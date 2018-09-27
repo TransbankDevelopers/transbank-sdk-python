@@ -1,2 +1,3 @@
-# transbank-sdk-python-onepay
-Código fuente Onepay SDK para Python
+# Transbank Python SDK Onepay
+
+Esta librería se encuentra en construcción.
