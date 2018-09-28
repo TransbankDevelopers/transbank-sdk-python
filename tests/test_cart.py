@@ -40,3 +40,9 @@ class CartTestCase(unittest.TestCase):
             Item("", 0, 0, 0)
         with self.assertRaisesRegex(ValueError, "expire must be an integer"):
             Item("", 0, 0, "","")
+
+    def test_positive_item_validations(self):
+        with self.assertRaisesRegex(ValueError, "quantity must be a positive number"):
+            Item("", -1, 0)
+        with self.assertRaisesRegex(ValueError, "amount must be a positive number"):
+            Item("", 0, -1)
