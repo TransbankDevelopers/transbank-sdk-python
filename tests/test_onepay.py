@@ -1,6 +1,6 @@
 import unittest
 
-from onepay.onepay import Onepay
+from onepay.onepay import Onepay, IntegrationType
 
 class OnepayTestCase(unittest.TestCase):
     def test_set_global_keys(self):
@@ -22,3 +22,15 @@ class OnepayTestCase(unittest.TestCase):
             Onepay.set_callback_url(0)
         with self.assertRaisesRegex(ValueError, "app_scheme must be a string"):
             Onepay.set_app_scheme(0)
+
+    def test_integration_types(self):
+        self.assertIsNotNone(IntegrationType.LIVE)
+        self.assertIsNotNone(IntegrationType.TEST)
+        self.assertIsNotNone(IntegrationType.MOCK)
+
+        self.assertIsNotNone(IntegrationType.LIVE.value.get_api_base())
+        self.assertIsNotNone(IntegrationType.LIVE.value.get_key())
+        self.assertIsNotNone(IntegrationType.LIVE.value.get_app_key())
+
+        Onepay.set_integration_type(IntegrationType.LIVE)
+        self.assertEqual(Onepay.get_current_integration_type(), IntegrationType.LIVE)
