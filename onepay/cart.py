@@ -6,7 +6,7 @@ class Item(object):
         if not isinstance(description, str):
             raise ValueError('description must be a string')
         if not isinstance(quantity, int):
-            raise ValueError('shared_secret must be an integer')
+            raise ValueError('quantity must be an integer')
         if not isinstance(amount, int):
             raise ValueError('amount must be an integer')
         if not isinstance(additional_data, str):
