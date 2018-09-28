@@ -14,11 +14,11 @@ class OnepayTestCase(unittest.TestCase):
         self.assertEqual(Onepay.get_callback_url(), "callback_url")
         self.assertEqual(Onepay.get_app_scheme(), "app_scheme")
 
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "api_key must be a string"):
             Onepay.set_api_key(0)
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "shared_secret must be a string"):
             Onepay.set_shared_secret(0)
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "callback_url must be a string"):
             Onepay.set_callback_url(0)
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "app_scheme must be a string"):
             Onepay.set_app_scheme(0)

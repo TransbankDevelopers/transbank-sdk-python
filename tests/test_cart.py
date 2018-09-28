@@ -29,14 +29,14 @@ class CartTestCase(unittest.TestCase):
         cart.add(Item("Envio", 1, 500))
         self.assertEqual(cart.get_total(), 1500)
 
-    def test_validations(self):
-        with self.assertRaises(ValueError):
+    def test_type_validations(self):
+        with self.assertRaisesRegex(ValueError, "description must be a string"):
             Item(0, 0, 0)
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "quantity must be an integer"):
             Item("", "", 0)
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "amount must be an integer"):
             Item("", 0, "")
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "additional_data must be a string"):
             Item("", 0, 0, 0)
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "expire must be an integer"):
             Item("", 0, 0, "","")
