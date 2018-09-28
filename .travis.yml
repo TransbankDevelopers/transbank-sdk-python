@@ -1,10 +1,14 @@
 language: python
 python:
-  - "3.3"
   - "3.4"
   - "3.5"
   - "3.6"
-  - "3.7"
+# temporary workaround to run tests in 3.7 version
+matrix:
+  include:
+    - python: "3.7"
+      dist: xenial
+      sudo: true
 
 install:
   - pip install pipenv --upgrade
