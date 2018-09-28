@@ -10,3 +10,6 @@ docutils = "*"
 requests-mock = "*"
 mock = {markers="python_version < '3.5'"}
 coverage = "*"
+
+[scripts]
+tests = "python setup.py nosetests"
