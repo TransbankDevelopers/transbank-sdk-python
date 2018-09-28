@@ -13,12 +13,12 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'transbank-sdk-python-onepay'
-MODULE_NAME = 'onepay'
+NAME = 'onepay'
 DESCRIPTION = 'Onepay SDK.'
 URL = 'https://github.com/TransbankDevelopers/transbank-sdk-python-onepay'
 EMAIL = 'transbankdevelopers@continuum.cl'
 AUTHOR = 'Transbank'
+VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
