@@ -13,3 +13,4 @@ coverage = "*"
 
 [scripts]
 tests = "python setup.py nosetests"
+citests = "python3 setup.py nosetests --cover-xml"
