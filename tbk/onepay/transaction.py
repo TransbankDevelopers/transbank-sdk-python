@@ -12,9 +12,10 @@ from urllib.parse import urlparse
 from marshmallow import Schema, fields, post_load
 
 from tbk.onepay.cart import ShoppingCart
-from tbk.onepay.onepay_base import IntegrationType, Onepay
 from tbk.onepay.error import TransactionCreateError, SignError
 from tbk.onepay.sign import SignUtil
+
+from tbk import onepay
 
 class Channel(Enum):
     WEB = "WEB"
@@ -49,13 +50,13 @@ class TransactionCreateRequest(object):
         self.callback_url = callback_url
         self.channel = channel
         self.app_scheme = app_scheme
-        self.app_key = Onepay.get_current_integration_type().value.get_app_key()
-        self.api_key = Onepay.get_api_key()
+        self.app_key = onepay.integration_type.value.app_key
+        self.api_key = onepay.api_key
         self.generate_ott_qr_code = True
 
     @property
     def signature(self):
-        return SignUtil.build_signature_transaction_create_request(self, Onepay.get_shared_secret())
+        return SignUtil.build_signature_transaction_create_request(self, onepay.shared_secret)
 
 class TransactionCreateRequestSchema(Schema):
     external_unique_number = fields.Str(dump_to="externalUniqueNumber")
@@ -106,11 +107,11 @@ class Transaction(object):
     @classmethod
     def create(cls, shopping_cart: ShoppingCart, channel = None, external_unique_number = None, options = None):
 
-        if (channel != None and channel == Channel.APP and Onepay.get_app_scheme):
+        if (channel != None and channel == Channel.APP and onepay.app_scheme):
             raise TransactionCreateError("You need to set an app_scheme if you want to use the APP channel")
 
 
-        if (channel != None and channel == Channel.MOBILE and Onepay.get_callback_url):
+        if (channel != None and channel == Channel.MOBILE and onepay.callback_url):
             raise TransactionCreateError("You need to set valid callback if you want to use the MOBILE channel")
 
 
@@ -118,7 +119,7 @@ class Transaction(object):
             raise Exception("Shopping cart is null or empty")
 
         path = cls.__TRANSACTION_BASE_PATH + cls.__SEND_TRANSACTION
-        api_base = Onepay.get_current_integration_type().value.get_api_base()
+        api_base = onepay.integration_type.value.api_base
 
         parsed_url = urlparse(api_base)
         if parsed_url.scheme.lower() == "http":
@@ -126,7 +127,7 @@ class Transaction(object):
         else:
             conn = http.client.HTTPSConnection(parsed_url.netloc)
 
-        req = TransactionCreateRequest(calendar.timegm(datetime.utcnow().utctimetuple()), shopping_cart.total, shopping_cart.item_quantity, calendar.timegm(datetime.utcnow().utctimetuple()), shopping_cart.items, Onepay.get_callback_url(), channel.value , Onepay.get_app_scheme())
+        req = TransactionCreateRequest(calendar.timegm(datetime.utcnow().utctimetuple()), shopping_cart.total, shopping_cart.item_quantity, calendar.timegm(datetime.utcnow().utctimetuple()), shopping_cart.items, onepay.callback_url, channel.value , onepay.app_scheme)
 
         try:
             conn.request("POST", path, TransactionCreateRequestSchema().dumps(req).data)
@@ -141,4 +142,9 @@ class Transaction(object):
         if transaction_response['response_code'] != "OK":
             raise TransactionCreateError("%s : %s" % (transaction_response['response_code'], transaction_response['description']))
 
-        return transaction_response['result']
+        result = transaction_response['result']
+
+        if not SignUtil.validate_create_response(result, onepay.shared_secret, result.signature):
+            raise TransactionCreateError("The response signature is not valid.", -1)
+
+        return result

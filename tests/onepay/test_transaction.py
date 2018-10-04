@@ -2,17 +2,18 @@ import unittest
 import unittest.mock
 
 import http.client
+from tbk import onepay
+
 from tbk.onepay.transaction import Options, Transaction, Channel
 from tbk.onepay.cart import ShoppingCart, Item
-from tbk.onepay.onepay_base import Onepay, IntegrationType
 from tbk.onepay.error import TransactionCreateError, SignError
 
 class TransactionTestCase(unittest.TestCase):
 
     def setUp(self):
         self.shopping_cart = ShoppingCart()
-        Onepay.set_integration_type(IntegrationType.TEST)
-        Onepay.set_callback_url("http://localhost/callback")
+        onepay.integration_type = onepay.IntegrationType.TEST
+        onepay.callback_url = "http://localhost/callback"
 
     def get_valid_cart(self):
         shopping_cart = ShoppingCart()
@@ -42,9 +43,10 @@ class TransactionTestCase(unittest.TestCase):
 
         with self.assertRaisesRegex(TransactionCreateError, "You need to set valid callback if you want to use the MOBILE channel"):
             Transaction.create(self.get_valid_cart(), Channel.MOBILE)
+
     def test_raise_error_response_create_transaction(self):
-        Onepay.set_api_key("dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw")
-        Onepay.set_shared_secret("?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ")
+        onepay.api_key = "dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw"
+        onepay.shared_secret = "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ"
 
         http.client.HTTPSConnection = unittest.mock.Mock(spec=http.client.HTTPSConnection)
         http.client.HTTPResponse = unittest.mock.Mock(spec=http.client.HTTPResponse)
@@ -59,8 +61,8 @@ class TransactionTestCase(unittest.TestCase):
             Transaction.create(self.get_valid_cart(), Channel.WEB)
 
     def test_create_transaction(self):
-        Onepay.set_api_key("dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw")
-        Onepay.set_shared_secret("?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ")
+        onepay.api_key = "dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw"
+        onepay.shared_secret = "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ"
         response = Transaction.create(self.get_valid_cart(), Channel.WEB)
 
         self.assertIsNotNone(response)
