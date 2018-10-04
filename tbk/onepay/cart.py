@@ -1,5 +1,4 @@
 # encoding: utf-8
-from __future__ import unicode_literals
 
 class Item(object):
     def __init__(self, description, quantity, amount, additional_data = "", expire = 0):

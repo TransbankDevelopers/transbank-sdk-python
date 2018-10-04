@@ -1,5 +1,4 @@
 # encoding: utf-8
-from __future__ import unicode_literals
 
 class TransbankError(Exception):
     def __init__(self, message = "An error has happened, verify given parameters and try again.", code = 0):

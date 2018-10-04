@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 # Note: To use the 'upload' functionality of this file, you must:
 #   $ pip install twine

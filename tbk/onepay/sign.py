@@ -1,7 +1,6 @@
 # encoding: utf-8
-from __future__ import unicode_literals
-
 import hashlib, hmac, base64
+
 from tbk import onepay
 
 def sign_sha256(secret: str, data: str) -> str:
