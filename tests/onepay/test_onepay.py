@@ -1,6 +1,6 @@
 import unittest
 
-from onepay.onepay import Onepay, IntegrationType
+from tbk.onepay.onepay_base import Onepay, IntegrationType
 
 class OnepayTestCase(unittest.TestCase):
     def test_set_global_keys(self):

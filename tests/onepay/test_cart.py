@@ -1,6 +1,6 @@
 import unittest
 
-from onepay.cart import ShoppingCart, Item
+from tbk.onepay.cart import ShoppingCart, Item
 
 class CartTestCase(unittest.TestCase):
     def test_create_single_item(self):
@@ -16,18 +16,35 @@ class CartTestCase(unittest.TestCase):
         cart.add(Item("Ropa", 1, 1000))
         cart.add(Item("Envio", 1, 500))
 
-        self.assertEqual(len(cart.get_items()), 2)
+        self.assertEqual(len(cart.items), 2)
+
+    def test_validate_item_when_add_items(self):
+        cart = ShoppingCart()
+
+        with self.assertRaisesRegex(ValueError, "item must be an instance of Item"):
+            cart.add("Ropa")
 
     def test_calculate_cart_total(self):
         cart = ShoppingCart()
 
-        self.assertEqual(cart.get_total(), 0)
+        self.assertEqual(cart.total, 0)
 
         cart.add(Item("Ropa", 1, 1000))
-        self.assertEqual(cart.get_total(), 1000)
+        self.assertEqual(cart.total, 1000)
 
         cart.add(Item("Envio", 1, 500))
-        self.assertEqual(cart.get_total(), 1500)
+        self.assertEqual(cart.total, 1500)
+
+    def test_calculate_cart_quantity(self):
+        cart = ShoppingCart()
+
+        self.assertEqual(cart.item_quantity, 0)
+
+        cart.add(Item("Ropa", 2, 1000))
+        self.assertEqual(cart.item_quantity, 2)
+
+        cart.add(Item("Envio", 3, 500))
+        self.assertEqual(cart.item_quantity, 5)
 
     def test_type_validations(self):
         with self.assertRaisesRegex(ValueError, "description must be a string"):

@@ -13,22 +13,23 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'onepay'
-DESCRIPTION = 'Onepay SDK.'
-URL = 'https://github.com/TransbankDevelopers/transbank-sdk-python-onepay'
+NAME = 'transbank_sdk_python'
+MODULE_NAME = 'tbk'
+DESCRIPTION = 'Transbank Python SDK'
+URL = 'https://github.com/TransbankDevelopers/transbank-sdk-python'
 EMAIL = 'transbankdevelopers@continuum.cl'
 AUTHOR = 'Transbank'
 VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
+  "marshmallow>=2.15.6"
 ]
 
 TESTS_REQUIREMENTS = [
     "nose>=1.0",
     "coverage",
-    "mock",
-    "requests_mock"
+    "mock"
 ]
 
 # The rest you shouldn't have to touch too much :)
@@ -49,7 +50,7 @@ except FileNotFoundError:
 # Load the package's __version__.py module as a dictionary.
 about = {}
 if not VERSION:
-    with open(os.path.join(here, NAME, '__version__.py')) as f:
+    with open(os.path.join(here, MODULE_NAME, '__version__.py')) as f:
         exec(f.read(), about)
 else:
     about['__version__'] = VERSION

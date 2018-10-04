@@ -7,9 +7,12 @@ name = "pypi"
 ipython = "<=5.7.0"
 nose = "*"
 docutils = "*"
-requests-mock = "*"
 mock = {markers="python_version < '3.5'"}
 coverage = "*"
+pylint = "*"
+
+[packages]
+marshmallow = '>=2.15.6'
 
 [scripts]
 tests = "python setup.py nosetests"
