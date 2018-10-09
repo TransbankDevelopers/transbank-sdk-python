@@ -11,7 +11,7 @@ from marshmallow import Schema, fields, post_load
 
 from tbk.onepay.cart import ShoppingCart
 from tbk.onepay.error import TransactionCreateError, SignError
-from tbk.onepay.sign import SignUtil
+from tbk.onepay import sign
 
 from tbk import onepay
 
@@ -50,7 +50,7 @@ class TransactionCreateRequest(object):
 
     @property
     def signature(self):
-        return SignUtil.build_signature_transaction_create_request(self, onepay.shared_secret)
+        return sign.build_signature_transaction_create_request(self, onepay.shared_secret)
 
 class TransactionCreateRequestSchema(Schema):
     external_unique_number = fields.Str(dump_to="externalUniqueNumber")
@@ -139,7 +139,7 @@ class Transaction(object):
 
         result = transaction_response['result']
 
-        if not SignUtil.validate_create_response(result, onepay.shared_secret, result.signature):
+        if not sign.validate_create_response(result, onepay.shared_secret, result.signature):
             raise TransactionCreateError("The response signature is not valid.", -1)
 
         return result
