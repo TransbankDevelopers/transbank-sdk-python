@@ -32,9 +32,19 @@ class ItemSchema(Schema):
         additional_data = fields.Str(dump_to="additionalData")
         expire = fields.Int()
 
-class TransactionCreateRequest(object):
+class TransbankRequestResponse(object):
+    signable_attributes = []
+
+    def get_signable_data(self, append_data = []):
+        signable_data = [getattr(self, item) for item in self.signable_attributes]
+        return signable_data + append_data
+
+class TransactionCreateRequest(TransbankRequestResponse):
+
+    signable_attributes = ['external_unique_number', 'total', 'items_quantity', 'issued_at']
+
     def __init__(self, external_unique_number, total, items_quantity, issued_at, items,
-                 callback_url = None, channel = "WEB", app_scheme = None):
+                 callback_url = None, channel = "WEB", app_scheme = None, options = None):
 
         self.external_unique_number = external_unique_number
         self.total = total
@@ -45,12 +55,13 @@ class TransactionCreateRequest(object):
         self.channel = channel
         self.app_scheme = app_scheme
         self.app_key = onepay.integration_type.value.app_key
-        self.api_key = onepay.api_key
+        self.api_key = (options or onepay).api_key
         self.generate_ott_qr_code = True
+        self.options = options or onepay
 
     @property
     def signature(self):
-        return sign.build_signature_transaction_create_request(self, onepay.shared_secret)
+        return sign.build_signature_for_transaction_create_request(self, self.options.shared_secret)
 
 class TransactionCreateRequestSchema(Schema):
     external_unique_number = fields.Str(dump_to="externalUniqueNumber")
@@ -66,7 +77,9 @@ class TransactionCreateRequestSchema(Schema):
     generate_ott_qr_code = fields.Bool(dump_to = "generateOttQrCode")
     signature = fields.Str()
 
-class TransactionCreateResponse(object):
+class TransactionCreateResponse(TransbankRequestResponse):
+    signable_attributes = ['occ', 'external_unique_number', 'issued_at']
+
     def __init__(self, occ, ott, signature, external_unique_number, issued_at, qr_code_as_base64):
         self.occ = occ
         self.ott = ott
@@ -119,10 +132,12 @@ class Transaction(object):
         else:
             conn = http.client.HTTPSConnection(parsed_url.netloc)
 
-        req = TransactionCreateRequest(calendar.timegm(datetime.utcnow().utctimetuple()),
+        external_unique_number_req = external_unique_number or datetime.utcnow().timestamp() * 1e3
+
+        req = TransactionCreateRequest(external_unique_number_req,
               shopping_cart.total, shopping_cart.item_quantity,
               calendar.timegm(datetime.utcnow().utctimetuple()), shopping_cart.items,
-              onepay.callback_url, channel.value , onepay.app_scheme)
+              onepay.callback_url, channel.value , onepay.app_scheme, options)
 
         try:
             conn.request("POST", path, TransactionCreateRequestSchema().dumps(req).data)
@@ -139,7 +154,7 @@ class Transaction(object):
 
         result = transaction_response['result']
 
-        if not sign.validate_create_response(result, onepay.shared_secret, result.signature):
+        if not sign.validate_create_response(result, (options or onepay).shared_secret, result.signature):
             raise TransactionCreateError("The response signature is not valid.", -1)
 
         return result

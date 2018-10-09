@@ -4,7 +4,7 @@ import unittest.mock
 import http.client
 from transbank import onepay
 
-from transbank.onepay.transaction import Options, Transaction, Channel
+from transbank.onepay.transaction import Options, Transaction, Channel, TransactionCreateRequest
 from transbank.onepay.cart import ShoppingCart, Item
 from transbank.onepay.error import TransactionCreateError, SignError
 
@@ -14,6 +14,11 @@ class TransactionTestCase(unittest.TestCase):
         self.shopping_cart = ShoppingCart()
         onepay.integration_type = onepay.IntegrationType.TEST
         onepay.callback_url = "http://localhost/callback"
+
+    def test_get_signable_elements(self):
+        request = TransactionCreateRequest(1, 1000, 1, 1, None, "http://localhost", "WEB", None)
+        self.assertEqual(request.get_signable_data(), [1, 1000, 1, 1])
+        self.assertEqual(request.get_signable_data(append_data=["callback"]), [1, 1000, 1, 1, "callback"])
 
     def get_valid_cart(self):
         shopping_cart = ShoppingCart()
@@ -58,5 +63,13 @@ class TransactionTestCase(unittest.TestCase):
         onepay.api_key = "dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw"
         onepay.shared_secret = "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ"
         response = Transaction.create(self.get_valid_cart(), Channel.WEB)
+
+        self.assertIsNotNone(response)
+
+    def test_create_transaction_with_options(self):
+        onepay.api_key = None
+        onepay.shared_secret = None
+        options = Options("dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw", "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ")
+        response = Transaction.create(self.get_valid_cart(), Channel.WEB, options=options)
 
         self.assertIsNotNone(response)

@@ -3,36 +3,24 @@ import hashlib, hmac, base64
 
 from transbank import onepay
 
+def str_with_len_prefix(param):
+    return str(len(str(param).encode('utf-8'))) + str(param)
+
+def concat_for_signing(*params):
+    return ''.join(str_with_len_prefix(param) for param in params)
+
 def sign_sha256(secret: str, data: str) -> str:
     digest = hmac.new(str.encode(secret), msg=str.encode(data), digestmod=hashlib.sha256).digest()
     return base64.b64encode(digest).decode()
 
-def build_signature_transaction_create_request(signable, secret: str):
-        external_unique_number_as_string = str(signable.external_unique_number)
-        total_as_string = str(signable.total)
-        items_quantity_as_string = str(signable.items_quantity)
-        issued_at_as_string = str(signable.issued_at)
+def build_signature_for_transaction_create_request(signable, secret: str):
+    data = concat_for_signing(*signable.get_signable_data(append_data=[onepay.callback_url]))
+    return sign_sha256(secret, data)
 
-        data = str(len(external_unique_number_as_string.encode('utf-8'))) + external_unique_number_as_string
-        data += str(len(total_as_string.encode('utf-8'))) + total_as_string
-        data += str(len(items_quantity_as_string.encode('utf-8'))) + items_quantity_as_string
-        data += str(len(issued_at_as_string.encode('utf-8'))) + issued_at_as_string
-        data += str(len(onepay.callback_url.encode('utf-8'))) + onepay.callback_url
-
-        return sign_sha256(secret, data)
-
-
-def build_signature_transaction_commit_request_or_create_response(signable, secret: str):
-        external_unique_number_as_string = str(signable.external_unique_number)
-        occ_as_string = str(signable.occ)
-        issued_at_as_string = str(signable.issued_at)
-
-        data = str(len(occ_as_string.encode('utf-8'))) + occ_as_string
-        data += str(len(external_unique_number_as_string.encode('utf-8'))) + external_unique_number_as_string
-        data += str(len(issued_at_as_string.encode('utf-8'))) + issued_at_as_string
-
-        return sign_sha256(secret, data)
+def build_signature_for_transaction_commit_request_or_create_response(signable, secret: str):
+    data = concat_for_signing(*signable.get_signable_data())
+    return sign_sha256(secret, data)
 
 def validate_create_response(signable, secret, response_signature):
-    calculated_signature = build_signature_transaction_commit_request_or_create_response(signable, secret)
+    calculated_signature = build_signature_for_transaction_commit_request_or_create_response(signable, secret)
     return calculated_signature == response_signature
