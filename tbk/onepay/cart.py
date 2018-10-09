@@ -42,16 +42,8 @@ class ShoppingCart(object):
 
     @property
     def total(self):
-        total = 0
-        for item in self.__items:
-            total += item.amount * item.quantity
-
-        return total
+        return sum(item.amount * item.quantity for item in self.items)
 
     @property
     def item_quantity(self):
-        quantity = 0
-        for item in self.__items:
-            quantity += item.quantity
-
-        return quantity
+        return sum(item.quantity for item in self.items)
