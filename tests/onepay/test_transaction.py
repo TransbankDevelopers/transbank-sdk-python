@@ -26,10 +26,10 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(options.shared_secret, "shared_secret")
 
     def test_validate_create(self):
-        with self.assertRaisesRegex(Exception, "Shopping cart is null or empty"):
+        with self.assertRaisesRegex(Exception, "Shopping cart must not be null or empty"):
             Transaction.create(None)
 
-        with self.assertRaisesRegex(Exception, "Shopping cart is null or empty"):
+        with self.assertRaisesRegex(Exception, "Shopping cart must not be null or empty"):
             Transaction.create(self.shopping_cart)
 
         with self.assertRaisesRegex(TransactionCreateError, "You need to set an app_scheme if you want to use the APP channel"):
