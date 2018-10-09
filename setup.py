@@ -13,7 +13,7 @@ from setuptools import find_packages, setup, Command
 
 # Package meta-data.
 NAME = 'transbank_sdk_python'
-MODULE_NAME = 'tbk'
+MODULE_NAME = 'transbank'
 DESCRIPTION = 'Transbank Python SDK'
 URL = 'https://github.com/TransbankDevelopers/transbank-sdk-python'
 EMAIL = 'transbankdevelopers@continuum.cl'

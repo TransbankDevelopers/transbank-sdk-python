@@ -1,6 +1,6 @@
 import unittest
 
-from tbk.onepay.cart import ShoppingCart, Item
+from transbank.onepay.cart import ShoppingCart, Item
 
 class CartTestCase(unittest.TestCase):
     def test_create_single_item(self):

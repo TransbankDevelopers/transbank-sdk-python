@@ -1,6 +1,6 @@
 import unittest
 
-from tbk import onepay
+from transbank import onepay
 
 class OnepayTestCase(unittest.TestCase):
     def test_set_global_keys(self):

@@ -16,7 +16,7 @@ install:
 
 script:
   - pipenv run citests
-  - sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=./tbk -Dsonar.python.coverage.reportPath=coverage.xml
+  - sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=./transbank -Dsonar.python.coverage.reportPath=coverage.xml
 
 addons:
   sonarcloud:

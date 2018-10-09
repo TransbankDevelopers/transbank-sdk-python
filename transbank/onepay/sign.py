@@ -1,7 +1,7 @@
 # encoding: utf-8
 import hashlib, hmac, base64
 
-from tbk import onepay
+from transbank import onepay
 
 def sign_sha256(secret: str, data: str) -> str:
     digest = hmac.new(str.encode(secret), msg=str.encode(data), digestmod=hashlib.sha256).digest()

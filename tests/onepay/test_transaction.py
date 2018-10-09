@@ -2,11 +2,11 @@ import unittest
 import unittest.mock
 
 import http.client
-from tbk import onepay
+from transbank import onepay
 
-from tbk.onepay.transaction import Options, Transaction, Channel
-from tbk.onepay.cart import ShoppingCart, Item
-from tbk.onepay.error import TransactionCreateError, SignError
+from transbank.onepay.transaction import Options, Transaction, Channel
+from transbank.onepay.cart import ShoppingCart, Item
+from transbank.onepay.error import TransactionCreateError, SignError
 
 class TransactionTestCase(unittest.TestCase):
 

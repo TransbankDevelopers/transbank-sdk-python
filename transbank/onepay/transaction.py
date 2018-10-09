@@ -9,11 +9,11 @@ from urllib.parse import urlparse
 
 from marshmallow import Schema, fields, post_load
 
-from tbk.onepay.cart import ShoppingCart
-from tbk.onepay.error import TransactionCreateError, SignError
-from tbk.onepay import sign
+from transbank.onepay.cart import ShoppingCart
+from transbank.onepay.error import TransactionCreateError, SignError
+from transbank.onepay import sign
 
-from tbk import onepay
+from transbank import onepay
 
 class Channel(Enum):
     WEB = "WEB"
