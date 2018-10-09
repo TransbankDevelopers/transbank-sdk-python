@@ -9,23 +9,11 @@ class Item(object):
         self.expire = expire
 
     @property
-    def description(self):
-        return self.__description
-
-    @description.setter
-    def description(self, value):
-        if not isinstance(value, str):
-            raise ValueError('description must be a string')
-        self.__description = value
-
-    @property
     def quantity(self):
         return self.__quantity
 
     @quantity.setter
     def quantity(self, value):
-        if not isinstance(value, int):
-            raise ValueError('quantity must be an integer')
         if (value < 0):
             raise ValueError('quantity must be a positive number')
         self.__quantity = value
@@ -36,41 +24,17 @@ class Item(object):
 
     @amount.setter
     def amount(self, value):
-        if not isinstance(value, int):
-            raise ValueError('amount must be an integer')
         if (value < 0):
             raise ValueError('amount must be a positive number')
         self.__amount = value
 
-    @property
-    def additional_data(self):
-        return self.__additional_data
-
-    @additional_data.setter
-    def additional_data(self, value):
-        if not isinstance(value, str):
-            raise ValueError('additional_data must be a string')
-        self.__additional_data = value
-
-    @property
-    def expire(self):
-        return self.__expire
-
-    @expire.setter
-    def expire(self, value):
-        if not isinstance(value, int):
-            raise ValueError('expire must be an integer')
-        self.__expire = value
 
 class ShoppingCart(object):
     def __init__(self):
         self.__items = []
 
     def add(self, item: Item):
-        if isinstance(item, Item):
-            self.__items.append(item)
-        else:
-            raise ValueError("item must be an instance of Item")
+        self.__items.append(item)
 
     @property
     def items(self):
@@ -81,6 +45,7 @@ class ShoppingCart(object):
         total = 0
         for item in self.__items:
             total += item.amount * item.quantity
+
         return total
 
     @property

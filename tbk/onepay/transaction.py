@@ -22,12 +22,6 @@ class Channel(Enum):
 
 class Options(object):
     def __init__(self, api_key: str, shared_secret: str):
-        if not isinstance(api_key, str):
-            raise ValueError('api_key must be a string')
-
-        if not isinstance(shared_secret, str):
-                raise ValueError('shared_secret must be a string')
-
         self.api_key = api_key
         self.shared_secret = shared_secret
 
@@ -39,7 +33,9 @@ class ItemSchema(Schema):
         expire = fields.Int()
 
 class TransactionCreateRequest(object):
-    def __init__(self, external_unique_number, total, items_quantity, issued_at, items, callback_url = None, channel = "WEB", app_scheme = None):
+    def __init__(self, external_unique_number, total, items_quantity, issued_at, items,
+                 callback_url = None, channel = "WEB", app_scheme = None):
+
         self.external_unique_number = external_unique_number
         self.total = total
         self.items_quantity = items_quantity
@@ -108,13 +104,11 @@ class Transaction(object):
         if (channel != None and channel == Channel.APP and onepay.app_scheme):
             raise TransactionCreateError("You need to set an app_scheme if you want to use the APP channel")
 
-
         if (channel != None and channel == Channel.MOBILE and onepay.callback_url):
             raise TransactionCreateError("You need to set valid callback if you want to use the MOBILE channel")
 
-
-        if not isinstance(shopping_cart, ShoppingCart) or (isinstance(shopping_cart, ShoppingCart) and not shopping_cart.items):
-            raise Exception("Shopping cart is null or empty")
+        if not hasattr(shopping_cart, 'items') or (hasattr(shopping_cart, 'items') and not shopping_cart.items):
+            raise ValueError("Shopping cart must not be null or empty")
 
         path = cls.__TRANSACTION_BASE_PATH + cls.__SEND_TRANSACTION
         api_base = onepay.integration_type.value.api_base
@@ -125,7 +119,10 @@ class Transaction(object):
         else:
             conn = http.client.HTTPSConnection(parsed_url.netloc)
 
-        req = TransactionCreateRequest(calendar.timegm(datetime.utcnow().utctimetuple()), shopping_cart.total, shopping_cart.item_quantity, calendar.timegm(datetime.utcnow().utctimetuple()), shopping_cart.items, onepay.callback_url, channel.value , onepay.app_scheme)
+        req = TransactionCreateRequest(calendar.timegm(datetime.utcnow().utctimetuple()),
+              shopping_cart.total, shopping_cart.item_quantity,
+              calendar.timegm(datetime.utcnow().utctimetuple()), shopping_cart.items,
+              onepay.callback_url, channel.value , onepay.app_scheme)
 
         try:
             conn.request("POST", path, TransactionCreateRequestSchema().dumps(req).data)

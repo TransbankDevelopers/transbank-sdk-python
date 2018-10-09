@@ -18,12 +18,6 @@ class CartTestCase(unittest.TestCase):
 
         self.assertEqual(len(cart.items), 2)
 
-    def test_validate_item_when_add_items(self):
-        cart = ShoppingCart()
-
-        with self.assertRaisesRegex(ValueError, "item must be an instance of Item"):
-            cart.add("Ropa")
-
     def test_calculate_cart_total(self):
         cart = ShoppingCart()
 
@@ -45,18 +39,6 @@ class CartTestCase(unittest.TestCase):
 
         cart.add(Item("Envio", 3, 500))
         self.assertEqual(cart.item_quantity, 5)
-
-    def test_type_validations(self):
-        with self.assertRaisesRegex(ValueError, "description must be a string"):
-            Item(0, 0, 0)
-        with self.assertRaisesRegex(ValueError, "quantity must be an integer"):
-            Item("", "", 0)
-        with self.assertRaisesRegex(ValueError, "amount must be an integer"):
-            Item("", 0, "")
-        with self.assertRaisesRegex(ValueError, "additional_data must be a string"):
-            Item("", 0, 0, 0)
-        with self.assertRaisesRegex(ValueError, "expire must be an integer"):
-            Item("", 0, 0, "","")
 
     def test_positive_item_validations(self):
         with self.assertRaisesRegex(ValueError, "quantity must be a positive number"):

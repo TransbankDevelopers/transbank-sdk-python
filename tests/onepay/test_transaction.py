@@ -25,12 +25,6 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(options.api_key, "api_key")
         self.assertEqual(options.shared_secret, "shared_secret")
 
-        with self.assertRaisesRegex(ValueError, "api_key must be a string"):
-            Options(0, "")
-
-        with self.assertRaisesRegex(ValueError, "shared_secret must be a string"):
-            Options("", 0)
-
     def test_validate_create(self):
         with self.assertRaisesRegex(Exception, "Shopping cart is null or empty"):
             Transaction.create(None)
