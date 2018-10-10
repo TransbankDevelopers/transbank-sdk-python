@@ -7,7 +7,7 @@ from datetime import datetime
 from enum import Enum
 from urllib.parse import urlparse
 
-from marshmallow import Schema, fields, post_load
+from transbank.onepay.schema import ItemSchema, TransactionCreateRequestSchema, TransactionCreateResponseSchema, SendTransactionResponseSchema
 
 from transbank.onepay.cart import ShoppingCart
 from transbank.onepay.error import TransactionCreateError, SignError
@@ -24,13 +24,6 @@ class Options(object):
     def __init__(self, api_key: str, shared_secret: str):
         self.api_key = api_key
         self.shared_secret = shared_secret
-
-class ItemSchema(Schema):
-        description = fields.Str()
-        quantity = fields.Int()
-        amount = fields.Int()
-        additional_data = fields.Str(dump_to="additionalData")
-        expire = fields.Int()
 
 class TransbankRequestResponse(object):
     signable_attributes = []
@@ -63,20 +56,6 @@ class TransactionCreateRequest(TransbankRequestResponse):
     def signature(self):
         return sign.build_signature_for_transaction_create_request(self, self.options.shared_secret)
 
-class TransactionCreateRequestSchema(Schema):
-    external_unique_number = fields.Str(dump_to="externalUniqueNumber")
-    total = fields.Int()
-    items_quantity = fields.Int(dump_to = "itemsQuantity")
-    issued_at = fields.Integer(dump_to = "issuedAt")
-    items = fields.Nested(ItemSchema, many = True)
-    callback_url = fields.Str(dump_to = "callbackUrl")
-    channel = fields.Str()
-    app_scheme = fields.Str(dump_to = "appScheme")
-    app_key = fields.Str(dump_to = "appKey")
-    api_key = fields.Str(dump_to = "apiKey")
-    generate_ott_qr_code = fields.Bool(dump_to = "generateOttQrCode")
-    signature = fields.Str()
-
 class TransactionCreateResponse(TransbankRequestResponse):
     signable_attributes = ['occ', 'external_unique_number', 'issued_at']
 
@@ -87,23 +66,6 @@ class TransactionCreateResponse(TransbankRequestResponse):
         self.external_unique_number = external_unique_number
         self.issued_at = issued_at
         self.qr_code_as_base64 = qr_code_as_base64
-
-class TransactionCreateResponseSchema(Schema):
-    occ = fields.Str()
-    ott = fields.Int()
-    signature = fields.Str()
-    external_unique_number = fields.Str(load_from="externalUniqueNumber")
-    issued_at = fields.Int(load_from="issuedAt")
-    qr_code_as_base64 = fields.Str(load_from="qrCodeAsBase64")
-
-    @post_load
-    def make_transaction_create_response(self, data):
-        return TransactionCreateResponse(**data)
-
-class SendTransactionResponseSchema(Schema):
-    response_code = fields.Str(load_from="responseCode")
-    description = fields.Str()
-    result = fields.Nested(TransactionCreateResponseSchema)
 
 class Transaction(object):
 
@@ -152,7 +114,7 @@ class Transaction(object):
         if transaction_response['response_code'] != "OK":
             raise TransactionCreateError("%s : %s" % (transaction_response['response_code'], transaction_response['description']))
 
-        result = transaction_response['result']
+        result = TransactionCreateResponse(**transaction_response['result'])
 
         if not sign.validate_create_response(result, (options or onepay).shared_secret, result.signature):
             raise TransactionCreateError("The response signature is not valid.", -1)
