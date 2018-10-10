@@ -74,6 +74,9 @@ class TransactionCreateResponse(Signable):
         self.issued_at = issued_at
         self.qr_code_as_base64 = qr_code_as_base64
 
+    def to_json(self):
+        return TransactionCreateResponseSchema().dumps(self).data
+
 class TransactionCommitRequest(TransbankRequestResponse):
 
     signable_attributes = ['occ', 'external_unique_number', 'issued_at']
@@ -91,7 +94,7 @@ class TransactionCommitRequest(TransbankRequestResponse):
         return sign.build_signature_for_transaction_commit_request_or_create_response(self, self.options.shared_secret)
 
 class TransactionCommitResponse(TransbankRequestResponse):
-    signable_attributes = ['occ', 'external_unique_number', 'issued_at']
+    signable_attributes = ['occ', 'authorization_code', 'issued_at', 'amount', 'installments_amount', 'installments_number', 'buy_order']
 
     def __init__(self, occ, authorization_code, signature, transaction_desc, buy_order, issued_at, amount, installments_amount, installments_number):
         self.occ = occ
