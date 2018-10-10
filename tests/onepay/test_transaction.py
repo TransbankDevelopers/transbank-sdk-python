@@ -68,3 +68,12 @@ class TransactionTestCase(unittest.TestCase):
         response = Transaction.create(self.get_valid_cart(), Channel.WEB, options=options)
 
         self.assertIsNotNone(response)
+
+    def test_commit_transaction(self):
+        onepay.api_key = "dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw"
+        onepay.shared_secret = "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ"
+        response_create = Transaction.create(self.get_valid_cart(), Channel.WEB)
+
+        response = Transaction.commit(response_create.occ, response_create.external_unique_number)
+
+        self.assertIsNotNone(response)
