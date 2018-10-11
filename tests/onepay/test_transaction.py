@@ -16,9 +16,8 @@ class TransactionTestCase(unittest.TestCase):
         onepay.callback_url = "http://localhost/callback"
 
     def test_get_signable_elements(self):
-        request = TransactionCreateRequest(1, 1000, 1, 1, None, "http://localhost", "WEB", None)
-        self.assertEqual(request.get_signable_data(), [1, 1000, 1, 1])
-        self.assertEqual(request.get_signable_data(append_data=["callback"]), [1, 1000, 1, 1, "callback"])
+        request = TransactionCreateRequest(1, 1000, 1, 1, None, "http://localhost/callback", "WEB", None)
+        self.assertEqual(request.signable_data(), [1, 1000, 1, 1, "http://localhost/callback"])
 
     def get_valid_cart(self):
         shopping_cart = ShoppingCart()

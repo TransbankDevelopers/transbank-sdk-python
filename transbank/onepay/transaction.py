@@ -25,16 +25,23 @@ class Options(object):
         self.api_key = api_key
         self.shared_secret = shared_secret
 
-class TransbankRequestResponse(object):
+class Signable(object):
     signable_attributes = []
 
-    def get_signable_data(self, append_data = []):
+    def signable_data(self):
         signable_data = [getattr(self, item) for item in self.signable_attributes]
-        return signable_data + append_data
+        return signable_data
 
-class TransactionCreateRequest(TransbankRequestResponse):
+    def sign(self, secret):
+        data = sign.concat_for_signing(*self.signable_data())
+        return sign.sign_sha256(secret, data)
 
-    signable_attributes = ['external_unique_number', 'total', 'items_quantity', 'issued_at']
+    def is_valid_signature(self, secret, signature):
+        return self.sign(secret) == signature
+
+class TransactionCreateRequest(Signable):
+
+    signable_attributes = ['external_unique_number', 'total', 'items_quantity', 'issued_at', 'callback_url']
 
     def __init__(self, external_unique_number, total, items_quantity, issued_at, items,
                  callback_url = None, channel = "WEB", app_scheme = None, options = None):
@@ -54,9 +61,9 @@ class TransactionCreateRequest(TransbankRequestResponse):
 
     @property
     def signature(self):
-        return sign.build_signature_for_transaction_create_request(self, self.options.shared_secret)
+        return self.sign(self.options.shared_secret)
 
-class TransactionCreateResponse(TransbankRequestResponse):
+class TransactionCreateResponse(Signable):
     signable_attributes = ['occ', 'external_unique_number', 'issued_at']
 
     def __init__(self, occ, ott, signature, external_unique_number, issued_at, qr_code_as_base64):
@@ -116,7 +123,7 @@ class Transaction(object):
 
         result = TransactionCreateResponse(**transaction_response['result'])
 
-        if not sign.validate_create_response(result, (options or onepay).shared_secret, result.signature):
+        if not result.is_valid_signature((options or onepay).shared_secret, result.signature):
             raise TransactionCreateError("The response signature is not valid.", -1)
 
         return result
