@@ -1,0 +1,25 @@
+language: python
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+# temporary workaround to run tests in 3.7 version
+matrix:
+  include:
+    - python: "3.7"
+      dist: xenial
+      sudo: true
+
+install:
+  - pip install pipenv --upgrade
+  - pipenv install --dev --skip-lock
+
+script:
+  - pipenv run citests
+  - sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=./transbank -Dsonar.python.coverage.reportPath=coverage.xml
+
+addons:
+  sonarcloud:
+    organization: "transbankdevelopers"
+    token:
+        secure: "mZ4G3upadS4wnxMTmwiry12AHyOV0fer9gRVJTMbjTFU2Qi5Bkz2PAwiEf0AFs/muZZzu4iqhL1ff3OhtwrtprgPDK1uPlZ3fb51Rd6YhaoOFxGTz+fhZLcHEo1AG/5YDn2tvEQ1pSjNdYH40E2djzkQ+APJ+R6DTsGIvBJdplxBjOJRLuQ+Iq5mCnplciaJhqrANit202BjVYkFBdTssvqhCez0GV2GmWGbRuKkfbKr9MFwCEjQxvdfVUBdwRbkBou3S8q0m8Y4MyYCCLtceW5IRlu+oTHwsxELB+oyFb4HyNRJy5PgFRT2mHWuWiPxrcThAZmn/kTnIiQ0NQkR2piNQMsIENnnndQd88Xdqg5gRXitoqJxpwJiu11ZRbJUG162q2sqMoYwjdQnJ0+jQ6WUDiJft0fQaTIC5AWZfnqcwvKgdbJ1Anyh8GLgSWI/BSELFyYnEcHiCQewhe+6OzIfFg/oLKigvLSLa4egNW+VbvkVNi1q9vyRxxRBeqwwNKCQ/VBrmGK4coojlte/exSl5ZhWld8ei+D0Iuw9PwxDwcbnV1kfQk0FgqYq9+LzAjgbyZUYEbI+2qMTegth5+GJjM5I5PkX6UsD2bl1vN7sPh7Tyec2Z+E2iJBW2KKNh1iyPHC+a3bkb0TkHryRtVOv1zqeHiz0gyv+3trO4Hg="
