@@ -101,11 +101,11 @@ class Transaction(object):
         else:
             conn = http.client.HTTPSConnection(parsed_url.netloc)
 
-        external_unique_number_req = external_unique_number or datetime.utcnow().timestamp() * 1e3
+        external_unique_number_req = external_unique_number or int(datetime.now().timestamp() * 1000)
 
         req = TransactionCreateRequest(external_unique_number_req,
               shopping_cart.total, shopping_cart.item_quantity,
-              calendar.timegm(datetime.utcnow().utctimetuple()), shopping_cart.items,
+              int(datetime.now().timestamp()), shopping_cart.items,
               onepay.callback_url, channel.value , onepay.app_scheme, options)
 
         try:
