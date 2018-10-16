@@ -10,9 +10,11 @@ docutils = "*"
 mock = {markers="python_version < '3.5'"}
 coverage = "*"
 pylint = "*"
+requests-mock = "<=1.5.2"
 
 [packages]
 marshmallow = '<=2.15.6'
+requests = "<=2.19.1"
 
 [scripts]
 tests = "python setup.py nosetests"

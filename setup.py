@@ -22,13 +22,15 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-  "marshmallow<=2.15.6"
+  "marshmallow<=2.15.6",
+  "requests<=2.19.1"
 ]
 
 TESTS_REQUIREMENTS = [
     "nose>=1.0",
     "coverage",
-    "mock"
+    "mock",
+    "requests-mock<=1.5.2"
 ]
 
 # The rest you shouldn't have to touch too much :)

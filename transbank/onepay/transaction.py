@@ -5,7 +5,7 @@ import json
 
 from datetime import datetime
 from enum import Enum
-from urllib.parse import urlparse
+import requests
 
 from transbank.onepay.schema import ItemSchema, TransactionCreateRequestSchema, TransactionCreateResponseSchema, SendTransactionResponseSchema
 
@@ -95,12 +95,6 @@ class Transaction(object):
         path = cls.__TRANSACTION_BASE_PATH + cls.__SEND_TRANSACTION
         api_base = onepay.integration_type.value.api_base
 
-        parsed_url = urlparse(api_base)
-        if parsed_url.scheme.lower() == "http":
-            conn = http.client.HTTPConnection(parsed_url.netloc)
-        else:
-            conn = http.client.HTTPSConnection(parsed_url.netloc)
-
         external_unique_number_req = external_unique_number or int(datetime.now().timestamp() * 1000)
 
         req = TransactionCreateRequest(external_unique_number_req,
@@ -109,14 +103,11 @@ class Transaction(object):
               onepay.callback_url, channel.value , onepay.app_scheme, options)
 
         try:
-            conn.request("POST", path, TransactionCreateRequestSchema().dumps(req).data)
+            data_response = requests.post(api_base + path, data = TransactionCreateRequestSchema().dumps(req).data).text
         except Exception:
             raise TransactionCreateError("Could not obtain a response from the service")
 
-        data_response = conn.getresponse().read()
-        conn.close()
-
-        transaction_response = SendTransactionResponseSchema().loads(data_response.decode('utf-8')).data
+        transaction_response = SendTransactionResponseSchema().loads(data_response).data
 
         if transaction_response['response_code'] != "OK":
             raise TransactionCreateError("%s : %s" % (transaction_response['response_code'], transaction_response['description']))

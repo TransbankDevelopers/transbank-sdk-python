@@ -1,7 +1,9 @@
 import unittest
 import unittest.mock
 
-import http.client
+import requests_mock
+import re
+
 from transbank import onepay
 
 from transbank.onepay.transaction import Options, Transaction, Channel, TransactionCreateRequest
@@ -46,17 +48,11 @@ class TransactionTestCase(unittest.TestCase):
         onepay.api_key = "dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw"
         onepay.shared_secret = "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ"
 
-        http.client.HTTPSConnection = unittest.mock.Mock(spec=http.client.HTTPSConnection)
-        http.client.HTTPResponse = unittest.mock.Mock(spec=http.client.HTTPResponse)
-
-        connection = http.client.HTTPSConnection()
-        response = http.client.HTTPResponse()
-
-        response.read.return_value = b'{"response_code": "ERROR", "description": "ERROR"}'
-        connection.getresponse.return_value = response
-
-        with self.assertRaisesRegex(TransactionCreateError, "ERROR : ERROR"):
-            Transaction.create(self.get_valid_cart(), Channel.WEB)
+        with requests_mock.Mocker() as m:
+            m.register_uri("POST", re.compile("/sendtransaction"), text="{\"response_code\": \"ERROR\", \"description\": \"ERROR\"}")
+            
+            with self.assertRaisesRegex(TransactionCreateError, "ERROR : ERROR"):
+                response = Transaction.create(self.get_valid_cart(), Channel.WEB)
 
     def test_create_transaction(self):
         onepay.api_key = "dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw"
