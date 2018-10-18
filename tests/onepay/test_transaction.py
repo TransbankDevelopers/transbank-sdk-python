@@ -12,10 +12,17 @@ from transbank.onepay.error import TransactionCreateError, SignError
 
 class TransactionTestCase(unittest.TestCase):
 
+    external_unique_number_test = "1532376544050"
+    occ_commit_test = "1807829988419927"
+    shared_secret_mock = "P4DCPS55QB2QLT56SQH6#W#LV76IAPYX"
+    api_key_mock = "mUc0GxYGor6X8u-_oB3e-HWJulRG01WoC96-_tUA3Bg"
+
     def setUp(self):
         self.shopping_cart = ShoppingCart()
-        onepay.integration_type = onepay.IntegrationType.TEST
+        onepay.integration_type = onepay.IntegrationType.MOCK
         onepay.callback_url = "http://localhost/callback"
+        onepay.api_key = self.api_key_mock
+        onepay.shared_secret = self.shared_secret_mock
 
     def test_get_signable_elements(self):
         request = TransactionCreateRequest(1, 1000, 1, 1, None, "http://localhost/callback", "WEB", None)
@@ -45,26 +52,64 @@ class TransactionTestCase(unittest.TestCase):
             Transaction.create(self.get_valid_cart(), Channel.MOBILE)
 
     def test_raise_error_response_create_transaction(self):
-        onepay.api_key = "dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw"
-        onepay.shared_secret = "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ"
-
         with requests_mock.Mocker() as m:
             m.register_uri("POST", re.compile("/sendtransaction"), text="{\"response_code\": \"ERROR\", \"description\": \"ERROR\"}")
             
             with self.assertRaisesRegex(TransactionCreateError, "ERROR : ERROR"):
                 response = Transaction.create(self.get_valid_cart(), Channel.WEB)
 
-    def test_create_transaction(self):
-        onepay.api_key = "dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw"
-        onepay.shared_secret = "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ"
+    def test_create_transaction_global_options(self):
         response = Transaction.create(self.get_valid_cart(), Channel.WEB)
 
         self.assertIsNotNone(response)
+        self.assertIsNotNone(response.occ)
+        self.assertIsNotNone(response.ott)
+        self.assertIsNotNone(response.signature)
+        self.assertIsNotNone(response.external_unique_number)
+        self.assertIsNotNone(response.qr_code_as_base64)
 
-    def test_create_transaction_with_options(self):
+    def test_create_transaction_given_options(self):
         onepay.api_key = None
         onepay.shared_secret = None
-        options = Options("dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw", "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ")
+        options = Options(self.api_key_mock, self.shared_secret_mock)
         response = Transaction.create(self.get_valid_cart(), Channel.WEB, options=options)
 
         self.assertIsNotNone(response)
+        self.assertIsNotNone(response.occ)
+        self.assertIsNotNone(response.ott)
+        self.assertIsNotNone(response.signature)
+        self.assertIsNotNone(response.external_unique_number)
+        self.assertIsNotNone(response.qr_code_as_base64)
+
+    def test_commit_transaction_global_options(self):
+
+        response = Transaction.commit(self.occ_commit_test, self.external_unique_number_test)
+
+        self.assertIsNotNone(response)
+        self.assertIsNotNone(response.authorization_code)
+        self.assertIsNotNone(response.occ)
+        self.assertIsNotNone(response.signature)
+        self.assertIsNotNone(response.transaction_desc)
+        self.assertIsNotNone(response.buy_order)
+        self.assertIsNotNone(response.issued_at)
+        self.assertIsNotNone(response.amount)
+        self.assertIsNotNone(response.installments_amount)
+        self.assertIsNotNone(response.installments_number)
+
+    def test_commit_transaction_given_options(self):
+        onepay.api_key = None
+        onepay.shared_secret = None
+
+        options = Options(self.api_key_mock, self.shared_secret_mock)
+        response = Transaction.commit(self.occ_commit_test, self.external_unique_number_test, options)
+
+        self.assertIsNotNone(response)
+        self.assertIsNotNone(response.authorization_code)
+        self.assertIsNotNone(response.occ)
+        self.assertIsNotNone(response.signature)
+        self.assertIsNotNone(response.transaction_desc)
+        self.assertIsNotNone(response.buy_order)
+        self.assertIsNotNone(response.issued_at)
+        self.assertIsNotNone(response.amount)
+        self.assertIsNotNone(response.installments_amount)
+        self.assertIsNotNone(response.installments_number)

@@ -25,11 +25,35 @@ class TransactionCreateResponseSchema(Schema):
     occ = fields.Str()
     ott = fields.Int()
     signature = fields.Str()
-    external_unique_number = fields.Str(load_from="externalUniqueNumber")
+    external_unique_number = fields.Str(load_from="externalUniqueNumber", dump_to="externalUniqueNumber")
+    issued_at = fields.Int(load_from="issuedAt", dump_to="issuedAt")
+    qr_code_as_base64 = fields.Str(load_from="qrCodeAsBase64", dump_to="qrCodeAsBase64")
+
+class TransactionCommitRequestSchema(Schema):
+    occ = fields.Str()
+    external_unique_number = fields.Str(dump_to="externalUniqueNumber")
+    issued_at = fields.Int(dump_to="issuedAt")
+    signature = fields.Str()
+    app_key = fields.Str(dump_to = "appKey")
+    api_key = fields.Str(dump_to = "apiKey")
+
+class TransactionCommitResponseSchema(Schema):
+    occ = fields.Str()
+    authorization_code = fields.Str(load_from="authorizationCode")
+    signature = fields.Str()
+    transaction_desc = fields.Str(load_from="transactionDesc")
+    buy_order = fields.Str(load_from="buyOrder")
     issued_at = fields.Int(load_from="issuedAt")
-    qr_code_as_base64 = fields.Str(load_from="qrCodeAsBase64")
+    amount = fields.Int()
+    installments_amount = fields.Int(load_from="installmentsAmount")
+    installments_number = fields.Int(load_from="installmentsNumber")
 
 class SendTransactionResponseSchema(Schema):
     response_code = fields.Str(load_from="responseCode")
     description = fields.Str()
     result = fields.Nested(TransactionCreateResponseSchema)
+
+class SendCommitResponseSchema(Schema):
+    response_code = fields.Str(load_from="responseCode")
+    description = fields.Str()
+    result = fields.Nested(TransactionCommitResponseSchema)

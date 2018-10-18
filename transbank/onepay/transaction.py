@@ -7,7 +7,7 @@ from datetime import datetime
 from enum import Enum
 import requests
 
-from transbank.onepay.schema import ItemSchema, TransactionCreateRequestSchema, TransactionCreateResponseSchema, SendTransactionResponseSchema
+from transbank.onepay.schema import ItemSchema, TransactionCreateRequestSchema, TransactionCreateResponseSchema, SendTransactionResponseSchema, TransactionCommitRequestSchema, SendCommitResponseSchema
 
 from transbank.onepay.cart import ShoppingCart
 from transbank.onepay.error import TransactionCreateError, SignError
@@ -74,6 +74,36 @@ class TransactionCreateResponse(Signable):
         self.issued_at = issued_at
         self.qr_code_as_base64 = qr_code_as_base64
 
+class TransactionCommitRequest(Signable):
+
+    signable_attributes = ['occ', 'external_unique_number', 'issued_at']
+
+    def __init__(self, occ, external_unique_number, issued_at, options = None):
+        self.occ = occ
+        self.external_unique_number = external_unique_number
+        self.issued_at = issued_at
+        self.app_key = onepay.integration_type.value.app_key
+        self.api_key = (options or onepay).api_key
+        self.options = options or onepay
+
+    @property
+    def signature(self):
+        return self.sign(self.options.shared_secret)
+
+class TransactionCommitResponse(Signable):
+    signable_attributes = ['occ', 'authorization_code', 'issued_at', 'amount', 'installments_amount', 'installments_number', 'buy_order']
+
+    def __init__(self, occ, authorization_code, signature, transaction_desc, buy_order, issued_at, amount, installments_amount, installments_number):
+        self.occ = occ
+        self.authorization_code = authorization_code
+        self.signature = signature
+        self.transaction_desc = transaction_desc
+        self.buy_order = buy_order
+        self.issued_at = issued_at
+        self.amount = amount
+        self.installments_amount = installments_amount
+        self.installments_number = installments_number
+
 class Transaction(object):
 
     __SEND_TRANSACTION = "sendtransaction"
@@ -113,6 +143,31 @@ class Transaction(object):
             raise TransactionCreateError("%s : %s" % (transaction_response['response_code'], transaction_response['description']))
 
         result = TransactionCreateResponse(**transaction_response['result'])
+
+        if not result.is_valid_signature((options or onepay).shared_secret, result.signature):
+            raise TransactionCreateError("The response signature is not valid.", -1)
+
+        return result
+
+    @classmethod
+    def commit(cls, occ, external_unique_number, options = None):
+
+        path = cls.__TRANSACTION_BASE_PATH + cls.__COMMIT_TRANSACTION
+        api_base = onepay.integration_type.value.api_base
+
+        req = TransactionCommitRequest(occ, external_unique_number, int(datetime.now().timestamp()), options)
+
+        try:
+            data_response = requests.post(api_base + path, data = TransactionCommitRequestSchema().dumps(req).data).text
+        except Exception:
+            raise TransactionCreateError("Could not obtain a response from the service")
+
+        transaction_response = SendCommitResponseSchema().loads(data_response).data
+
+        if transaction_response['response_code'] != "OK":
+            raise TransactionCreateError("%s : %s" % (transaction_response['response_code'], transaction_response['description']))
+
+        result = TransactionCommitResponse(**transaction_response['result'])
 
         if not result.is_valid_signature((options or onepay).shared_secret, result.signature):
             raise TransactionCreateError("The response signature is not valid.", -1)
