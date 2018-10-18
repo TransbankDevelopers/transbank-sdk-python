@@ -74,10 +74,7 @@ class TransactionCreateResponse(Signable):
         self.issued_at = issued_at
         self.qr_code_as_base64 = qr_code_as_base64
 
-    def to_json(self):
-        return TransactionCreateResponseSchema().dumps(self).data
-
-class TransactionCommitRequest(TransbankRequestResponse):
+class TransactionCommitRequest(Signable):
 
     signable_attributes = ['occ', 'external_unique_number', 'issued_at']
 
@@ -91,9 +88,9 @@ class TransactionCommitRequest(TransbankRequestResponse):
 
     @property
     def signature(self):
-        return sign.build_signature_for_transaction_commit_request_or_create_response(self, self.options.shared_secret)
+        return self.sign(self.options.shared_secret)
 
-class TransactionCommitResponse(TransbankRequestResponse):
+class TransactionCommitResponse(Signable):
     signable_attributes = ['occ', 'authorization_code', 'issued_at', 'amount', 'installments_amount', 'installments_number', 'buy_order']
 
     def __init__(self, occ, authorization_code, signature, transaction_desc, buy_order, issued_at, amount, installments_amount, installments_number):
@@ -158,31 +155,21 @@ class Transaction(object):
         path = cls.__TRANSACTION_BASE_PATH + cls.__COMMIT_TRANSACTION
         api_base = onepay.integration_type.value.api_base
 
-        parsed_url = urlparse(api_base)
-        if parsed_url.scheme.lower() == "http":
-            conn = http.client.HTTPConnection(parsed_url.netloc)
-        else:
-            conn = http.client.HTTPSConnection(parsed_url.netloc)
-
-        issued_at = calendar.timegm(datetime.utcnow().utctimetuple())
-        req = TransactionCommitRequest(occ, external_unique_number, issued_at, options)
+        req = TransactionCommitRequest(occ, external_unique_number, int(datetime.now().timestamp()), options)
 
         try:
-            conn.request("POST", path, TransactionCommitRequestSchema().dumps(req).data)
+            data_response = requests.post(api_base + path, data = TransactionCommitRequestSchema().dumps(req).data).text
         except Exception:
             raise TransactionCreateError("Could not obtain a response from the service")
 
-        data_response = conn.getresponse().read()
-        conn.close()
-
-        transaction_response = SendCommitResponseSchema().loads(data_response.decode('utf-8')).data
+        transaction_response = SendCommitResponseSchema().loads(data_response).data
 
         if transaction_response['response_code'] != "OK":
             raise TransactionCreateError("%s : %s" % (transaction_response['response_code'], transaction_response['description']))
 
         result = TransactionCommitResponse(**transaction_response['result'])
 
-        if not sign.validate_create_response(result, (options or onepay).shared_secret, result.signature):
+        if not result.is_valid_signature((options or onepay).shared_secret, result.signature):
             raise TransactionCreateError("The response signature is not valid.", -1)
 
         return result
