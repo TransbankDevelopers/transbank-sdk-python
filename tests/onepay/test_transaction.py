@@ -62,7 +62,6 @@ class TransactionTestCase(unittest.TestCase):
         response = Transaction.create(self.get_valid_cart(), Channel.WEB)
 
         self.assertIsNotNone(response)
-        self.assertIsNotNone(response)
         self.assertIsNotNone(response.occ)
         self.assertIsNotNone(response.ott)
         self.assertIsNotNone(response.signature)
