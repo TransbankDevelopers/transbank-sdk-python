@@ -6,7 +6,8 @@ import re
 
 from transbank import onepay
 
-from transbank.onepay.transaction import Options, Transaction, Channel, TransactionCreateRequest
+from transbank.onepay.shared_classes import Options
+from transbank.onepay.transaction import Transaction, Channel, TransactionCreateRequest
 from transbank.onepay.cart import ShoppingCart, Item
 from transbank.onepay.error import TransactionCreateError, SignError
 
@@ -54,9 +55,9 @@ class TransactionTestCase(unittest.TestCase):
     def test_raise_error_response_create_transaction(self):
         with requests_mock.Mocker() as m:
             m.register_uri("POST", re.compile("/sendtransaction"), text="{\"response_code\": \"ERROR\", \"description\": \"ERROR\"}")
-            
+
             with self.assertRaisesRegex(TransactionCreateError, "ERROR : ERROR"):
-                response = Transaction.create(self.get_valid_cart(), Channel.WEB)
+                Transaction.create(self.get_valid_cart(), Channel.WEB)
 
     def test_create_transaction_global_options(self):
         response = Transaction.create(self.get_valid_cart(), Channel.WEB)

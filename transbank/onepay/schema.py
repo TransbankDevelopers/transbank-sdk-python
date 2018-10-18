@@ -57,3 +57,25 @@ class SendCommitResponseSchema(Schema):
     response_code = fields.Str(load_from="responseCode")
     description = fields.Str()
     result = fields.Nested(TransactionCommitResponseSchema)
+
+class RefundCreateRequestSchema(Schema):
+    occ = fields.Str()
+    external_unique_number = fields.Str(dump_to="externalUniqueNumber")
+    authorization_code = fields.Str(dump_to="authorizationCode")
+    nullify_amount = fields.Int(dump_to = "nullifyAmount")
+    issued_at = fields.Int(dump_to = "issuedAt")
+    app_key = fields.Str(dump_to = "appKey")
+    api_key = fields.Str(dump_to = "apiKey")
+    signature = fields.Str()
+
+class RefundCreateResponseSchema(Schema):
+    occ = fields.Str()
+    external_unique_number = fields.Str(load_from="externalUniqueNumber", dump_to="externalUniqueNumber")
+    reverse_code = fields.Str(load_from="reverseCode", dump_to="reverseCode")
+    issued_at = fields.Int(load_from="issuedAt", dump_to="issuedAt")
+    signature = fields.Str()
+
+class SendRefundResponseSchema(Schema):
+    response_code = fields.Str(load_from="responseCode")
+    description = fields.Str()
+    result = fields.Nested(RefundCreateResponseSchema)
