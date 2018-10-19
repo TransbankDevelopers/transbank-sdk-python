@@ -20,7 +20,6 @@ class RefundTestCase(unittest.TestCase):
 
     def setUp(self):
         onepay.integration_type = onepay.IntegrationType.MOCK
-        onepay.callback_url = "http://localhost/callback"
         onepay.api_key = self.api_key_mock
         onepay.shared_secret = self.shared_secret_mock
 
