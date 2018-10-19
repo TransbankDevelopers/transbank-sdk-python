@@ -109,10 +109,7 @@ class Transaction(object):
               int(datetime.now().timestamp()), shopping_cart.items,
               onepay.callback_url, channel.value , onepay.app_scheme, options)
 
-        try:
-            data_response = requests.post(api_base + path, data = TransactionCreateRequestSchema().dumps(req).data).text
-        except Exception:
-            raise TransactionCreateError("Could not obtain a response from the service")
+        data_response = requests.post(api_base + path, data = TransactionCreateRequestSchema().dumps(req).data).text
 
         transaction_response = SendTransactionResponseSchema().loads(data_response).data
 
@@ -134,10 +131,7 @@ class Transaction(object):
 
         req = TransactionCommitRequest(occ, external_unique_number, int(datetime.now().timestamp()), options)
 
-        try:
-            data_response = requests.post(api_base + path, data = TransactionCommitRequestSchema().dumps(req).data).text
-        except Exception:
-            raise TransactionCreateError("Could not obtain a response from the service")
+        data_response = requests.post(api_base + path, data = TransactionCommitRequestSchema().dumps(req).data).text
 
         transaction_response = SendCommitResponseSchema().loads(data_response).data
 
