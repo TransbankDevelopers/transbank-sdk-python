@@ -7,7 +7,7 @@ from transbank import onepay
 
 from transbank.onepay.schema import RefundCreateRequestSchema, SendRefundResponseSchema
 from transbank.onepay.error import RefundCreateError
-from transbank.onepay.shared_classes import Options, Signable
+from transbank.onepay import Options, Signable
 
 class RefundCreateRequest(Signable):
 

@@ -6,7 +6,7 @@ import re
 
 from transbank import onepay
 
-from transbank.onepay.shared_classes import Options
+from transbank.onepay import Options
 from transbank.onepay.refund import Refund, RefundCreateRequest, RefundCreateResponse
 from transbank.onepay.error import RefundCreateError, SignError
 

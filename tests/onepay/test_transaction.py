@@ -6,7 +6,7 @@ import re
 
 from transbank import onepay
 
-from transbank.onepay.shared_classes import Options
+from transbank.onepay import Options
 from transbank.onepay.transaction import Transaction, Channel, TransactionCreateRequest
 from transbank.onepay.cart import ShoppingCart, Item
 from transbank.onepay.error import TransactionCreateError, SignError

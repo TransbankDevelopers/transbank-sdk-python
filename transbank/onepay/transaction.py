@@ -12,7 +12,7 @@ from transbank.onepay.schema import ItemSchema, TransactionCreateRequestSchema, 
 from transbank.onepay.cart import ShoppingCart
 from transbank.onepay.error import TransactionCreateError, SignError
 from transbank.onepay import sign
-from transbank.onepay.shared_classes import Options, Signable
+from transbank.onepay import Options, Signable
 
 from transbank import onepay
 
