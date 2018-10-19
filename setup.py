@@ -12,7 +12,7 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'transbank_sdk_python'
+NAME = 'transbank-sdk'
 MODULE_NAME = 'transbank'
 DESCRIPTION = 'Transbank Python SDK'
 URL = 'https://github.com/TransbankDevelopers/transbank-sdk-python'
