@@ -45,10 +45,7 @@ class Refund(object):
 
         api_base = onepay.integration_type.value.api_base + cls.__TRANSACTION_BASE_PATH
 
-        try:
-            data_response = requests.post(api_base + cls.__CREATE_REFUND, data = RefundCreateRequestSchema().dumps(req).data).text
-        except Exception:
-            raise RefundCreateError("Could not obtain a response from the service")
+        data_response = requests.post(api_base + cls.__CREATE_REFUND, data = RefundCreateRequestSchema().dumps(req).data).text
 
         refund_response = SendRefundResponseSchema().loads(data_response).data
 
