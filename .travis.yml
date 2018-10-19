@@ -24,6 +24,7 @@ addons:
 
 jobs:
   include:
+    - if: tag IS present
     - stage: deploy
       script: skip
       deploy:
