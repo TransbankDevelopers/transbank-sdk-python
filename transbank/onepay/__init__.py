@@ -1,4 +1,5 @@
 from enum import Enum
+from transbank.onepay import sign
 
 api_key = None
 shared_secret = None
@@ -32,3 +33,22 @@ class IntegrationType(Enum):
     LIVE = Integration("LIVE","https://www.onepay.cl","66535F26-5918-435C-ACAB-F628F4CC65EF")
     TEST = Integration("TEST","https://onepay.ionix.cl","8e279b4e-917d-4cbf-b0e3-9432adefff6a")
     MOCK = Integration("MOCK","http://onepay.getsandbox.com","04533c31-fe7e-43ed-bbc4-1c8ab1538afp")
+
+class Options(object):
+    def __init__(self, api_key: str, shared_secret: str):
+        self.api_key = api_key
+        self.shared_secret = shared_secret
+
+class Signable(object):
+    signable_attributes = []
+
+    def signable_data(self):
+        signable_data = [getattr(self, item) for item in self.signable_attributes]
+        return signable_data
+
+    def sign(self, secret):
+        data = sign.concat_for_signing(*self.signable_data())
+        return sign.sign_sha256(secret, data)
+
+    def is_valid_signature(self, secret, signature):
+        return self.sign(secret) == signature

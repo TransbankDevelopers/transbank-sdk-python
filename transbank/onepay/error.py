@@ -10,6 +10,11 @@ class TransactionCreateError(TransbankError):
         self.message = message
         self.code = code
 
+class RefundCreateError(TransbankError):
+    def __init__(self, message = "Refund could not be executed. Please verify given parameters", code = 0):
+        self.message = message
+        self.code = code
+
 class SignError(TransbankError):
     def __init__(self, message = "Signature does not match", code = 0):
         self.message = message
