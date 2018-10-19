@@ -3,19 +3,13 @@ python:
 - '3.4'
 - '3.5'
 - '3.6'
-matrix:
-  include:
-  - python: '3.7'
-    dist: xenial
-    sudo: true
+
 install:
 - pip install pipenv --upgrade
 - pipenv install --dev --skip-lock
 script:
-- pipenv run citests
-- sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank
-  Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io
-  -Dsonar.sources=./transbank -Dsonar.python.coverage.reportPath=coverage.xml
+- pipenv run tests
+
 addons:
   sonarcloud:
     organization: transbankdevelopers
@@ -24,8 +18,15 @@ addons:
 
 jobs:
   include:
-    - if: tag IS present
+    - python: '3.7'
+      dist: xenial
+      sudo: true
+    - stage: sonarcloud
+      script:
+      - pipenv run citests
+      - sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=./transbank -Dsonar.python.coverage.reportPath=coverage.xml
     - stage: deploy
+      if: tag IS present
       script: skip
       deploy:
         provider: pypi
