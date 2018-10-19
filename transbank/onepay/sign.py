@@ -1,8 +1,6 @@
 # encoding: utf-8
 import hashlib, hmac, base64
 
-from transbank import onepay
-
 def str_with_len_prefix(param):
     return str(len(str(param).encode('utf-8'))) + str(param)
 

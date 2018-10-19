@@ -1,8 +1,6 @@
 from datetime import datetime
 import requests
 
-from transbank.onepay import sign
-
 from transbank import onepay
 
 from transbank.onepay.schema import RefundCreateRequestSchema, SendRefundResponseSchema

@@ -1,8 +1,4 @@
 # encoding: utf-8
-import calendar
-import http.client
-import json
-
 from datetime import datetime
 from enum import Enum
 import requests
@@ -11,7 +7,6 @@ from transbank.onepay.schema import ItemSchema, TransactionCreateRequestSchema, 
 
 from transbank.onepay.cart import ShoppingCart
 from transbank.onepay.error import TransactionCreateError, SignError
-from transbank.onepay import sign
 from transbank.onepay import Options, Signable
 
 from transbank import onepay
