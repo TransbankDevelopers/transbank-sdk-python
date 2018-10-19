@@ -88,7 +88,7 @@ class Transaction(object):
     __TRANSACTION_BASE_PATH = '/ewallet-plugin-api-services/services/transactionservice/'
 
     @classmethod
-    def create(cls, shopping_cart: ShoppingCart, channel = None, external_unique_number = None, options = None):
+    def create(cls, shopping_cart: ShoppingCart, channel = Channel.WEB, external_unique_number = None, options = None):
 
         if (channel != None and channel == Channel.APP and onepay.app_scheme):
             raise TransactionCreateError("You need to set an app_scheme if you want to use the APP channel")
@@ -107,7 +107,7 @@ class Transaction(object):
         req = TransactionCreateRequest(external_unique_number_req,
               shopping_cart.total, shopping_cart.item_quantity,
               int(datetime.now().timestamp()), shopping_cart.items,
-              onepay.callback_url, channel.value , onepay.app_scheme, options)
+              onepay.callback_url, (channel or Channel.WEB).value , onepay.app_scheme, options)
 
         data_response = requests.post(api_base + path, data = TransactionCreateRequestSchema().dumps(req).data).text
 

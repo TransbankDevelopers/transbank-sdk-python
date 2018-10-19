@@ -1,12 +1,6 @@
 from enum import Enum
 from transbank.onepay import sign
 
-api_key = None
-shared_secret = None
-callback_url = None
-app_scheme = None
-integration_type = None
-
 class Integration(object):
     __key = None
     __api_base = None
@@ -52,3 +46,9 @@ class Signable(object):
 
     def is_valid_signature(self, secret, signature):
         return self.sign(secret) == signature
+
+api_key = "dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw"
+shared_secret = "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ"
+integration_type = IntegrationType.TEST
+callback_url = "http://no.callback.has/been.set"
+app_scheme = None

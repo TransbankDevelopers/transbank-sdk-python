@@ -21,12 +21,11 @@ class TransactionTestCase(unittest.TestCase):
     def setUp(self):
         self.shopping_cart = ShoppingCart()
         onepay.integration_type = onepay.IntegrationType.MOCK
-        onepay.callback_url = "http://localhost/callback"
         onepay.api_key = self.api_key_mock
         onepay.shared_secret = self.shared_secret_mock
 
     def test_get_signable_elements(self):
-        request = TransactionCreateRequest(1, 1000, 1, 1, None, "http://localhost/callback", "WEB", None)
+        request = TransactionCreateRequest(1, 1000, 1, 1, None, "http://localhost/callback")
         self.assertEqual(request.signable_data(), [1, 1000, 1, 1, "http://localhost/callback"])
 
     def get_valid_cart(self):
@@ -57,10 +56,10 @@ class TransactionTestCase(unittest.TestCase):
             m.register_uri("POST", re.compile("/sendtransaction"), text="{\"response_code\": \"ERROR\", \"description\": \"ERROR\"}")
 
             with self.assertRaisesRegex(TransactionCreateError, "ERROR : ERROR"):
-                Transaction.create(self.get_valid_cart(), Channel.WEB)
+                Transaction.create(self.get_valid_cart())
 
     def test_create_transaction_global_options(self):
-        response = Transaction.create(self.get_valid_cart(), Channel.WEB)
+        response = Transaction.create(self.get_valid_cart())
 
         self.assertIsNotNone(response)
         self.assertIsNotNone(response.occ)
@@ -73,7 +72,7 @@ class TransactionTestCase(unittest.TestCase):
         onepay.api_key = None
         onepay.shared_secret = None
         options = Options(self.api_key_mock, self.shared_secret_mock)
-        response = Transaction.create(self.get_valid_cart(), Channel.WEB, options=options)
+        response = Transaction.create(self.get_valid_cart(), options=options)
 
         self.assertIsNotNone(response)
         self.assertIsNotNone(response.occ)
