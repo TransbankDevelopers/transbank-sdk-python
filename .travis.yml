@@ -16,6 +16,7 @@ jobs:
       dist: xenial
       sudo: true
     - stage: sonarcloud
+      if: tag IS NOT present AND branch = master
       addons:
         sonarcloud:
           organization: transbankdevelopers
