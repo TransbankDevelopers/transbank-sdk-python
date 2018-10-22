@@ -43,13 +43,13 @@ class TransactionCreateRequest(Signable):
 class TransactionCreateResponse(Signable):
     signable_attributes = ['occ', 'external_unique_number', 'issued_at']
 
-    def __init__(self, occ, ott, signature, external_unique_number, issued_at, qr_code_as_base64):
+    def __init__(self, occ, ott, signature, external_unique_number, issued_at, qr_as_base64):
         self.occ = occ
         self.ott = ott
         self.signature = signature
         self.external_unique_number = external_unique_number
         self.issued_at = issued_at
-        self.qr_code_as_base64 = qr_code_as_base64
+        self.qr_as_base64 = qr_as_base64
 
 class TransactionCommitRequest(Signable):
 

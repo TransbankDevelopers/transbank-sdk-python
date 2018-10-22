@@ -66,7 +66,7 @@ class TransactionTestCase(unittest.TestCase):
         self.assertIsNotNone(response.ott)
         self.assertIsNotNone(response.signature)
         self.assertIsNotNone(response.external_unique_number)
-        self.assertIsNotNone(response.qr_code_as_base64)
+        self.assertIsNotNone(response.qr_as_base64)
 
     def test_create_transaction_given_options(self):
         onepay.api_key = None
@@ -79,7 +79,7 @@ class TransactionTestCase(unittest.TestCase):
         self.assertIsNotNone(response.ott)
         self.assertIsNotNone(response.signature)
         self.assertIsNotNone(response.external_unique_number)
-        self.assertIsNotNone(response.qr_code_as_base64)
+        self.assertIsNotNone(response.qr_as_base64)
 
     def test_commit_transaction_global_options(self):
 

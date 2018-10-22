@@ -27,7 +27,7 @@ class TransactionCreateResponseSchema(Schema):
     signature = fields.Str()
     external_unique_number = fields.Str(load_from="externalUniqueNumber", dump_to="externalUniqueNumber")
     issued_at = fields.Int(load_from="issuedAt", dump_to="issuedAt")
-    qr_code_as_base64 = fields.Str(load_from="qrCodeAsBase64", dump_to="qrCodeAsBase64")
+    qr_as_base64 = fields.Str(load_from="qrCodeAsBase64", dump_to="qrCodeAsBase64")
 
 class TransactionCommitRequestSchema(Schema):
     occ = fields.Str()
