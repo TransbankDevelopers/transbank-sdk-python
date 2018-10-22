@@ -1,25 +1,37 @@
 language: python
 python:
-  - "3.4"
-  - "3.5"
-  - "3.6"
-# temporary workaround to run tests in 3.7 version
-matrix:
-  include:
-    - python: "3.7"
-      dist: xenial
-      sudo: true
+- '3.4'
+- '3.5'
+- '3.6'
 
 install:
-  - pip install pipenv --upgrade
-  - pipenv install --dev --skip-lock
-
+- pip install pipenv --upgrade
+- pipenv install --dev --skip-lock
 script:
-  - pipenv run citests
-  - sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=./transbank -Dsonar.python.coverage.reportPath=coverage.xml
+- pipenv run tests
 
-addons:
-  sonarcloud:
-    organization: "transbankdevelopers"
-    token:
-        secure: "mZ4G3upadS4wnxMTmwiry12AHyOV0fer9gRVJTMbjTFU2Qi5Bkz2PAwiEf0AFs/muZZzu4iqhL1ff3OhtwrtprgPDK1uPlZ3fb51Rd6YhaoOFxGTz+fhZLcHEo1AG/5YDn2tvEQ1pSjNdYH40E2djzkQ+APJ+R6DTsGIvBJdplxBjOJRLuQ+Iq5mCnplciaJhqrANit202BjVYkFBdTssvqhCez0GV2GmWGbRuKkfbKr9MFwCEjQxvdfVUBdwRbkBou3S8q0m8Y4MyYCCLtceW5IRlu+oTHwsxELB+oyFb4HyNRJy5PgFRT2mHWuWiPxrcThAZmn/kTnIiQ0NQkR2piNQMsIENnnndQd88Xdqg5gRXitoqJxpwJiu11ZRbJUG162q2sqMoYwjdQnJ0+jQ6WUDiJft0fQaTIC5AWZfnqcwvKgdbJ1Anyh8GLgSWI/BSELFyYnEcHiCQewhe+6OzIfFg/oLKigvLSLa4egNW+VbvkVNi1q9vyRxxRBeqwwNKCQ/VBrmGK4coojlte/exSl5ZhWld8ei+D0Iuw9PwxDwcbnV1kfQk0FgqYq9+LzAjgbyZUYEbI+2qMTegth5+GJjM5I5PkX6UsD2bl1vN7sPh7Tyec2Z+E2iJBW2KKNh1iyPHC+a3bkb0TkHryRtVOv1zqeHiz0gyv+3trO4Hg="
+jobs:
+  include:
+    - python: '3.7'
+      dist: xenial
+      sudo: true
+    - stage: sonarcloud
+      if: tag IS NOT present AND branch = master
+      addons:
+        sonarcloud:
+          organization: transbankdevelopers
+          token:
+            secure: mZ4G3upadS4wnxMTmwiry12AHyOV0fer9gRVJTMbjTFU2Qi5Bkz2PAwiEf0AFs/muZZzu4iqhL1ff3OhtwrtprgPDK1uPlZ3fb51Rd6YhaoOFxGTz+fhZLcHEo1AG/5YDn2tvEQ1pSjNdYH40E2djzkQ+APJ+R6DTsGIvBJdplxBjOJRLuQ+Iq5mCnplciaJhqrANit202BjVYkFBdTssvqhCez0GV2GmWGbRuKkfbKr9MFwCEjQxvdfVUBdwRbkBou3S8q0m8Y4MyYCCLtceW5IRlu+oTHwsxELB+oyFb4HyNRJy5PgFRT2mHWuWiPxrcThAZmn/kTnIiQ0NQkR2piNQMsIENnnndQd88Xdqg5gRXitoqJxpwJiu11ZRbJUG162q2sqMoYwjdQnJ0+jQ6WUDiJft0fQaTIC5AWZfnqcwvKgdbJ1Anyh8GLgSWI/BSELFyYnEcHiCQewhe+6OzIfFg/oLKigvLSLa4egNW+VbvkVNi1q9vyRxxRBeqwwNKCQ/VBrmGK4coojlte/exSl5ZhWld8ei+D0Iuw9PwxDwcbnV1kfQk0FgqYq9+LzAjgbyZUYEbI+2qMTegth5+GJjM5I5PkX6UsD2bl1vN7sPh7Tyec2Z+E2iJBW2KKNh1iyPHC+a3bkb0TkHryRtVOv1zqeHiz0gyv+3trO4Hg=
+      script:
+      - pipenv run citests
+      - sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=./transbank -Dsonar.python.coverage.reportPath=coverage.xml
+    - stage: deploy
+      if: tag IS present
+      script: skip
+      deploy:
+        provider: pypi
+        user: transbankdevelopers
+        password:
+          secure: AHARbbj40IMpXm96BM5/hGw0qv8EBTM3k3xLqmb/QgodBt75tst7RFiIBpp/l6FbLG6iiUfpFiCCZ1B/LcU+lZ9+MV45QI7RgsKogxUZr0XtX3YX20Ks/KB2EqhA+Zv1kDOgzWTXEiLKT98wIyfWFs98IZoKFEk5aQmDo5V+j63IZ2WhjGOiNikJ4LI943P4TxvN1k6dK2ZOtn0sX4zX2zcFA31Qwp6WHiLNzUWn8yYyez1+B44DEaiOs6V2ALoLMslS67kuH9r4DnPmilyCiKXrXjxogthkqN21wC5owp0Uah02N4Qx20FZQFiApu0OFOqWWRPzV0d7yE4gmAWAccRMzlqbeHIfaFQVp+9fkaartbFYNsy3qH9WVJRPYCRREYsGEWCMvSgK/NSLrbNGEELVC1qc/VnoTFKNpc7Bkq3YXhhioPPSQeJJIcg0pBF+8F1Pp8UkqrpJx0fJkichGKU742FkGxO9PmXApaxjjD78322luc9cXR8Cuz4KzjrgRasKrNM6aLsSWqKiuSsSCLKqCHYbd4Vf8c0WKpmnsQpmrbnHnaPNortLhIyY5F8IgA2SYkJBKlUC5NaMAsJswSe0epTcEWNGuhIYQJ8LcWpZwPF7Ij4HKjUlYsnokzJdyh4nV8DPnj62P0RAFrXiCWcVhBF8cbBYtwGWZ8kM+Xc=
+        on:
+          tags: true
