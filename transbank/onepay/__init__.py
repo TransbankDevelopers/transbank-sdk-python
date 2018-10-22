@@ -26,7 +26,7 @@ class Integration(object):
 class IntegrationType(Enum):
     LIVE = Integration("LIVE","https://www.onepay.cl","66535F26-5918-435C-ACAB-F628F4CC65EF")
     TEST = Integration("TEST","https://onepay.ionix.cl","8e279b4e-917d-4cbf-b0e3-9432adefff6a")
-    MOCK = Integration("MOCK","http://onepay.getsandbox.com","04533c31-fe7e-43ed-bbc4-1c8ab1538afp")
+    MOCK = Integration("MOCK","https://transbank-onepay-ewallet-mock.herokuapp.com","04533c31-fe7e-43ed-bbc4-1c8ab1538afp")
 
 class Options(object):
     def __init__(self, api_key: str, shared_secret: str):
