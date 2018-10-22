@@ -6,7 +6,7 @@ import requests
 from transbank.onepay.schema import ItemSchema, TransactionCreateRequestSchema, TransactionCreateResponseSchema, SendTransactionResponseSchema, TransactionCommitRequestSchema, SendCommitResponseSchema
 
 from transbank.onepay.cart import ShoppingCart
-from transbank.onepay.error import TransactionCreateError, SignError
+from transbank.onepay.error import TransactionCreateError, SignError, TransactionCommitError
 from transbank.onepay import Options, Signable
 
 from transbank import onepay
@@ -136,11 +136,11 @@ class Transaction(object):
         transaction_response = SendCommitResponseSchema().loads(data_response).data
 
         if transaction_response['response_code'] != "OK":
-            raise TransactionCreateError("%s : %s" % (transaction_response['response_code'], transaction_response['description']))
+            raise TransactionCommitError("%s : %s" % (transaction_response['response_code'], transaction_response['description']))
 
         result = TransactionCommitResponse(**transaction_response['result'])
 
         if not result.is_valid_signature((options or onepay).shared_secret, result.signature):
-            raise TransactionCreateError("The response signature is not valid.", -1)
+            raise TransactionCommitError("The response signature is not valid.", -1)
 
         return result

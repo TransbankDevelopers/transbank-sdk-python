@@ -9,7 +9,7 @@ from transbank import onepay
 from transbank.onepay import Options
 from transbank.onepay.transaction import Transaction, Channel, TransactionCreateRequest
 from transbank.onepay.cart import ShoppingCart, Item
-from transbank.onepay.error import TransactionCreateError, SignError
+from transbank.onepay.error import TransactionCreateError, TransactionCommitError, SignError
 
 class TransactionTestCase(unittest.TestCase):
 
@@ -57,6 +57,13 @@ class TransactionTestCase(unittest.TestCase):
 
             with self.assertRaisesRegex(TransactionCreateError, "ERROR : ERROR"):
                 Transaction.create(self.get_valid_cart())
+
+    def test_raise_error_response_commit_transaction(self):
+        with requests_mock.Mocker() as m:
+            m.register_uri("POST", re.compile("/gettransactionnumber"), text="{\"response_code\": \"ERROR\", \"description\": \"ERROR\"}")
+
+            with self.assertRaisesRegex(TransactionCommitError, "ERROR : ERROR"):
+                Transaction.commit("occ", "external_unique_number")
 
     def test_create_transaction_global_options(self):
         response = Transaction.create(self.get_valid_cart())
