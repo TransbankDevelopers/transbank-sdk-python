@@ -29,6 +29,28 @@ class CartTestCase(unittest.TestCase):
         cart.add(Item("Envio", 1, 500))
         self.assertEqual(cart.total, 1500)
 
+    def test_can_add_items_to_cart_with_item_negative_value(self):
+        cart = ShoppingCart()
+
+        self.assertEqual(cart.total, 0)
+
+        cart.add(Item("Ropa", 1, 200))
+        self.assertEqual(cart.total, 200)
+
+        cart.add(Item("Descuento", 1, -10))
+        self.assertEqual(cart.total, 190)
+
+    def test_can_add_items_to_cart_with_item_negative_value_greater_than_total_amount(self):
+        cart = ShoppingCart()
+
+        self.assertEqual(cart.total, 0)
+
+        cart.add(Item("Ropa", 1, 200))
+        self.assertEqual(cart.total, 200)
+
+        with self.assertRaisesRegex(ValueError, "Total amount cannot be less than zero."):
+            cart.add(Item("Descuento", 1, -201))
+
     def test_calculate_cart_quantity(self):
         cart = ShoppingCart()
 
@@ -43,5 +65,3 @@ class CartTestCase(unittest.TestCase):
     def test_positive_item_validations(self):
         with self.assertRaisesRegex(ValueError, "quantity must be a positive number"):
             Item("", -1, 0)
-        with self.assertRaisesRegex(ValueError, "amount must be a positive number"):
-            Item("", 0, -1)
