@@ -24,8 +24,6 @@ class Item(object):
 
     @amount.setter
     def amount(self, value):
-        if (value < 0):
-            raise ValueError('amount must be a positive number')
         self.__amount = value
 
 
@@ -34,6 +32,9 @@ class ShoppingCart(object):
         self.__items = []
 
     def add(self, item: Item):
+        new_total = self.total + (item.amount * item.quantity)
+        if (new_total < 0):
+          raise ValueError('Total amount cannot be less than zero.')
         self.__items.append(item)
 
     @property
