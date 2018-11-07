@@ -23,6 +23,8 @@ class TransactionTestCase(unittest.TestCase):
         onepay.integration_type = onepay.IntegrationType.MOCK
         onepay.api_key = self.api_key_mock
         onepay.shared_secret = self.shared_secret_mock
+        onepay.callback_url = None
+        onepay.app_scheme = None
 
     def test_get_signable_elements(self):
         request = TransactionCreateRequest(1, 1000, 1, 1, None, "http://localhost/callback")
@@ -39,9 +41,6 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(options.shared_secret, "shared_secret")
 
     def test_validate_create(self):
-        onepay.callback_url = None
-        onepay.app_scheme = None
-
         with self.assertRaisesRegex(Exception, "Shopping cart must not be null or empty"):
             Transaction.create(None)
 
