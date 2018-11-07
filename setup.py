@@ -24,7 +24,7 @@ VERSION = None
 # What packages are required for this module to be executed?
 REQUIRED = [
   "marshmallow<=2.15.6",
-  "requests<=2.19.1"
+  "requests>=2.20.0"
 ]
 
 TESTS_REQUIREMENTS = [
