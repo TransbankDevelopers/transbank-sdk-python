@@ -90,10 +90,10 @@ class Transaction(object):
     @classmethod
     def create(cls, shopping_cart: ShoppingCart, channel = Channel.WEB, external_unique_number = None, options = None):
 
-        if (channel != None and channel == Channel.APP and onepay.app_scheme):
+        if (channel != None and channel == Channel.APP and not onepay.app_scheme):
             raise TransactionCreateError("You need to set an app_scheme if you want to use the APP channel")
 
-        if (channel != None and channel == Channel.MOBILE and onepay.callback_url):
+        if (channel != None and channel == Channel.MOBILE and not onepay.callback_url):
             raise TransactionCreateError("You need to set valid callback if you want to use the MOBILE channel")
 
         if not hasattr(shopping_cart, 'items') or (hasattr(shopping_cart, 'items') and not shopping_cart.items):

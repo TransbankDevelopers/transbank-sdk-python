@@ -39,6 +39,9 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(options.shared_secret, "shared_secret")
 
     def test_validate_create(self):
+        onepay.callback_url = None
+        onepay.app_scheme = None
+
         with self.assertRaisesRegex(Exception, "Shopping cart must not be null or empty"):
             Transaction.create(None)
 
