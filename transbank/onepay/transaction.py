@@ -35,6 +35,8 @@ class TransactionCreateRequest(Signable):
         self.api_key = (options or onepay).api_key
         self.generate_ott_qr_code = True
         self.options = options or onepay
+        self.qr_width_height = options.qr_width_height
+        self.commerce_logo_url = options.commerce_logo_url
 
     @property
     def signature(self):
@@ -89,6 +91,7 @@ class Transaction(object):
 
     @classmethod
     def create(cls, shopping_cart: ShoppingCart, channel = Channel.WEB, external_unique_number = None, options = None):
+        options = Options(options)
 
         if (channel != None and channel == Channel.APP and not onepay.app_scheme):
             raise TransactionCreateError("You need to set an app_scheme if you want to use the APP channel")
