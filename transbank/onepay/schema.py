@@ -20,6 +20,8 @@ class TransactionCreateRequestSchema(Schema):
     api_key = fields.Str(dump_to = "apiKey")
     generate_ott_qr_code = fields.Bool(dump_to = "generateOttQrCode")
     signature = fields.Str()
+    qr_width_height = fields.Str(dump_to = "widthHeight")
+    commerce_logo_url = fields.Str(dump_to = "commerceLogoUrl")
 
 class TransactionCreateResponseSchema(Schema):
     occ = fields.Str()

@@ -28,10 +28,21 @@ class IntegrationType(Enum):
     TEST = Integration("TEST","https://onepay.ionix.cl","8e279b4e-917d-4cbf-b0e3-9432adefff6a")
     MOCK = Integration("MOCK","https://transbank-onepay-ewallet-mock.herokuapp.com","04533c31-fe7e-43ed-bbc4-1c8ab1538afp")
 
+api_key = "dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw"
+shared_secret = "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ"
+integration_type = IntegrationType.TEST
+callback_url = "http://no.callback.has/been.set"
+app_scheme = None
+qr_width_height = None
+commerce_logo_url = None
+
 class Options(object):
-    def __init__(self, api_key: str, shared_secret: str):
+    def __init__(self, api_key: str, shared_secret: str, qr_width_height=qr_width_height, commerce_logo_url=commerce_logo_url):
         self.api_key = api_key
         self.shared_secret = shared_secret
+        self.qr_width_height = qr_width_height
+        self.commerce_logo_url = commerce_logo_url
+
 
 class Signable(object):
     signable_attributes = []
@@ -47,8 +58,3 @@ class Signable(object):
     def is_valid_signature(self, secret, signature):
         return self.sign(secret) == signature
 
-api_key = "dKVhq1WGt_XapIYirTXNyUKoWTDFfxaEV63-O5jcsdw"
-shared_secret = "?XW#WOLG##FBAGEAYSNQ5APD#JF@$AYZ"
-integration_type = IntegrationType.TEST
-callback_url = "http://no.callback.has/been.set"
-app_scheme = None

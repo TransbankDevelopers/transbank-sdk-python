@@ -35,6 +35,8 @@ class TransactionCreateRequest(Signable):
         self.api_key = (options or onepay).api_key
         self.generate_ott_qr_code = True
         self.options = options or onepay
+        self.qr_width_height = self.options.qr_width_height
+        self.commerce_logo_url = self.options.commerce_logo_url
 
     @property
     def signature(self):
