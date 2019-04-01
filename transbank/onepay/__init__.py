@@ -36,7 +36,7 @@ app_scheme = None
 qr_width_height = None
 commerce_logo_url = None
 
-defaultOptionsHash = {
+defaultOptions = {
     "api_key": api_key,
     "shared_secret": shared_secret,
     "qr_width_height": qr_width_height,
@@ -44,7 +44,7 @@ defaultOptionsHash = {
 }
 
 class Options(object):
-    def __init__(self, options=defaultOptionsHash):
+    def __init__(self, options=defaultOptions):
         self.api_key = options['api_key'] if 'api_key' in options else api_key
         self.shared_secret = options['shared_secret'] if 'shared_secret' in options else shared_secret
         self.qr_width_height = options['qr_width_height'] if 'qr_width_height' in options else qr_width_height
