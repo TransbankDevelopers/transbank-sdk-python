@@ -36,19 +36,13 @@ app_scheme = None
 qr_width_height = None
 commerce_logo_url = None
 
-defaultOptions = {
-    "api_key": api_key,
-    "shared_secret": shared_secret,
-    "qr_width_height": qr_width_height,
-    "commerce_logo_url": commerce_logo_url
-}
-
 class Options(object):
-    def __init__(self, options=defaultOptions):
-        self.api_key = options['api_key'] if 'api_key' in options else api_key
-        self.shared_secret = options['shared_secret'] if 'shared_secret' in options else shared_secret
-        self.qr_width_height = options['qr_width_height'] if 'qr_width_height' in options else qr_width_height
-        self.commerce_logo_url = options['commerce_logo_url'] if 'commerce_logo_url' in options else commerce_logo_url
+    def __init__(self, api_key: str, shared_secret: str, qr_width_height=qr_width_height, commerce_logo_url=commerce_logo_url):
+        self.api_key = api_key
+        self.shared_secret = shared_secret
+        self.qr_width_height = qr_width_height
+        self.commerce_logo_url = commerce_logo_url
+
 
 class Signable(object):
     signable_attributes = []
