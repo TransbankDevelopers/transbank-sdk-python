@@ -3,6 +3,7 @@ import unittest.mock
 
 import requests_mock
 import re
+import json
 
 from transbank import onepay
 
@@ -10,6 +11,7 @@ from transbank.onepay import Options
 from transbank.onepay.transaction import Transaction, Channel, TransactionCreateRequest
 from transbank.onepay.cart import ShoppingCart, Item
 from transbank.onepay.error import TransactionCreateError, TransactionCommitError, SignError
+from transbank.onepay.schema import TransactionCreateRequestSchema
 
 class TransactionTestCase(unittest.TestCase):
 
@@ -89,6 +91,20 @@ class TransactionTestCase(unittest.TestCase):
         self.assertIsNotNone(response.signature)
         self.assertIsNotNone(response.external_unique_number)
         self.assertIsNotNone(response.qr_code_as_base64)
+
+    def test_create_transaction_skip_none_params(self):
+        external_unique_number_req = 123
+        options = Options()
+        shopping_cart = self.get_valid_cart()
+
+        req = TransactionCreateRequest(external_unique_number_req,
+              shopping_cart.total, shopping_cart.item_quantity,
+              5473782781, shopping_cart.items,
+              onepay.callback_url, Channel.WEB.value , onepay.app_scheme, options)
+        request_string = TransactionCreateRequestSchema().dumps(req).data
+        request_json = json.loads(request_string)
+        self.assertFalse('commerceLogoUrl' in request_json)
+        self.assertFalse('widthHeight' in request_json)
 
     def test_commit_transaction_global_options(self):
 
