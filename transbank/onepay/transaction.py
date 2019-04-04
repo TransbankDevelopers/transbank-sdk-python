@@ -32,11 +32,13 @@ class TransactionCreateRequest(Signable):
         self.channel = channel
         self.app_scheme = app_scheme
         self.app_key = onepay.integration_type.value.app_key
-        self.api_key = (options or onepay).api_key
         self.generate_ott_qr_code = True
         self.options = options or onepay
-        self.qr_width_height = self.options.qr_width_height
-        self.commerce_logo_url = self.options.commerce_logo_url
+        self.api_key = self.options.api_key
+        if self.options.commerce_logo_url is not None:
+            self.commerce_logo_url = self.options.commerce_logo_url
+        if self.options.qr_width_height is not None:
+            self.qr_width_height = self.options.qr_width_height
 
     @property
     def signature(self):
@@ -105,6 +107,7 @@ class Transaction(object):
         api_base = onepay.integration_type.value.api_base
 
         external_unique_number_req = external_unique_number or int(datetime.now().timestamp() * 1000)
+        options = Options.build(options)
 
         req = TransactionCreateRequest(external_unique_number_req,
               shopping_cart.total, shopping_cart.item_quantity,
