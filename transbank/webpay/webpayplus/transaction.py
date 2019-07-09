@@ -39,3 +39,16 @@ class Transaction:
         http_client = WebpayPlus.http_client
 
         http_response = http_client.post(cls.CREATE_TRANSACTION_ENDPOINT, data=payload, headers=headers)
+        if 200 > http_response.status_code > 300:
+            raise Exception('Could not obtain a response from the service', -1)
+
+        response_json = http_response.json()
+
+        if response_json["token"] is None or response_json["url"] is None:
+            raise Exception(response_json["error_message"])
+
+        json_data = response_json
+        transaction_create_reponse = None
+        return transaction_create_reponse
+
+
