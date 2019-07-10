@@ -50,7 +50,10 @@ class Transaction:
 
         response_json = http_response.json()
 
-        if response_json["token"] is None or response_json["url"] is None:
+        try:
+            token = response_json["token"]
+            url = response_json["url"]
+        except KeyError:
             raise Exception(response_json["error_message"])
 
         json_data = response_json
