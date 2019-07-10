@@ -1,4 +1,4 @@
-from transbank.webpay.webpayplus import WebpayPlus
+from transbank.webpay.webpayplus import webpayplus
 
 
 class Options:
@@ -8,9 +8,9 @@ class Options:
     DEFAULT_INTEGRATION_TYPE = "TEST"
     DEFAULT_INTEGRATION_TYPE_URL = "https://webpay3gint.transbank.cl/"
     # End envvars
+
     _api_key = None
     _commerce_code = None
-
     _integration_type = None
 
     def __init__(self, api_key, commerce_code):
@@ -46,4 +46,4 @@ class Options:
         self._commerce_code = commerce_code
 
     def integration_type_url(self):
-        return WebpayPlus.INTEGRATION_TYPES[self.integration_type]
+        return webpayplus.INTEGRATION_TYPES[self.integration_type]
