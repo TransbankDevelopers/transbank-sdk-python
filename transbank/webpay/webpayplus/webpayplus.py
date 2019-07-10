@@ -1,7 +1,7 @@
 import requests
 
 
-class WebpayPlus_meta(type):
+class WebpayPlusMeta(type):
     INTEGRATION_TYPES = dict({
         "LIVE": "https://webpay3g.transbank.cl/",
         "TEST": "https://webpay3gint.transbank.cl/",
@@ -61,5 +61,5 @@ class WebpayPlus_meta(type):
         return cls.INTEGRATION_TYPES[integration_type]
 
 
-class WebpayPlus(metaclass=WebpayPlus_meta):
+class WebpayPlus(metaclass=WebpayPlusMeta):
     pass
