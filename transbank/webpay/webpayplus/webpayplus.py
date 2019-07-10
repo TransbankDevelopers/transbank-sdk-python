@@ -1,7 +1,8 @@
 import requests
+from transbank.webpay.options import *
 
 
-class WebpayPlusMeta(type):
+class WPPMeta(type):
     INTEGRATION_TYPES = dict({
         "LIVE": "https://webpay3g.transbank.cl/",
         "TEST": "https://webpay3gint.transbank.cl/",
@@ -12,12 +13,10 @@ class WebpayPlusMeta(type):
     _api_key = Options.DEFAULT_API_KEY
     _commerce_code = Options.DEFAULT_COMMERCE_CODE
     _integration_type = Options.DEFAULT_INTEGRATION_TYPE
-    _integration_type_url = None
+    _integration_type_url = INTEGRATION_TYPES["TEST"]
 
     def __init__(cls, *args, **kwargs):
-        cls._api_key = None
-        cls._commerce_code = None
-        cls._integration_type = None
+        pass
 
     # Getters and setters based on the @property decorator
     @property
@@ -28,6 +27,10 @@ class WebpayPlusMeta(type):
     def api_key(cls, api_key):
         cls._api_key = api_key
 
+    @classmethod
+    def api_key(cls):
+        return cls._api_key
+
     @property
     def commerce_code(cls):
         return cls._commerce_code
@@ -35,6 +38,10 @@ class WebpayPlusMeta(type):
     @commerce_code.setter
     def commerce_code(cls, commerce_code):
         cls._commerce_code = commerce_code
+
+    @classmethod
+    def commerce_code(cls):
+        return cls._commerce_code
 
     @property
     def integration_type(cls):
@@ -57,9 +64,16 @@ class WebpayPlusMeta(type):
     @property
     def integration_type_url(cls, integration_type=None):
         if integration_type is None:
-            return cls.INTEGRATION_TYPES[cls.integration_type]
+            print(cls._integration_type)
+            return cls.INTEGRATION_TYPES[cls._integration_type]
         return cls.INTEGRATION_TYPES[integration_type]
 
+    @classmethod
+    def integration_type_url(cls, integration_type=None):
+        if integration_type is None:
+            print(cls._integration_type)
+            return cls.INTEGRATION_TYPES[cls._integration_type]
+        return cls.INTEGRATION_TYPES[integration_type]
 
-class WebpayPlus(metaclass=WebpayPlusMeta):
+class WebpayPlus(metaclass=WPPMeta):
     pass

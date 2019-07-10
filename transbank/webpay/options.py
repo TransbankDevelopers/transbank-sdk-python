@@ -29,6 +29,10 @@ class Options:
     def integration_type(self, integration_type):
         self._integration_type = integration_type
 
+    @classmethod
+    def integration_type(cls):
+        return cls._integration_type
+
     @property
     def api_key(self):
         return self._api_key
@@ -36,6 +40,10 @@ class Options:
     @api_key.setter
     def api_key(self, api_key):
         self._api_key = api_key
+
+    @classmethod
+    def api_key(cls):
+        return cls._api_key
 
     @property
     def commerce_code(self):

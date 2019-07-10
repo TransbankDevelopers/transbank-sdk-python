@@ -1,7 +1,7 @@
 import json
 
 from transbank.webpay.webpayplus.transaction_create_response import TransactionCreateResponse
-from transbank.webpay.webpayplus.webpayplus import WebpayPlus
+from transbank.webpay.webpayplus.webpayplus import *
 
 
 class Transaction:
@@ -10,6 +10,9 @@ class Transaction:
     REFUND_TRANSACTION_ENDPOINT = 'rswebpaytransaction/api/webpay/v1.0/transactions/{0}/refund'
     GET_TRANSACTION_STATUS_ENDPOINT = 'rswebpaytransaction/api/webpay/v1.0/transactions/{0}'
 
+    def __init__(self):
+        pass
+
     @classmethod
     def create(cls, buy_order, session_id, amount,
                return_url, options=None):
@@ -17,18 +20,19 @@ class Transaction:
         api_key = None
         base_url = None
         if options is None:
-            commerce_code = WebpayPlus.commerce_code
-            api_key = WebpayPlus.api_key
-            base_url = WebpayPlus.base_url
+            commerce_code = WebpayPlus.commerce_code()
+            api_key = WebpayPlus.api_key()
+            base_url = WebpayPlus.integration_type_url()
         else:
             commerce_code = options.commerce_code
             api_key = options.api_key
             WebpayPlus.integration_type_url = options.integration_type
-            base_url = WebpayPlus.integration_type_url
+            base_url = WebpayPlus.integration_type_url()
 
         headers = dict({
             "Tbk-Api-Key-Id": commerce_code,
             "Tbk-Api-Key-Secret": api_key,
+            "Content-Type": "application/json",
         })
 
         payload = json.dumps(dict({
@@ -39,8 +43,8 @@ class Transaction:
         }))
 
         http_client = WebpayPlus.http_client
-
-        http_response = http_client.post(cls.CREATE_TRANSACTION_ENDPOINT, data=payload, headers=headers)
+        final_url = base_url + cls.CREATE_TRANSACTION_ENDPOINT
+        http_response = http_client.post(final_url, data=payload, headers=headers)
         if 200 > http_response.status_code > 300:
             raise Exception('Could not obtain a response from the service', -1)
 
