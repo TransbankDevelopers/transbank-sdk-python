@@ -1,4 +1,6 @@
 import json
+
+from transbank.webpay.webpayplus.transaction_create_response import TransactionCreateResponse
 from transbank.webpay.webpayplus.webpayplus import WebpayPlus
 
 
@@ -48,7 +50,5 @@ class Transaction:
             raise Exception(response_json["error_message"])
 
         json_data = response_json
-        transaction_create_reponse = None
-        return transaction_create_reponse
-
-
+        transaction_create_response = TransactionCreateResponse(json_data)
+        return transaction_create_response
