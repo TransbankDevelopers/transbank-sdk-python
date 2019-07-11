@@ -3,12 +3,12 @@ class TransactionCreateResponse:
     _url = None
 
     def __init__(self, json):
-        self._token = None
-        self._url = None
+        self.from_json(json)
 
     def from_json(self, json):
-        self.url = json["url"]
-        self.token = json["token"]
+        self._url = json["url"]
+        self._token = json["token"]
+        return self
 
     @property
     def token(self):
