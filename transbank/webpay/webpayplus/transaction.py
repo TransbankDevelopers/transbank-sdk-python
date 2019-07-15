@@ -1,6 +1,7 @@
 import json
 
 from transbank.webpay.webpayplus.transaction_create_response import TransactionCreateResponse
+from transbank.webpay.webpayplus.transaction_commit_response import TransactionCommitResponse
 from transbank.webpay.webpayplus.webpayplus import *
 
 
@@ -87,8 +88,10 @@ class Transaction:
 
         response_json = http_response.json()
 
-        try:
-            token = response_json["token"]
-            url = response_json["url"]
-        except KeyError:
+        if response_json["error_message"] is not None:
             raise Exception(response_json["error_message"])
+
+        json_data = response_json
+
+        transaction_commit_response = TransactionCommitResponse(json_data)
+        return transaction_commit_response
