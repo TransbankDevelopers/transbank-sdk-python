@@ -83,6 +83,12 @@ class Transaction:
 
         http_client = WebpayPlus.http_client
         final_url = base_url + cls.COMMIT_TRANSACTION_ENDPOINT + "/" + token
-        http_response = http_client.post(final_url, headers=headers)
+        http_response = http_client.put(final_url, headers=headers)
 
+        response_json = http_response.json()
 
+        try:
+            token = response_json["token"]
+            url = response_json["url"]
+        except KeyError:
+            raise Exception(response_json["error_message"])
