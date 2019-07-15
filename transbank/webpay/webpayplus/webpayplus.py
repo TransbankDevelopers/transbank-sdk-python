@@ -75,5 +75,6 @@ class WPPMeta(type):
             return cls.INTEGRATION_TYPES[cls._integration_type]
         return cls.INTEGRATION_TYPES[integration_type]
 
+
 class WebpayPlus(metaclass=WPPMeta):
     pass
