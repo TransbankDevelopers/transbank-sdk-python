@@ -56,3 +56,27 @@ class Transaction:
             else:
                 raise TransactionCreateException(http_response.status_code, e.args)
 
+    @classmethod
+    def commit(cls, token, options=None):
+        commerce_code = None
+        api_key = None
+        base_url = None
+        if options is None:
+            commerce_code = WebpayPlus.commerce_code()
+            api_key = WebpayPlus.api_key()
+            base_url = WebpayPlus.integration_type_url()
+        else:
+            commerce_code = options.commerce_code
+            api_key = options.api_key
+            WebpayPlus.integration_type_url = options.integration_type
+            base_url = WebpayPlus.integration_type_url()
+
+        headers = dict({
+            "Tbk-Api-Key-Id": commerce_code,
+            "Tbk-Api-Key-Secret": api_key,
+            "Content-Type": "application/json",
+        })
+
+        http_client = WebpayPlus.http_client
+        final_url = base_url + cls.COMMIT_TRANSACTION_ENDPOINT + "/" + token
+        http_response = http_client.post(final_url, headers=headers)
