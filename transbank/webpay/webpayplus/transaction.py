@@ -17,18 +17,15 @@ class Transaction:
     @classmethod
     def create(cls, buy_order, session_id, amount,
                return_url, options=None):
-        commerce_code = None
-        api_key = None
-        base_url = None
-        if options is None:
-            commerce_code = WebpayPlus.commerce_code()
-            api_key = WebpayPlus.api_key()
-            base_url = WebpayPlus.integration_type_url()
-        else:
+        commerce_code = WebpayPlus.commerce_code()
+        api_key = WebpayPlus.api_key()
+        base_url = WebpayPlus.integration_type_url()
+
+        if options is not None:
             commerce_code = options.commerce_code
             api_key = options.api_key
-            WebpayPlus.integration_type_url = options.integration_type
-            base_url = WebpayPlus.integration_type_url()
+            # WebpayPlus.integration_type_url = options.integration_type
+            base_url = WebpayPlus.integration_type_url(options.integration_type)
 
         headers = dict({
             "Tbk-Api-Key-Id": commerce_code,
@@ -45,6 +42,7 @@ class Transaction:
 
         http_client = WebpayPlus.http_client
         final_url = base_url + cls.CREATE_TRANSACTION_ENDPOINT
+
         http_response = http_client.post(final_url, data=payload, headers=headers)
         if 200 > http_response.status_code > 300:
             raise Exception('Could not obtain a response from the service', -1)
@@ -63,14 +61,11 @@ class Transaction:
 
     @classmethod
     def commit(cls, token_ws, options=None):
-        commerce_code = None
-        api_key = None
-        base_url = None
-        if options is None:
-            commerce_code = WebpayPlus.commerce_code()
-            api_key = WebpayPlus.api_key()
-            base_url = WebpayPlus.integration_type_url()
-        else:
+        commerce_code = WebpayPlus.commerce_code()
+        api_key = WebpayPlus.api_key()
+        base_url = WebpayPlus.integration_type_url()
+
+        if options is not None:
             commerce_code = options.commerce_code
             api_key = options.api_key
             WebpayPlus.integration_type_url = options.integration_type
