@@ -58,7 +58,7 @@ class Transaction:
                 raise TransactionCreateException(http_response.status_code, e.args)
 
     @classmethod
-    def commit(cls, token, options=None):
+    def commit(cls, token_ws, options=None):
         commerce_code = None
         api_key = None
         base_url = None
@@ -79,15 +79,14 @@ class Transaction:
         })
 
         http_client = WebpayPlus.http_client
-        final_url = base_url + cls.COMMIT_TRANSACTION_ENDPOINT + "/" + token
+        final_url = base_url + cls.COMMIT_TRANSACTION_ENDPOINT + "/" + token_ws
         http_response = http_client.put(final_url, headers=headers)
 
         response_json = http_response.json()
 
-        if response_json["error_message"] is not None:
+        if response_json.get('error_message') is not None:
             raise Exception(response_json["error_message"])
 
         json_data = response_json
-
         transaction_commit_response = TransactionCommitResponse(json_data)
         return transaction_commit_response
