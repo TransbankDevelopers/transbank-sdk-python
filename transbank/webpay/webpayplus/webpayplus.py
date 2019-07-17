@@ -64,14 +64,12 @@ class WPPMeta(type):
     @property
     def integration_type_url(cls, integration_type=None):
         if integration_type is None:
-            print(cls._integration_type)
             return cls.INTEGRATION_TYPES[cls._integration_type]
         return cls.INTEGRATION_TYPES[integration_type]
 
     @classmethod
     def integration_type_url(cls, integration_type=None):
         if integration_type is None:
-            print(cls._integration_type)
             return cls.INTEGRATION_TYPES[cls._integration_type]
         return cls.INTEGRATION_TYPES[integration_type]
 
