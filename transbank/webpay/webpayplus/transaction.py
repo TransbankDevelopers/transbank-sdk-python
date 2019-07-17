@@ -26,11 +26,8 @@ class Transaction:
         else:
             commerce_code = options.commerce_code
             api_key = options.api_key
-            # WebpayPlus.integration_type_url is a setter method that works with
-            # a key which is supplied by option.integration_type
-            # This is not so intuitive as "getter / setter" style from java / PHP
-            WebpayPlus.integration_type_url = options.integration_type  # setter method
-            base_url = WebpayPlus.integration_type_url()  # Class method
+            WebpayPlus.integration_type_url = options.integration_type
+            base_url = WebpayPlus.integration_type_url()
 
         headers = dict({
             "Tbk-Api-Key-Id": commerce_code,
