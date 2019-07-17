@@ -24,7 +24,6 @@ class Transaction:
         if options is not None:
             commerce_code = options.commerce_code
             api_key = options.api_key
-            # WebpayPlus.integration_type_url = options.integration_type
             base_url = WebpayPlus.integration_type_url(options.integration_type)
 
         headers = dict({
@@ -44,7 +43,7 @@ class Transaction:
         final_url = base_url + cls.CREATE_TRANSACTION_ENDPOINT
 
         http_response = http_client.post(final_url, data=payload, headers=headers)
-        if 200 > http_response.status_code > 300:
+        if (http_response.status_code < 200) or (http_response.status_code > 300):
             raise Exception('Could not obtain a response from the service', -1)
 
         response_json = http_response.json()
