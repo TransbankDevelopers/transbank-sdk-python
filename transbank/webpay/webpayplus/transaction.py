@@ -9,7 +9,7 @@ from transbank.webpay.webpayplus.webpayplus import *
 class Transaction:
     CREATE_TRANSACTION_ENDPOINT = 'rswebpaytransaction/api/webpay/v1.0/transactions'
     COMMIT_TRANSACTION_ENDPOINT = 'rswebpaytransaction/api/webpay/v1.0/transactions'
-    REFUND_TRANSACTION_ENDPOINT = 'rswebpaytransaction/api/webpay/v1.0/transactions/{0}/refund'
+    REFUND_TRANSACTION_ENDPOINT = 'rswebpaytransaction/api/webpay/v1.0/transactions/{0}/refunds'
     GET_TRANSACTION_STATUS_ENDPOINT = 'rswebpaytransaction/api/webpay/v1.0/transactions/{0}'
 
     def __init__(self):
@@ -106,14 +106,15 @@ class Transaction:
             "Content-Type": "application/json",
         })
 
-        payload = dict({
-            "token": token,
+        payload = json.dumps(dict({
             "amount": amount
-        })
+        }))
 
         http_client = WebpayPlus.http_client
-        final_url = base_url + cls.COMMIT_TRANSACTION_ENDPOINT.format(token)
+        final_url = base_url + cls.REFUND_TRANSACTION_ENDPOINT.format(token)
+
         http_response = http_client.post(final_url, data=payload, headers=headers)
+
         if (http_response.status_code < 200) or (http_response.status_code > 300) or http_response is None:
             raise Exception('Could not obtain a response from the service', -1)
         response_json = http_response.json()
