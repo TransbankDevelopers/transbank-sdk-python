@@ -124,7 +124,3 @@ class Transaction:
         json_data = response_json
         transaction_refund_response = TransactionRefundResponse(json_data)
         return transaction_refund_response
-
-
-
-
