@@ -44,8 +44,6 @@ class Transaction:
         final_url = base_url + cls.CREATE_TRANSACTION_ENDPOINT
 
         http_response = http_client.post(final_url, data=payload, headers=headers)
-        print(payload)
-        print(http_response.__dict__)
         if (http_response.status_code < 200) or (http_response.status_code > 300):
             raise Exception('Could not obtain a response from the service', -1)
 
