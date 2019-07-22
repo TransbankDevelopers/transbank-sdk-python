@@ -36,8 +36,8 @@ class Transaction:
         payload = json.dumps(dict({
             "buy_order": buy_order,
             "session_id": session_id,
-            "amount": amount,
             "return_url": return_url,
+            "details": details
         }))
 
         http_client = WebpayPlus.http_client
