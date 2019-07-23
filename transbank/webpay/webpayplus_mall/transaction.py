@@ -48,7 +48,6 @@ class Transaction:
             raise Exception('Could not obtain a response from the service', -1)
 
         response_json = http_response.json()
-
         try:
             token = response_json["token"]
             url = response_json["url"]
