@@ -1,6 +1,7 @@
 class Detail:
 
     def __init__(self, json_data):
+
         self._amount = json_data.get('amount', None)
         self._status = json_data.get('status', None)
         self._authorization_code = json_data.get('authorization_code', None)
