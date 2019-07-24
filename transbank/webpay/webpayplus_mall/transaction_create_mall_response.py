@@ -1,4 +1,4 @@
-class TransactionCreateResponse:
+class TransactionCreateMallResponse:
     _token = None
     _url = None
 

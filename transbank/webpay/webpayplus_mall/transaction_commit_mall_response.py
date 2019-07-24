@@ -1,13 +1,12 @@
 from .detail import Detail
 
 
-class TransactionCommitResponse:
+class TransactionCommitMallResponse:
     def __init__(self, json_data):
         self._buy_order = json_data.get('buy_order', None)
         self._vci = json_data.get('vci', None)
-        self._amount = json_data.get('amount', None)
-        self._card_number = json_data.get('card_details').get('card_number', None) \
-            if json_data.get('card_details', None) is not None else None
+        self._card_detail = {'card_number': json_data.get('card_details').get('card_number', None) if
+        json_data.get('card_details', None) is not None else None}
         self._accounting_date = json_data.get('accounting_date', None)
         self._transaction_date = json_data.get('transaction_date', None)
         self._details = [Detail(i) for i in json_data.get('details')]
@@ -21,20 +20,12 @@ class TransactionCommitResponse:
         self._vci = vci
 
     @property
-    def amount(self):
-        return self._amount
+    def card_detail(self):
+        return self._card_detail
 
-    @amount.setter
-    def amount(self, amount):
-        self._amount = amount
-
-    @property
-    def card_number(self):
-        return self._card_number
-
-    @card_number.setter
-    def card_number(self, card_number):
-        self._card_number = card_number
+    @card_detail.setter
+    def card_detail(self, card_detail):
+        self._card_detail = card_detail
 
     @property
     def accounting_date(self):
@@ -59,3 +50,10 @@ class TransactionCommitResponse:
     @details.setter
     def details(self, array_details):
         self._details = [Detail(i) for i in array_details]
+
+    def as_dict(self):
+        instance_as_dict = None
+        if self._details is not None:
+            instance_as_dict = {k[1:]: v for k, v in self.__dict__.items() if k[1:] != 'details'}
+            instance_as_dict['details'] = [e.__dict__ for e in self._details]
+        return instance_as_dict

@@ -1,10 +1,10 @@
 import json
 
-from transbank.webpay.webpayplus.transaction_create_response import TransactionCreateResponse
-from transbank.webpay.webpayplus.transaction_commit_response import TransactionCommitResponse
-from transbank.webpay.webpayplus.transaction_refund_response import TransactionRefundResponse
-from transbank.webpay.webpayplus.transaction_status_response import TransactionStatusResponse
-from transbank.webpay.webpayplus.webpayplus import *
+from transbank.webpay.webpayplus_mall.transaction_create_mall_response import TransactionCreateMallResponse
+from transbank.webpay.webpayplus_mall.transaction_commit_mall_response import TransactionCommitMallResponse
+# from transbank.webpay.webpayplus.transaction_refund_response import TransactionRefundResponse
+# from transbank.webpay.webpayplus.transaction_status_response import TransactionStatusResponse
+from transbank.webpay.webpayplus.webpayplus import WebpayPlus
 
 
 class Transaction:
@@ -55,7 +55,7 @@ class Transaction:
             raise Exception(response_json["error_message"])
 
         json_data = response_json
-        transaction_create_response = TransactionCreateResponse(json_data)
+        transaction_create_response = TransactionCreateMallResponse(json_data)
         return transaction_create_response
 
     @classmethod
@@ -66,7 +66,7 @@ class Transaction:
 
         if options is not None:
             commerce_code = options.commerce_code
-            api_key = options.api_key
+            api_key = options.api_key()
             base_url = WebpayPlus.integration_type_url(options.integration_type)
 
         headers = dict({
@@ -85,5 +85,5 @@ class Transaction:
             raise Exception(response_json["error_message"])
 
         json_data = response_json
-        transaction_commit_response = TransactionCommitResponse(json_data)
+        transaction_commit_response = TransactionCommitMallResponse(json_data)
         return transaction_commit_response

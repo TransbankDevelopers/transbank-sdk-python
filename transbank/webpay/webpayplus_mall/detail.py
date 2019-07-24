@@ -12,6 +12,9 @@ class Detail:
         self._commerce_code = json_data.get('commerce_code', None)
         self._buy_order = json_data.get('buy_order', None)
 
+    def attributes_as_dict(self):
+        return self.__dict__
+
     @property
     def amount(self):
         return self._amount
