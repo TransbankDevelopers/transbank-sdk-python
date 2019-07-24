@@ -13,7 +13,7 @@ class Detail:
         self._buy_order = json_data.get('buy_order', None)
 
     def attributes_as_dict(self):
-        return self.__dict__
+        return {k[1:]: v for k, v in self.__dict__.items()}
 
     @property
     def amount(self):

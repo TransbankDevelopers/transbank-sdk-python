@@ -55,5 +55,5 @@ class TransactionCommitMallResponse:
         instance_as_dict = None
         if self._details is not None:
             instance_as_dict = {k[1:]: v for k, v in self.__dict__.items() if k[1:] != 'details'}
-            instance_as_dict['details'] = [e.__dict__ for e in self._details]
+            instance_as_dict['details'] = [e.attributes_as_dict() for e in self._details]
         return instance_as_dict
