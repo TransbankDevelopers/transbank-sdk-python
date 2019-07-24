@@ -5,8 +5,8 @@ class TransactionCommitMallResponse:
     def __init__(self, json_data):
         self._buy_order = json_data.get('buy_order', None)
         self._vci = json_data.get('vci', None)
-        self._card_detail = {'card_number': json_data.get('card_details').get('card_number', None) if
-        json_data.get('card_details', None) is not None else None}
+        self._card_detail = dict({'card_number': json_data.get('card_detail').get('card_number', None) if
+        json_data.get('card_detail', None) is not None else None})
         self._accounting_date = json_data.get('accounting_date', None)
         self._transaction_date = json_data.get('transaction_date', None)
         self._details = [Detail(i) for i in json_data.get('details')]
