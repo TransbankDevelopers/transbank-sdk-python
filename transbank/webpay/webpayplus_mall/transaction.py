@@ -87,3 +87,7 @@ class Transaction:
         json_data = response_json
         transaction_commit_response = TransactionCommitMallResponse(json_data)
         return transaction_commit_response
+
+    @classmethod
+    def refund_mall(cls):
+        pass
