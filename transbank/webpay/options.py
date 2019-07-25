@@ -9,9 +9,9 @@ class Options:
     DEFAULT_INTEGRATION_TYPE_URL = "https://webpay3gint.transbank.cl/"
     # End envvars
 
-    _api_key = None
-    _commerce_code = None
-    _integration_type = None
+    _api_key = DEFAULT_API_KEY
+    _commerce_code = DEFAULT_COMMERCE_CODE
+    _integration_type = DEFAULT_INTEGRATION_TYPE
 
     def __init__(self, api_key, commerce_code):
         self._api_key = api_key
@@ -29,9 +29,13 @@ class Options:
     def integration_type(self, integration_type):
         self._integration_type = integration_type
 
-    @classmethod
-    def integration_type(cls):
-        return cls._integration_type
+    @property
+    def integration_type(self):
+        return self._integration_type
+
+    @integration_type.setter
+    def integration_type(self, integration_type):
+        self._integration_type = integration_type
 
     @property
     def api_key(self):
