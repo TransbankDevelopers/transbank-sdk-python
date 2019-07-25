@@ -15,7 +15,7 @@ class WPPMeta(type):
     _integration_type = Options.DEFAULT_INTEGRATION_TYPE
     _integration_type_url = INTEGRATION_TYPES["TEST"]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(cls, *args, **kwargs):
         pass
 
     # Getters and setters based on the @property decorator
@@ -29,7 +29,7 @@ class WPPMeta(type):
 
     @classmethod
     def api_key(cls):
-        return str(cls._api_key)
+        return cls._api_key
 
     @property
     def commerce_code(cls):
