@@ -3,11 +3,11 @@ from transbank.webpay.options import *
 
 
 class WPPMeta(type):
-    INTEGRATION_TYPES = dict({
+    INTEGRATION_TYPES = {
         "LIVE": "https://webpay3g.transbank.cl/",
         "TEST": "https://webpay3gint.transbank.cl/",
         "MOCK": ""
-    })
+    }
 
     _http_client = None
     _api_key = Options.DEFAULT_API_KEY
@@ -18,7 +18,6 @@ class WPPMeta(type):
     def __init__(self, *args, **kwargs):
         pass
 
-    # Getters and setters based on the @property decorator
     @property
     def api_key(cls):
         return cls._api_key

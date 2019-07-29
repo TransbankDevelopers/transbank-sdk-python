@@ -28,18 +28,18 @@ class Transaction:
             api_key = options.api_key
             base_url = WebpayPlus.integration_type_url(options.integration_type)
 
-        headers = dict({
+        headers = {
             "Tbk-Api-Key-Id": commerce_code,
             "Tbk-Api-Key-Secret": api_key,
             "Content-Type": "application/json",
-        })
+        }
 
-        payload = json.dumps(dict({
+        payload = json.dumps({
             "buy_order": buy_order,
             "session_id": session_id,
             "amount": amount,
             "return_url": return_url,
-        }))
+        })
 
         http_client = WebpayPlus.http_client
         final_url = base_url + cls.CREATE_TRANSACTION_ENDPOINT
@@ -57,8 +57,7 @@ class Transaction:
             raise Exception(response_json["error_message"])
 
         json_data = response_json
-        transaction_create_response = TransactionCreateResponse(json_data)
-        return transaction_create_response
+        return TransactionCreateResponse(json_data)
 
     @classmethod
     def commit(cls, token_ws, options=None):
@@ -71,11 +70,11 @@ class Transaction:
             api_key = options.api_key
             base_url = WebpayPlus.integration_type_url(options.integration_type)
 
-        headers = dict({
+        headers = {
             "Tbk-Api-Key-Id": commerce_code,
             "Tbk-Api-Key-Secret": api_key,
             "Content-Type": "application/json",
-        })
+        }
 
         http_client = WebpayPlus.http_client
         final_url = base_url + cls.COMMIT_TRANSACTION_ENDPOINT + "/" + token_ws
@@ -87,8 +86,7 @@ class Transaction:
             raise Exception(response_json["error_message"])
 
         json_data = response_json
-        transaction_commit_response = TransactionCommitResponse(json_data)
-        return transaction_commit_response
+        return TransactionCommitResponse(json_data)
 
     @classmethod
     def refund(cls, token, amount, options=None):
@@ -101,15 +99,15 @@ class Transaction:
             api_key = options.api_key
             base_url = WebpayPlus.integration_type_url(options.integration_type)
 
-        headers = dict({
+        headers = {
             "Tbk-Api-Key-Id": commerce_code,
             "Tbk-Api-Key-Secret": api_key,
             "Content-Type": "application/json",
-        })
+        }
 
-        payload = json.dumps(dict({
+        payload = json.dumps({
             "amount": amount
-        }))
+        })
 
         http_client = WebpayPlus.http_client
         final_url = base_url + cls.REFUND_TRANSACTION_ENDPOINT.format(token)
@@ -124,8 +122,7 @@ class Transaction:
             raise Exception(response_json["error_message"])
 
         json_data = response_json
-        transaction_refund_response = TransactionRefundResponse(json_data)
-        return transaction_refund_response
+        return TransactionRefundResponse(json_data)
 
     @classmethod
     def status(cls, token, options=None):
@@ -138,11 +135,11 @@ class Transaction:
             api_key = options.api_key
             base_url = WebpayPlus.integration_type_url(options.integration_type)
 
-        headers = dict({
+        headers = {
             "Tbk-Api-Key-Id": commerce_code,
             "Tbk-Api-Key-Secret": api_key,
             "Content-Type": "application/json",
-        })
+        }
 
         http_client = WebpayPlus.http_client
         final_url = base_url + cls.GET_TRANSACTION_STATUS_ENDPOINT.format(token)
@@ -157,5 +154,4 @@ class Transaction:
             raise Exception(response_json["error_message"])
 
         json_data = response_json
-        transaction_status_response = TransactionStatusResponse(json_data)
-        return transaction_status_response
+        return TransactionStatusResponse(json_data)

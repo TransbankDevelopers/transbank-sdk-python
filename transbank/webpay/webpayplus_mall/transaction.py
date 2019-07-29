@@ -27,18 +27,18 @@ class Transaction:
             api_key = options.api_key()
             base_url = WebpayPlus.integration_type_url(options.integration_type)
 
-        headers = dict({
+        headers = {
             "Tbk-Api-Key-Id": commerce_code,
             "Tbk-Api-Key-Secret": api_key,
             "Content-Type": "application/json",
-        })
+        }
 
-        payload = json.dumps(dict({
+        payload = json.dumps({
             "buy_order": buy_order,
             "session_id": session_id,
             "return_url": return_url,
             "details": details
-        }))
+        })
 
         http_client = WebpayPlus.http_client
         final_url = base_url + cls.CREATE_TRANSACTION_ENDPOINT
@@ -55,8 +55,8 @@ class Transaction:
             raise Exception(response_json["error_message"])
 
         json_data = response_json
-        transaction_create_response = TransactionCreateMallResponse(json_data)
-        return transaction_create_response
+
+        return TransactionCreateMallResponse(json_data)
 
     @classmethod
     def commit_mall(cls, token_ws, options=None):
@@ -69,11 +69,11 @@ class Transaction:
             api_key = options.api_key()
             base_url = WebpayPlus.integration_type_url(options.integration_type)
 
-        headers = dict({
+        headers = {
             "Tbk-Api-Key-Id": commerce_code,
             "Tbk-Api-Key-Secret": api_key,
             "Content-Type": "application/json",
-        })
+        }
 
         http_client = WebpayPlus.http_client
         final_url = base_url + cls.COMMIT_TRANSACTION_ENDPOINT + "/" + token_ws
@@ -85,5 +85,5 @@ class Transaction:
             raise Exception(response_json["error_message"])
 
         json_data = response_json
-        transaction_commit_response = TransactionCommitMallResponse(json_data)
-        return transaction_commit_response
+
+        return TransactionCommitMallResponse(json_data)
