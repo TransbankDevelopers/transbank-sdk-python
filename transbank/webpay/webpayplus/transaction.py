@@ -1,6 +1,8 @@
 import json
 
 from transbank.webpay.webpayplus.transaction_create_response import TransactionCreateResponse
+from .exceptions.transaction_exception import TransactionHttpException, TransactionRequestException, \
+    TransactionTimeoutException, TransactionConnectionException
 from transbank.webpay.webpayplus.webpayplus import *
 
 
@@ -43,11 +45,19 @@ class Transaction:
 
         http_client = WebpayPlus.http_client
         final_url = base_url + cls.CREATE_TRANSACTION_ENDPOINT
-        http_response = http_client.post(final_url, data=payload, headers=headers)
-        if (http_response.status_code < 200) or (http_response.status_code > 300):
-            raise Exception('Could not obtain a response from the service', -1)
-
-        response_json = http_response.json()
+        try:
+            http_response = http_client.post(final_url, data=payload, headers=headers)
+            http_response.raise_for_status()
+        except requests.exceptions.HTTPError as http_error:
+            raise TransactionHttpException(http_response.status_code, http_response.reason, http_error.args)
+        except requests.exceptions.ConnectionError as conn_error:
+            raise TransactionConnectionException(http_response.status_code, http_response.reason, conn_error.args)
+        except requests.exceptions.Timeout as timeout_err:
+            raise TransactionTimeoutException(http_response.status_code, http_response.reason, timeout_err.args)
+        except requests.exceptions.RequestException as req_error:
+            raise TransactionRequestException(http_response.status_code, http_response.reason, req_error.args)
+        else:
+            response_json = http_response.json()
 
         try:
             token = response_json["token"]
@@ -55,6 +65,4 @@ class Transaction:
         except KeyError:
             raise Exception(response_json["error_message"])
 
-        json_data = response_json
-
-        return TransactionCreateResponse(json_data)
+        return TransactionCreateResponse(response_json)
