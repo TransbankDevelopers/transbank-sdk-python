@@ -1,6 +1,11 @@
 
 class TransactionException(Exception):
-    pass
+    def __init__(self, http_exception_args):
+        self._message = http_exception_args
+        super(TransactionException, self).__init__(self._message)
+
+    def __str__(self):
+        pass
 
 
 class TransactionHttpException(TransactionException):
