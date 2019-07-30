@@ -3,6 +3,7 @@ import json
 from transbank.webpay.webpayplus.transaction_create_response import TransactionCreateResponse
 from .exceptions.transaction_exception import TransactionHttpException, TransactionRequestException, \
     TransactionTimeoutException, TransactionConnectionException
+from .exceptions.transaction_create_exception import TransactionCreateException
 from transbank.webpay.webpayplus.webpayplus import *
 
 
@@ -45,19 +46,21 @@ class Transaction:
 
         http_client = WebpayPlus.http_client
         final_url = base_url + cls.CREATE_TRANSACTION_ENDPOINT
+
         try:
             http_response = http_client.post(final_url, data=payload, headers=headers)
             http_response.raise_for_status()
         except requests.exceptions.HTTPError as http_error:
-            raise TransactionHttpException(http_response.status_code, http_response.reason, http_error.args)
+            raise TransactionCreateException(http_response.status_code, http_error.args)
         except requests.exceptions.ConnectionError as conn_error:
-            raise TransactionConnectionException(http_response.status_code, http_response.reason, conn_error.args)
+            raise TransactionCreateException(http_response.status_code, conn_error.args)
         except requests.exceptions.Timeout as timeout_err:
-            raise TransactionTimeoutException(http_response.status_code, http_response.reason, timeout_err.args)
+            raise TransactionCreateException(http_response.status_code, timeout_err.args)
         except requests.exceptions.RequestException as req_error:
-            raise TransactionRequestException(http_response.status_code, http_response.reason, req_error.args)
+            raise TransactionCreateException(http_response.status_code, req_error.args)
         else:
             response_json = http_response.json()
+
 
         try:
             token = response_json["token"]
