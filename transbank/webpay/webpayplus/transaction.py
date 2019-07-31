@@ -19,17 +19,8 @@ class Transaction:
     @classmethod
     def create(cls, buy_order, session_id, amount,
                return_url, options=None):
-        commerce_code = None
-        api_key = None
-        base_url = None
-        if options is None:
-            commerce_code = WebpayPlus.commerce_code()
-            api_key = WebpayPlus.api_key()
-            base_url = WebpayPlus.integration_type_url()
-        else:
-            commerce_code = options.commerce_code
-            api_key = options.api_key
-            base_url = WebpayPlus.integration_type_url(options.integration_type)
+
+        commerce_code, api_key, base_url = Options.build_options(options)
 
         headers = {
             "Tbk-Api-Key-Id": commerce_code,
@@ -60,17 +51,8 @@ class Transaction:
 
     @classmethod
     def commit(cls, token_ws, options=None):
-        commerce_code = None
-        api_key = None
-        base_url = None
-        if options is None:
-            commerce_code = WebpayPlus.commerce_code()
-            api_key = WebpayPlus.api_key()
-            base_url = WebpayPlus.integration_type_url()
-        else:
-            commerce_code = options.commerce_code
-            api_key = options.api_key
-            base_url = WebpayPlus.integration_type_url(options.integration_type)
+
+        commerce_code, api_key, base_url = Options.build_options(options)
 
         headers = {
             "Tbk-Api-Key-Id": commerce_code,

@@ -1,5 +1,5 @@
 import requests
-from transbank.webpay.options import *
+from .options import *
 
 
 class WPPMeta(type):
