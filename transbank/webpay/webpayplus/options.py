@@ -1,4 +1,4 @@
-from transbank.webpay.webpayplus import WebpayPlus
+from transbank.webpay.webpayplus.webpayplus import WebpayPlus
 
 
 
