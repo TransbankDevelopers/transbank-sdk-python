@@ -7,8 +7,8 @@ class TransactionCommitResponse:
         self._session_id = json_data.get('session_id', None)
         self._card_number = json_data.get('card_details').get('card_number', None) \
             if json_data.get('card_details', None) is not None else None
-        self.accounting_date = json_data.get('accounting_date', None)
-        self.transaction_date = json_data.get('transaction_date', None)
+        self._accounting_date = json_data.get('accounting_date', None)
+        self._transaction_date = json_data.get('transaction_date', None)
         self._authorization_code = json_data.get('authorization_code', None)
         self._payment_type_code = json_data.get('payment_type_code', None)
         self._response_code = json_data.get('response_code', None)
