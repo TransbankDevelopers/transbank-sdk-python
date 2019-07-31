@@ -1,4 +1,6 @@
-from .webpayplus import WebpayPlus
+from transbank.webpay.webpayplus import WebpayPlus
+
+
 
 
 class Options:
