@@ -50,22 +50,9 @@ class Transaction:
         try:
             http_response = http_client.post(final_url, data=payload, headers=headers)
             http_response.raise_for_status()
-        except requests.exceptions.HTTPError as http_error:
-            raise TransactionCreateException(http_response.status_code, http_error.args)
-        except requests.exceptions.ConnectionError as conn_error:
-            raise TransactionCreateException(http_response.status_code, conn_error.args)
-        except requests.exceptions.Timeout as timeout_err:
-            raise TransactionCreateException(http_response.status_code, timeout_err.args)
-        except requests.exceptions.RequestException as req_error:
-            raise TransactionCreateException(http_response.status_code, req_error.args)
+        except Exception as e:
+            raise TransactionCreateException(http_response.status_code, e.args)
         else:
             response_json = http_response.json()
-
-
-        try:
-            token = response_json["token"]
-            url = response_json["url"]
-        except KeyError:
-            raise Exception(response_json["error_message"])
 
         return TransactionCreateResponse(response_json)
