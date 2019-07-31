@@ -107,3 +107,4 @@ venv.bak/
 .vscode
 
 .idea/
+Pipfile.lock
