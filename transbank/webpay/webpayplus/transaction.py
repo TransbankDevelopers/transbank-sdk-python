@@ -70,8 +70,7 @@ class Transaction:
         else:
             commerce_code = options.commerce_code
             api_key = options.api_key
-            WebpayPlus.integration_type_url = options.integration_type
-            base_url = WebpayPlus.integration_type_url()
+            base_url = WebpayPlus.integration_type_url(options.integration_type)
 
         headers = {
             "Tbk-Api-Key-Id": commerce_code,
