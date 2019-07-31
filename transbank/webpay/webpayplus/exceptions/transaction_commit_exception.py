@@ -2,7 +2,7 @@ from .transbank_exception import TransbankException
 
 
 class TransactionCommitException(TransbankException):
-    DEFAULT_MESSAGE = 'Transaction could not be created. Please verify given parameters'
+    DEFAULT_MESSAGE = 'Transaction could not be created. Unidentified error.'
 
     def __init__(self, error_code, message=DEFAULT_MESSAGE, previous=None):
         self._error_code = error_code
