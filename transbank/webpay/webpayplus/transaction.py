@@ -51,7 +51,10 @@ class Transaction:
             http_response = http_client.post(final_url, data=payload, headers=headers)
             http_response.raise_for_status()
         except Exception as e:
-            raise TransactionCreateException(http_response.status_code, e.args)
+            if 'http_response' in locals():
+                raise TransactionCreateException(-1)
+            else:
+                raise TransactionCreateException(http_response.status_code, e.args)
         else:
             response_json = http_response.json()
 
