@@ -1,3 +1,3 @@
 from .webpayplus import *
 
-__all__ = ['webpayplus', 'transaction', 'options', 'WebpayPlus']
+__all__ = ['webpayplus', 'transaction', 'WebpayPlus']

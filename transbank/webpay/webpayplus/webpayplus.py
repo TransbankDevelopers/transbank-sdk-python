@@ -1,4 +1,4 @@
-from .options import Options
+from .configuration.options import Options
 
 
 class WPPMeta(type):
