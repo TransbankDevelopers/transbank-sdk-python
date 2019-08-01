@@ -36,14 +36,14 @@ class Transaction:
         })
 
         final_url = base_url + cls.CREATE_TRANSACTION_ENDPOINT
-
+        http_response = None
         try:
             http_response = requests.post(final_url, data=payload, headers=headers)
             http_response.raise_for_status()
             response_json = http_response.json()
             return TransactionCreateResponse(response_json)
         except Exception as e:
-            if 'http_response' in locals():
+            if http_response is None:
                 raise TransactionCreateException(-1)
             raise TransactionCreateException(http_response.status_code, e.args)
 
@@ -59,13 +59,13 @@ class Transaction:
         }
 
         final_url = base_url + cls.COMMIT_TRANSACTION_ENDPOINT + "/" + token_ws
-
+        http_response = None
         try:
             http_response = requests.put(final_url, headers=headers)
             http_response.raise_for_status()
             response_json = http_response.json()
             return TransactionCommitResponse(response_json)
         except Exception as e:
-            if 'http_response' in locals():
-                raise TransactionCommitException(-1)
+            if http_response is None:
+                raise TransactionCreateException(-1)
             raise TransactionCommitException(http_response.status_code, e.args)
