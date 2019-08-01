@@ -4,7 +4,7 @@ from transbank.webpay.webpayplus.transaction_create_response import TransactionC
 from .exceptions.transaction_create_exception import TransactionCreateException
 from .exceptions.transaction_commit_exception import TransactionCommitException
 from transbank.webpay.webpayplus.transaction_commit_response import TransactionCommitResponse
-from transbank.webpay.webpayplus.webpayplus import *
+from .configuration.options import Options
 
 
 class Transaction:

@@ -2,11 +2,11 @@ from .configuration.options import Options
 
 
 class WPPMeta(type):
-    INTEGRATION_TYPES = dict({
+    INTEGRATION_TYPES = {
         "LIVE": "https://webpay3g.transbank.cl/",
         "TEST": "https://webpay3gint.transbank.cl/",
         "MOCK": ""
-    })
+    }
 
     _http_client = None
     _api_key = Options.DEFAULT_API_KEY

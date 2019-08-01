@@ -1,4 +1,4 @@
-from transbank.webpay.webpayplus.webpayplus import WebpayPlus
+
 
 
 class Options:
@@ -54,10 +54,12 @@ class Options:
         self._commerce_code = commerce_code
 
     def integration_type_url(self):
+        from transbank.webpay.webpayplus.webpayplus import WebpayPlus
         return WebpayPlus.INTEGRATION_TYPES[self.integration_type]
 
     @staticmethod
-    def build_options(options):
+    def build_options(options=None):
+        from transbank.webpay.webpayplus.webpayplus import WebpayPlus
         commerce_code = WebpayPlus.commerce_code()
         api_key = WebpayPlus.api_key()
         base_url = WebpayPlus.integration_type_url()

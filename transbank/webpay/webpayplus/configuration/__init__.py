@@ -1,3 +1,1 @@
-from .options import *
-
-__all__ = ['options']
+from .options import Options
