@@ -1,5 +1,4 @@
-import requests
-from .options import *
+from .options import Options
 
 
 class WPPMeta(type):
@@ -50,16 +49,6 @@ class WPPMeta(type):
     @integration_type.setter
     def integration_type(cls, integration_type):
         cls._integration_type = integration_type
-
-    @property
-    def http_client(cls):
-        if cls._http_client is None:
-            cls._http_client = requests.Session()
-        return cls._http_client
-
-    @http_client.setter
-    def http_client(cls, http_client):
-        cls._http_client = http_client
 
     @property
     def integration_type_url(cls, integration_type=None):

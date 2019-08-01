@@ -1,8 +1,6 @@
 from transbank.webpay.webpayplus.webpayplus import WebpayPlus
 
 
-
-
 class Options:
     # All the following values could be set from envvars
     DEFAULT_API_KEY = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C'
@@ -65,8 +63,13 @@ class Options:
         base_url = WebpayPlus.integration_type_url()
 
         if options is not None:
-            commerce_code = options.commerce_code
-            api_key = options.api_key
-            base_url = WebpayPlus.integration_type_url(options.integration_type)
+            if hasattr(options, 'commerce_code'):
+                commerce_code = options.commerce_code
+
+            if hasattr(options, 'api_key'):
+                api_key = options.api_key
+
+            if hasattr(options, 'integration_type'):
+                base_url = WebpayPlus.integration_type_url(options.integration_type)
 
         return commerce_code, api_key, base_url

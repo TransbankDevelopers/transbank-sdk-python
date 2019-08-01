@@ -1,5 +1,5 @@
 import json
-
+import requests
 from transbank.webpay.webpayplus.transaction_create_response import TransactionCreateResponse
 from .exceptions.transaction_create_exception import TransactionCreateException
 from .exceptions.transaction_commit_exception import TransactionCommitException
@@ -35,19 +35,17 @@ class Transaction:
             "return_url": return_url,
         })
 
-        http_client = WebpayPlus.http_client
         final_url = base_url + cls.CREATE_TRANSACTION_ENDPOINT
 
         try:
-            http_response = http_client.post(final_url, data=payload, headers=headers)
+            http_response = requests.post(final_url, data=payload, headers=headers)
             http_response.raise_for_status()
             response_json = http_response.json()
             return TransactionCreateResponse(response_json)
         except Exception as e:
             if 'http_response' in locals():
                 raise TransactionCreateException(-1)
-            else:
-                raise TransactionCreateException(http_response.status_code, e.args)
+            raise TransactionCreateException(http_response.status_code, e.args)
 
     @classmethod
     def commit(cls, token_ws, options=None):
@@ -60,16 +58,14 @@ class Transaction:
             "Content-Type": "application/json",
         }
 
-        http_client = WebpayPlus.http_client
         final_url = base_url + cls.COMMIT_TRANSACTION_ENDPOINT + "/" + token_ws
 
         try:
-            http_response = http_client.put(final_url, headers=headers)
+            http_response = requests.put(final_url, headers=headers)
             http_response.raise_for_status()
             response_json = http_response.json()
             return TransactionCommitResponse(response_json)
         except Exception as e:
             if 'http_response' in locals():
                 raise TransactionCommitException(-1)
-            else:
-                raise TransactionCommitException(http_response.status_code, e.args)
+            raise TransactionCommitException(http_response.status_code, e.args)
