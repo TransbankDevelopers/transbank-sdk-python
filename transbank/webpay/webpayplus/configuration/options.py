@@ -1,6 +1,3 @@
-
-
-
 class Options:
     # All the following values could be set from envvars
     DEFAULT_API_KEY = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C'
@@ -54,12 +51,12 @@ class Options:
         self._commerce_code = commerce_code
 
     def integration_type_url(self):
-        from transbank.webpay.webpayplus.webpayplus import WebpayPlus
+        from transbank.webpay.webpayplus import WebpayPlus
         return WebpayPlus.INTEGRATION_TYPES[self.integration_type]
 
     @staticmethod
     def build_options(options=None):
-        from transbank.webpay.webpayplus.webpayplus import WebpayPlus
+        from transbank.webpay.webpayplus import WebpayPlus
         commerce_code = WebpayPlus.commerce_code()
         api_key = WebpayPlus.api_key()
         base_url = WebpayPlus.integration_type_url()
