@@ -64,7 +64,7 @@ class Transaction:
         http_response = None
 
         try:
-            http_response = requests.put(final_url,  headers=headers)
+            http_response = requests.put(final_url, headers=headers)
             http_response.raise_for_status()
             response_json = http_response.json()
             return TransactionCommitResponse(response_json)

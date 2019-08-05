@@ -10,9 +10,13 @@ class Options:
     _commerce_code = None
     _integration_type = None
 
-    def __init__(self, api_key, commerce_code):
+    def __init__(self, api_key, commerce_code, integration_type):
         self._api_key = api_key
         self._commerce_code = commerce_code
+        self._integration_type = integration_type
+
+    def __str__(self):
+        return "{0} - {1} - {2}".format(self._api_key, self._commerce_code, self._integration_type)
 
     @classmethod
     def default_configuration(cls):
@@ -26,10 +30,6 @@ class Options:
     def integration_type(self, integration_type):
         self._integration_type = integration_type
 
-    @classmethod
-    def integration_type(cls):
-        return cls._integration_type
-
     @property
     def api_key(self):
         return self._api_key
@@ -37,10 +37,6 @@ class Options:
     @api_key.setter
     def api_key(self, api_key):
         self._api_key = api_key
-
-    @classmethod
-    def api_key(cls):
-        return cls._api_key
 
     @property
     def commerce_code(self):
@@ -62,13 +58,13 @@ class Options:
         base_url = WebpayPlus.integration_type_url()
 
         if options is not None:
-            if hasattr(options, 'commerce_code'):
+            if hasattr(options, 'commerce_code') and options.commerce_code is not None:
                 commerce_code = options.commerce_code
 
-            if hasattr(options, 'api_key'):
+            if hasattr(options, 'api_key') and options.api_key is not None:
                 api_key = options.api_key
 
-            if hasattr(options, 'integration_type'):
+            if hasattr(options, 'integration_type') and options.integration_type is not None:
                 base_url = WebpayPlus.integration_type_url(options.integration_type)
 
         return commerce_code, api_key, base_url
