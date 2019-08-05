@@ -43,16 +43,11 @@ class Transaction:
             http_response.raise_for_status()
             response_json = http_response.json()
             return TransactionCreateResponse(response_json)
-        except requests.exceptions.HTTPError as http_error:
-            raise TransactionCreateException(http_response.status_code, http_error.args)
-        except requests.exceptions.ConnectionError as conn_error:
-            raise TransactionCreateException(http_response.status_code, conn_error.args)
-        except requests.exceptions.Timeout as timeout_err:
-            raise TransactionCreateException(http_response.status_code, timeout_err.args)
-        except requests.exceptions.RequestException as req_error:
-            raise TransactionCreateException(http_response.status_code, req_error.args)
         except Exception as e:
-            raise TransactionCreateException(-1, e.args)
+            if http_response is None:
+                raise TransactionCreateException(0, e.args)
+            error_message = http_response.json().get('error_message', "")
+            raise TransactionCreateException(http_response.status_code, e.args[0], error_message)
 
     @classmethod
     def commit(cls, token_ws, options=None):
@@ -69,17 +64,12 @@ class Transaction:
         http_response = None
 
         try:
-            http_response = requests.put(final_url, headers=headers)
+            http_response = requests.put(final_url,  headers=headers)
             http_response.raise_for_status()
             response_json = http_response.json()
             return TransactionCommitResponse(response_json)
-        except requests.exceptions.HTTPError as http_error:
-            raise TransactionCommitException(http_response.status_code, http_error.args)
-        except requests.exceptions.ConnectionError as conn_error:
-            raise TransactionCommitException(http_response.status_code, conn_error.args)
-        except requests.exceptions.Timeout as timeout_err:
-            raise TransactionCommitException(http_response.status_code, timeout_err.args)
-        except requests.exceptions.RequestException as req_error:
-            raise TransactionCommitException(http_response.status_code, req_error.args)
         except Exception as e:
-            raise TransactionCommitException(-1, e.args)
+            if http_response is None:
+                raise TransactionCommitException(0, e.args[0])
+            error_message = http_response.json().get('error_message', "")
+            raise TransactionCommitException(http_response.status_code, e.args[0], error_message)
