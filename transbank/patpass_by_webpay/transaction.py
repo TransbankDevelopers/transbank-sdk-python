@@ -15,7 +15,7 @@ class Transaction(object):
     @classmethod
     def __get_base_url(cls, integration_type: IntegrationType):
         return "{}/rswebpaytransaction/api/webpay/v1.0/transactions".format(
-            IntegrationTypeHostHelper.get_webpay_host(integration_type))
+            IntegrationTypeHostHelper.webpay_host(integration_type))
 
     @classmethod
     def build_options(cls, options: Options = None) -> Options:
