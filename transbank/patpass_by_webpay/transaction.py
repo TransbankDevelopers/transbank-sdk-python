@@ -13,7 +13,7 @@ from transbank.patpass_by_webpay.transaction_create_response import TransactionC
 
 class Transaction(object):
     @classmethod
-    def __get_base_url(cls, integration_type: IntegrationType):
+    def __base_url(cls, integration_type: IntegrationType):
         return "{}/rswebpaytransaction/api/webpay/v1.0/transactions".format(
             IntegrationTypeHostHelper.webpay_host(integration_type))
 
@@ -36,7 +36,7 @@ class Transaction(object):
                cellphone_number: str, expiration_date: str, commerce_mail: str, uf_flag: bool,
                options: Options = None) -> TransactionCreateResponse:
         options = cls.build_options(options)
-        endpoint = cls.__get_base_url(options.integration_type)
+        endpoint = cls.__base_url(options.integration_type)
         request = TransactionCreateRequest(buy_order, session_id, amount, return_url, service_id, card_holder_id,
                                            card_holder_name, card_holder_last_name1, card_holder_last_name2,
                                            card_holder_mail, cellphone_number, expiration_date, commerce_mail, uf_flag)
