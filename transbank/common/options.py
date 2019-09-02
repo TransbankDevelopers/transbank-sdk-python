@@ -10,11 +10,11 @@ class Options(ABC):
         self.integration_type = integration_type
 
     @abstractmethod
-    def get_header_commerce_code_name(self):
+    def header_commerce_code_name(self):
         pass
 
     @abstractmethod
-    def get_header_api_key_name(self):
+    def header_api_key_name(self):
         pass
 
     def set_commerce_code(self, commerce_code: str) -> None:
@@ -48,8 +48,8 @@ class Options(ABC):
 
 
 class WebpayOptions(Options):
-    def get_header_commerce_code_name(self):
+    def header_commerce_code_name(self):
         return "Tbk-Api-Key-Id"
 
-    def get_header_api_key_name(self):
+    def header_api_key_name(self):
         return "Tbk-Api-Key-Secret"
