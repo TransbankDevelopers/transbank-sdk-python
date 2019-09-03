@@ -1,8 +1,7 @@
 import requests
 
 from transbank.common.headers_builder import HeadersBuilder
-from transbank.common.integration_type import IntegrationType
-from transbank.common.integration_type_host_helper import IntegrationTypeHostHelper
+from transbank.common.integration_type import IntegrationType, webpay_host
 from transbank.common.options import Options, WebpayOptions
 from transbank import patpass_by_webpay
 from transbank.error.transaction_create_error import TransactionCreateError
@@ -15,7 +14,7 @@ class Transaction(object):
     @classmethod
     def __base_url(cls, integration_type: IntegrationType):
         return "{}/rswebpaytransaction/api/webpay/v1.0/transactions".format(
-            IntegrationTypeHostHelper.webpay_host(integration_type))
+            webpay_host(integration_type))
 
     @classmethod
     def build_options(cls, options: Options = None) -> Options:
