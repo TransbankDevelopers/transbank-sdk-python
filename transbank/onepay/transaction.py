@@ -108,7 +108,6 @@ class Transaction(object):
 
         external_unique_number_req = external_unique_number or int(datetime.now().timestamp() * 1000)
         options = Options.build(options)
-        print(options.shared_secret)
 
         req = TransactionCreateRequest(external_unique_number_req,
               shopping_cart.total, shopping_cart.item_quantity,
