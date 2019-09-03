@@ -3,5 +3,5 @@ class TransactionCreateResponse(object):
         self.token = token
         self.url = url
 
-    def __str__(self):
+    def __repr__(self):
         return "token: {}, url: {}".format(self.token, self.url)

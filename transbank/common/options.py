@@ -45,7 +45,7 @@ class Options(ABC):
     def is_empty(options: 'Options') -> bool:
         return options is None or not options.commerce_code and not options.api_key and not options.integration_type
 
-    def __str__(self) -> str:
+    def __repr__(self) -> str:
         return "Options(commerce_code: {}, api_key: {}, integration_type: {})".format(self.commerce_code, self.api_key, self.integration_type)
 
 
