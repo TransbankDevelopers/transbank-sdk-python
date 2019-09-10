@@ -5,4 +5,4 @@ class TransbankError(Exception):
         self.code = code
 
     def __repr__(self):
-        return format(self.message)
+        return "message: {}, code: {}".format(self.message, self.code)
