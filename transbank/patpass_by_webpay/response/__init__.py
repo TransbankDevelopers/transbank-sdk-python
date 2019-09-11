@@ -1,4 +1,4 @@
-from transbank.common.response import CardDetail
+from transbank.common.model import CardDetail
 
 
 class TransactionCreateResponse(object):
