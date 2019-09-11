@@ -11,7 +11,7 @@ class TransactionCreateResponse(object):
 
 
 class TransactionCommitResponse(object):
-    def __init__(self, vci: str, amount: float, status: str, buy_order: str, session_id: str, card_detail: CardDetail,
+    def __init__(self, vci: str, amount: float, status: str, buy_order: str, session_id: str, card_detail: dict,
                  accounting_date: str, transaction_date: str, authorization_code: str, payment_type_code: str,
                  response_code: int, installments_number: int):
         self.vci = vci
@@ -19,7 +19,7 @@ class TransactionCommitResponse(object):
         self.status = status
         self.buy_order = buy_order
         self.session_id = session_id
-        self.card_detail = card_detail
+        self.card_detail = CardDetail(**card_detail)
         self.accounting_date = accounting_date
         self.transaction_date = transaction_date
         self.authorization_code = authorization_code
