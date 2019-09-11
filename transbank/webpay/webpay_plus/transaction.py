@@ -4,6 +4,7 @@ from transbank.common.headers_builder import HeadersBuilder
 from transbank.common.integration_type import IntegrationType, webpay_host
 from transbank.common.options import Options, WebpayOptions
 from transbank.common.schema import TransactionStatusResponseSchema
+from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.webpay.webpay_plus import default_commerce_code, default_api_key, default_integration_type, \
     TransactionStatusResponse
 
@@ -33,5 +34,8 @@ class Transaction(object):
         response = requests.get(url=endpoint, headers=HeadersBuilder.build(options))
         json_response = response.text
         dict_response = TransactionStatusResponseSchema().loads(json_response).data
+
+        if response.status_code not in range(200, 299):
+            raise TransactionStatusError(message=dict_response["error_message"], code=response.status_code)
 
         return TransactionStatusResponse(**dict_response)
