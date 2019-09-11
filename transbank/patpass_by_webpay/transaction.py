@@ -7,7 +7,7 @@ from transbank import patpass_by_webpay
 from transbank.error.transaction_commit_error import TransactionCommitError
 from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.patpass_by_webpay.request import TransactionCreateRequest
-from transbank.patpass_by_webpay.schema import TransactionCreateRequestSchema, TransactionCreateResponseSchema, \
+from transbank.common.schema import TransactionCreateRequestSchema, TransactionCreateResponseSchema, \
     TransactionCommitResponseSchema
 from transbank.patpass_by_webpay.response import TransactionCreateResponse, TransactionCommitResponse
 
