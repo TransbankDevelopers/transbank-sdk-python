@@ -1,3 +1,6 @@
+from transbank.common.response import CardDetail
+
+
 class TransactionCreateResponse(object):
     def __init__(self, token: str, url: str):
         self.token = token
@@ -5,14 +8,6 @@ class TransactionCreateResponse(object):
 
     def __repr__(self):
         return "token: {}, url: {}".format(self.token, self.url)
-
-
-class CardDetail(object):
-    def __init__(self, card_number: str):
-        self.card_number = card_number
-
-    def __repr__(self) -> str:
-        return "card_number: {}".format(self.card_number)
 
 
 class TransactionCommitResponse(object):
