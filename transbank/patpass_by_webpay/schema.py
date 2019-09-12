@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields
 
+from transbank.common.schema import CardDetailSchema
+
 
 class WpmDetailSchema(Schema):
     service_id = fields.Str()
@@ -26,10 +28,6 @@ class TransactionCreateResponseSchema(Schema):
     error_message = fields.Str()
     token = fields.Str()
     url = fields.Str()
-
-
-class CardDetailSchema(Schema):
-    card_number = fields.Str()
 
 
 class TransactionCommitResponseSchema(Schema):
