@@ -3,7 +3,7 @@ import requests
 from transbank.common.headers_builder import HeadersBuilder
 from transbank.common.integration_type import IntegrationType, webpay_host
 from transbank.common.options import Options, WebpayOptions
-from transbank.common.schema import TransactionStatusResponseSchema
+from transbank.webpay.webpay_plus.schema import TransactionStatusResponseSchema
 from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.webpay.webpay_plus import default_commerce_code, default_api_key, default_integration_type, \
     TransactionStatusResponse
