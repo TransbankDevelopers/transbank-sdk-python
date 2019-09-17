@@ -10,6 +10,7 @@ from transbank.patpass_by_webpay.request import TransactionCreateRequest
 from transbank.patpass_by_webpay.schema import TransactionCreateRequestSchema, TransactionCreateResponseSchema, \
     TransactionCommitResponseSchema
 from transbank.patpass_by_webpay.response import TransactionCreateResponse, TransactionCommitResponse
+from transbank.webpay.webpay_plus.transaction import Transaction as T
 
 
 class Transaction(object):
@@ -65,3 +66,7 @@ class Transaction(object):
             raise TransactionCommitError(message=dict_response["error_message"], code=response.status_code)
 
         return TransactionCommitResponse(**dict_response)
+
+    @classmethod
+    def status(cls, token: str, options: Options = None):
+        return T.status(token, cls.build_options(options))
