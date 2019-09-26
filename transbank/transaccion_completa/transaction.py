@@ -5,14 +5,20 @@ from transbank.common.integration_type import IntegrationType, webpay_host
 from transbank.common.options import Options, WebpayOptions
 from transbank import transaccion_completa
 from transbank.error.transaction_create_error import TransactionCreateError
-from transbank.transaccion_completa.transaction_create_request import TransactionCreateRequest
-from transbank.transaccion_completa.schema import CreateTransactionRequestSchema, CreateTransactionResponseSchema
-from transbank.transaccion_completa.transaction_create_response import TransactionCreateResponse
+from transbank.error.transaction_commit_error import TransactionCommitError
+from transbank.error.transaction_refund_error import TransactionRefundError
+from transbank.error.transaction_status_error import TransactionStatusError
+from transbank.transaccion_completa.request import TransactionCreateRequest, TransactionCommitRequest, \
+    TransactionStatusRequest, TransactionRefundRequest
+from transbank.transaccion_completa.response import TransactionCreateResponse, TransactionCommitResponse, \
+    TransactionStatusResponse, TransactionRefundResponse
+from transbank.transaccion_completa.schema import CreateTransactionRequestSchema, CreateTransactionResponseSchema, \
+    CommitTransactionRequestSchema, CommitTransactionResponseSchema
 
 
 class Transaction(object):
     @classmethod
-    def __base_url(clscls, integration_type: IntegrationType):
+    def __base_url(cls, integration_type: IntegrationType):
         return "{}/rswebpaytransaction/api/webpay/v1.0/transactions".format(
             webpay_host(integration_type))
 
@@ -38,22 +44,45 @@ class Transaction(object):
         response_json = response.text
         response_dict = CreateTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
-            return TransactionCreateResponse(token=response_dict["token"])
+            return TransactionCreateResponse(**response_dict)
         raise TransactionCreateError(message=response_dict["error_message"])
 
     @classmethod
-    def commit(cls, token: str, id_query_installments:str, deferred_period_index: int, grace_period: int,
+    def commit(cls, token: str, id_query_installments: str, deferred_period_index: int, grace_period: int,
                options: Options = None):
         options = cls.build_options(options)
-        endpoint = cls.__base_url(options.integration_type)
-        request = TransactionCommitRequest(buy_order, session_id, amount, card_number, cvv, card_expiration_date)
-        response = requests.post(endpoint, data=CreateTransactionRequestSchema().dumps(request).data,
+        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
+        request = TransactionCommitRequest(id_query_installments, deferred_period_index, grace_period)
+        response = requests.post(endpoint, data=CommitTransactionRequestSchema().dumps(request).data,
                                  headers=HeadersBuilder.build(options))
         response_json = response.text
-        response_dict = CreateTransactionResponseSchema().loads(response_json).data
+        response_dict = CommitTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
-            return TransactionCreateResponse(token=response_dict["token"])
-        raise TransactionCreateError(message=response_dict["error_message"])
+            return TransactionCommitResponse(**response_dict)
+        raise TransactionCommitError(message=response_dict["error_message"])
 
+    @classmethod
+    def status(cls, token: str, options: Options = None):
+        options = cls.build_options(options)
+        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
+        request = TransactionStatusRequest(token = token)
+        response = requests.post(endpoint, data=CommitTransactionRequestSchema().dumps(request).data,
+                                 headers=HeadersBuilder.build(options))
+        response_json = response.text
+        response_dict = CommitTransactionResponseSchema().loads(response_json).data
+        if response.status_code in range(200, 299):
+            return TransactionStatusResponse(**response_dict)
+        raise TransactionStatusError(message=response_dict["error_message"])
 
-
+    @classmethod
+    def refund(cls, token: str, amount: str, options: Options = None):
+        options = cls.build_options(options)
+        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
+        request = TransactionRefundRequest(token = token)
+        response = requests.post(endpoint, data=CommitTransactionRequestSchema().dumps(request).data,
+                                 headers=HeadersBuilder.build(options))
+        response_json = response.text
+        response_dict = CommitTransactionResponseSchema().loads(response_json).data
+        if response.status_code in range(200, 299):
+            return TransactionRefundResponse(**response_dict)
+        raise TransactionRefundError(message=response_dict["error_message"])

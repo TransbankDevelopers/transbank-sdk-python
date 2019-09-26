@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields
+from transbank.common.schema import CardDetailSchema
 
 
 class CreateTransactionRequestSchema(Schema):
@@ -27,7 +28,7 @@ class CommitTransactionResponseSchema(Schema):
     status = fields.Str()
     buy_order = fields.Str()
     session_id = fields.Str()
-    card_detail = fields.Str()
+    card_detail = fields.Nested(CardDetailSchema, many=False)
     accounting_date = fields.Str()
     transaction_date = fields.Str()
     authorization_code = fields.Str()
