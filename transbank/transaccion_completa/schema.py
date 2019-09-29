@@ -23,6 +23,7 @@ class CommitTransactionRequestSchema(Schema):
 
 
 class CommitTransactionResponseSchema(Schema):
+    error_message = fields.Str()
     vci = fields.Str()
     amount = fields.Str()
     status = fields.Str()
@@ -37,3 +38,14 @@ class CommitTransactionResponseSchema(Schema):
     installments_number = fields.Str()
     installments_amount = fields.Str()
     balance = fields.Str()
+
+
+class InstallmentsTransactionRequestSchema(Schema):
+    installments_number = fields.Float()
+
+
+class InstallmentsTransactionResponseSchema(Schema):
+    error_message = fields.Str()
+    installments_amount = fields.Float()
+    id_query_installments = fields.Str()
+    deferred_periods = fields.Str()

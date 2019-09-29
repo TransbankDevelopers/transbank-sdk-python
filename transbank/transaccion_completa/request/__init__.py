@@ -24,3 +24,9 @@ class TransactionStatusRequest(object):
 class TransactionRefundRequest(object):
     def __init__(self, amount: float):
         self.amount = amount
+
+
+class TransactionInstallmentsRequest(object):
+    def __init__(self, installments_number: float):
+        self.installments_number = installments_number
+

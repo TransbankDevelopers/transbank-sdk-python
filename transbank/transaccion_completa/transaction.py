@@ -8,12 +8,14 @@ from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.error.transaction_commit_error import TransactionCommitError
 from transbank.error.transaction_refund_error import TransactionRefundError
 from transbank.error.transaction_status_error import TransactionStatusError
+from transbank.error.transaction_installments_error import TransactionInstallmentsError
 from transbank.transaccion_completa.request import TransactionCreateRequest, TransactionCommitRequest, \
-    TransactionStatusRequest, TransactionRefundRequest
+    TransactionStatusRequest, TransactionRefundRequest, TransactionInstallmentsRequest
 from transbank.transaccion_completa.response import TransactionCreateResponse, TransactionCommitResponse, \
-    TransactionStatusResponse, TransactionRefundResponse
+    TransactionStatusResponse, TransactionRefundResponse, TransactionInstallmentsResponse
 from transbank.transaccion_completa.schema import CreateTransactionRequestSchema, CreateTransactionResponseSchema, \
-    CommitTransactionRequestSchema, CommitTransactionResponseSchema
+    CommitTransactionRequestSchema, CommitTransactionResponseSchema, InstallmentsTransactionRequestSchema, \
+    InstallmentsTransactionResponseSchema
 
 
 class Transaction(object):
@@ -65,7 +67,7 @@ class Transaction(object):
     def status(cls, token: str, options: Options = None):
         options = cls.build_options(options)
         endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
-        request = TransactionStatusRequest(token = token)
+        request = TransactionStatusRequest(token=token)
         response = requests.post(endpoint, data=CommitTransactionRequestSchema().dumps(request).data,
                                  headers=HeadersBuilder.build(options))
         response_json = response.text
@@ -78,7 +80,7 @@ class Transaction(object):
     def refund(cls, token: str, amount: str, options: Options = None):
         options = cls.build_options(options)
         endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
-        request = TransactionRefundRequest(token = token)
+        request = TransactionRefundRequest(token=token)
         response = requests.post(endpoint, data=CommitTransactionRequestSchema().dumps(request).data,
                                  headers=HeadersBuilder.build(options))
         response_json = response.text
@@ -86,3 +88,23 @@ class Transaction(object):
         if response.status_code in range(200, 299):
             return TransactionRefundResponse(**response_dict)
         raise TransactionRefundError(message=response_dict["error_message"])
+
+    @classmethod
+    def installments(cls, token: str, installments_number: float, options: Options = None):
+        options = cls.build_options(options)
+        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
+
+        request = TransactionInstallmentsRequest(installments_number=installments_number)
+        response = requests.post(endpoint, data=InstallmentsTransactionRequestSchema().dumps(request).data,
+                                 headers=HeadersBuilder.build(options))
+        response_json = response.text
+        response_dict = InstallmentsTransactionResponseSchema().loads(response_json).data
+        if response.status_code in range(200, 299):
+            return TransactionInstallmentsResponse(**response_dict)
+
+        print("RESPONSE JSON \n")
+        print(response_json)
+
+        print("RESPONSE DICT \n")
+        print(response_dict)
+        raise TransactionInstallmentsError(message=response_dict["error_message"])
