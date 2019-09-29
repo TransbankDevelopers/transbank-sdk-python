@@ -15,7 +15,7 @@ from transbank.transaccion_completa.response import TransactionCreateResponse, T
     TransactionStatusResponse, TransactionRefundResponse, TransactionInstallmentsResponse
 from transbank.transaccion_completa.schema import CreateTransactionRequestSchema, CreateTransactionResponseSchema, \
     CommitTransactionRequestSchema, CommitTransactionResponseSchema, InstallmentsTransactionRequestSchema, \
-    InstallmentsTransactionResponseSchema
+    InstallmentsTransactionResponseSchema, RefundTransactionRequestSchema, RefundTransactionResponseSchema
 
 
 class Transaction(object):
@@ -55,8 +55,8 @@ class Transaction(object):
         options = cls.build_options(options)
         endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
         request = TransactionCommitRequest(id_query_installments, deferred_period_index, grace_period)
-        response = requests.post(endpoint, data=CommitTransactionRequestSchema().dumps(request).data,
-                                 headers=HeadersBuilder.build(options))
+        response = requests.put(endpoint, data=CommitTransactionRequestSchema().dumps(request).data,
+                                headers=HeadersBuilder.build(options))
         response_json = response.text
         response_dict = CommitTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
@@ -68,8 +68,7 @@ class Transaction(object):
         options = cls.build_options(options)
         endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
         request = TransactionStatusRequest(token=token)
-        response = requests.post(endpoint, data=CommitTransactionRequestSchema().dumps(request).data,
-                                 headers=HeadersBuilder.build(options))
+        response = requests.get(endpoint, headers=HeadersBuilder.build(options))
         response_json = response.text
         response_dict = CommitTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
@@ -79,12 +78,12 @@ class Transaction(object):
     @classmethod
     def refund(cls, token: str, amount: str, options: Options = None):
         options = cls.build_options(options)
-        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
-        request = TransactionRefundRequest(token=token)
-        response = requests.post(endpoint, data=CommitTransactionRequestSchema().dumps(request).data,
+        endpoint = '{}/{}/refunds'.format(cls.__base_url(options.integration_type), token)
+        request = TransactionRefundRequest(amount=amount)
+        response = requests.post(endpoint, data=RefundTransactionRequestSchema().dumps(request).data,
                                  headers=HeadersBuilder.build(options))
         response_json = response.text
-        response_dict = CommitTransactionResponseSchema().loads(response_json).data
+        response_dict = RefundTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
             return TransactionRefundResponse(**response_dict)
         raise TransactionRefundError(message=response_dict["error_message"])
@@ -92,7 +91,7 @@ class Transaction(object):
     @classmethod
     def installments(cls, token: str, installments_number: float, options: Options = None):
         options = cls.build_options(options)
-        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
+        endpoint = '{}/{}/installments'.format(cls.__base_url(options.integration_type), token)
 
         request = TransactionInstallmentsRequest(installments_number=installments_number)
         response = requests.post(endpoint, data=InstallmentsTransactionRequestSchema().dumps(request).data,
@@ -101,10 +100,4 @@ class Transaction(object):
         response_dict = InstallmentsTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
             return TransactionInstallmentsResponse(**response_dict)
-
-        print("RESPONSE JSON \n")
-        print(response_json)
-
-        print("RESPONSE DICT \n")
-        print(response_dict)
         raise TransactionInstallmentsError(message=response_dict["error_message"])

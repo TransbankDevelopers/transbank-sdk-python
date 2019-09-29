@@ -1,8 +1,14 @@
 class TransactionCommitRequest(object):
-    def __init__(self, id_query_installments: str, deferred_periods_index: str, grace_period: str):
+    def __init__(self, id_query_installments: str, deferred_period_index: float, grace_period):
         self.id_query_installments = id_query_installments
-        self.deferred_periods_index = deferred_periods_index
-        self.grace_period = grace_period
+        self.deferred_period_index = deferred_period_index
+        if type(grace_period) == bool:
+            grace_p = grace_period
+        else:
+            grace_p = grace_period == 'True'
+
+        print(" GRACE PERIOD IS " + str(grace_p))
+        self.grace_period = str(grace_p).lower()
 
 
 class TransactionCreateRequest(object):
@@ -29,4 +35,3 @@ class TransactionRefundRequest(object):
 class TransactionInstallmentsRequest(object):
     def __init__(self, installments_number: float):
         self.installments_number = installments_number
-

@@ -24,8 +24,8 @@ class CommitTransactionRequestSchema(Schema):
 
 class CommitTransactionResponseSchema(Schema):
     error_message = fields.Str()
-    vci = fields.Str()
-    amount = fields.Str()
+    # vci = fields.Raw()
+    amount = fields.Float()
     status = fields.Str()
     buy_order = fields.Str()
     session_id = fields.Str()
@@ -34,10 +34,12 @@ class CommitTransactionResponseSchema(Schema):
     transaction_date = fields.Str()
     authorization_code = fields.Str()
     payment_type_code = fields.Str()
-    response_code = fields.Str()
-    installments_number = fields.Str()
-    installments_amount = fields.Str()
-    balance = fields.Str()
+    response_code = fields.Float()
+    installments_number = fields.Float()
+
+
+# installments_amount = fields.Float()
+# balance = fields.Float()
 
 
 class InstallmentsTransactionRequestSchema(Schema):
@@ -47,5 +49,34 @@ class InstallmentsTransactionRequestSchema(Schema):
 class InstallmentsTransactionResponseSchema(Schema):
     error_message = fields.Str()
     installments_amount = fields.Float()
-    id_query_installments = fields.Str()
-    deferred_periods = fields.Str()
+    id_query_installments = fields.Raw()
+    deferred_periods = fields.Raw()
+
+
+class StatusTransactionResponseSchema(Schema):
+    error_message = fields.Str()
+    amount = fields.Float()
+    status = fields.Str()
+    buy_order = fields.Str()
+    session_id = fields.Str()
+    card_detail = fields.Nested(CardDetailSchema, many=False)
+    accounting_date = fields.Str()
+    transaction_date = fields.Str()
+    authorization_code = fields.Str()
+    payment_type_code = fields.Str()
+    response_code = fields.Float()
+    installments_number = fields.Float()
+
+
+class RefundTransactionRequestSchema(Schema):
+    amount = fields.Float()
+
+
+class RefundTransactionResponseSchema(Schema):
+    error_message = fields.Str()
+    type = fields.Str()
+    authorization_code = fields.Str()
+    authorization_date = fields.Str()
+    nullified_amount = fields.Raw()
+    balance = fields.Raw()
+    response_code = fields.Raw()
