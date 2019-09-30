@@ -7,7 +7,6 @@ class TransactionCommitRequest(object):
         else:
             grace_p = grace_period == 'True'
 
-        print(" GRACE PERIOD IS " + str(grace_p))
         self.grace_period = str(grace_p).lower()
 
 

@@ -71,13 +71,6 @@ class Transaction(object):
         response = requests.get(endpoint, headers=HeadersBuilder.build(options))
         response_json = response.text
         response_dict = CommitTransactionResponseSchema().loads(response_json).data
-
-        print("RESPONSE JSON \n")
-        print(response_json)
-
-        print("RESPONSE DICT \n")
-        print(response_dict)
-
         if response.status_code in range(200, 299):
             return TransactionStatusResponse(**response_dict)
         raise TransactionStatusError(message=response_dict["error_message"])
