@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+.DS_Store
+
 # Distribution / packaging
 .Python
 build/
@@ -106,3 +108,4 @@ venv.bak/
 
 .vscode
 
+.idea
