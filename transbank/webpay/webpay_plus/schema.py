@@ -19,3 +19,16 @@ class TransactionStatusResponseSchema(Schema):
     installments_number = fields.Int()
     installments_amount = fields.Float()
     balance = fields.Float()
+
+
+class TransactionCreateRequestSchema(Schema):
+    buy_order = fields.Str()
+    session_id = fields.Str()
+    amount = fields.Float()
+    return_url = fields.Str()
+
+
+class TransactionCreateResponseSchema(Schema):
+    error_message = fields.Str()
+    token = fields.Str()
+    url = fields.Str()
