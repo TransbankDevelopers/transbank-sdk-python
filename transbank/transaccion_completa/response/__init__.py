@@ -68,7 +68,6 @@ class TransactionCommitResponse(object):
         )
 
 
-
 class TransactionStatusResponse(object):
     def __init__(self, amount: float, status: str, buy_order: str, session_id: str,
                  card_detail: CardDetail, accounting_date: str, transaction_date: str, authorization_code: str,
