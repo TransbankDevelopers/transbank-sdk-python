@@ -24,7 +24,7 @@ class CommitTransactionRequestSchema(Schema):
 
 class CommitTransactionResponseSchema(Schema):
     error_message = fields.Str()
-    # vci = fields.Raw()
+    vci = fields.Raw()
     amount = fields.Float()
     status = fields.Str()
     buy_order = fields.Str()
@@ -36,10 +36,8 @@ class CommitTransactionResponseSchema(Schema):
     payment_type_code = fields.Str()
     response_code = fields.Float()
     installments_number = fields.Float()
-
-
-# installments_amount = fields.Float()
-# balance = fields.Float()
+    installments_amount = fields.Float()
+    balance = fields.Float()
 
 
 class InstallmentsTransactionRequestSchema(Schema):
@@ -55,6 +53,7 @@ class InstallmentsTransactionResponseSchema(Schema):
 
 class StatusTransactionResponseSchema(Schema):
     error_message = fields.Str()
+    vci = fields.Raw()
     amount = fields.Float()
     status = fields.Str()
     buy_order = fields.Str()
@@ -66,6 +65,8 @@ class StatusTransactionResponseSchema(Schema):
     payment_type_code = fields.Str()
     response_code = fields.Float()
     installments_number = fields.Float()
+    installments_amount = fields.Float()
+    balance = fields.Float()
 
 
 class RefundTransactionRequestSchema(Schema):
