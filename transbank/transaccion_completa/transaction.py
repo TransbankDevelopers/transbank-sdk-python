@@ -44,8 +44,6 @@ class Transaction(object):
         response = requests.post(endpoint, data=CreateTransactionRequestSchema().dumps(request).data,
                                  headers=HeadersBuilder.build(options))
         response_json = response.text
-
-        print("CREATE RESPONSE JSON {}".format(response_json))
         response_dict = CreateTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
             return TransactionCreateResponse(**response_dict)
@@ -60,7 +58,6 @@ class Transaction(object):
         response = requests.put(endpoint, data=CommitTransactionRequestSchema().dumps(request).data,
                                 headers=HeadersBuilder.build(options))
         response_json = response.text
-        print("COMMIT RESPONSE JSON {}".format(response_json))
         response_dict = CommitTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
             return TransactionCommitResponse(**response_dict)
@@ -73,7 +70,6 @@ class Transaction(object):
         request = TransactionStatusRequest(token=token)
         response = requests.get(endpoint, headers=HeadersBuilder.build(options))
         response_json = response.text
-        print("STATUS RESPONSE JSON {}".format(response_json))
         response_dict = CommitTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
             return TransactionStatusResponse(**response_dict)
@@ -87,7 +83,6 @@ class Transaction(object):
         response = requests.post(endpoint, data=RefundTransactionRequestSchema().dumps(request).data,
                                  headers=HeadersBuilder.build(options))
         response_json = response.text
-        print("REFUND RESPONSE JSON {}".format(response_json))
         response_dict = RefundTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
             return TransactionRefundResponse(**response_dict)
@@ -102,7 +97,6 @@ class Transaction(object):
         response = requests.post(endpoint, data=InstallmentsTransactionRequestSchema().dumps(request).data,
                                  headers=HeadersBuilder.build(options))
         response_json = response.text
-        print("INSTALLMENTS RESPONSE JSON {}".format(response_json))
         response_dict = InstallmentsTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
             return TransactionInstallmentsResponse(**response_dict)
