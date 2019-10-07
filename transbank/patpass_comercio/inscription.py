@@ -56,8 +56,8 @@ class Inscription(object):
 
         request = TransactionInscriptionRequest(url, name, first_last_name, second_last_name, rut,
                                                 service_id, final_url, options.commerce_code, m_amount,
-                                                phone_number, mobile_number, patpass_name, person_email, commerce_email,
-                                                address, city)
+                                                phone_number, mobile_number, patpass_name, person_email,
+                                                commerce_email, address, city)
 
         response = requests.post(endpoint, data=TransactionInscriptionRequestSchema().dumps(request).data,
                                  headers=HeadersBuilder.build(options))
