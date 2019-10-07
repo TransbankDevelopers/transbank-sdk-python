@@ -55,3 +55,11 @@ class WebpayOptions(Options):
 
     def header_api_key_name(self):
         return "Tbk-Api-Key-Secret"
+
+
+class PatpassComercioOptions(Options):
+    def header_commerce_code_name(self):
+        return "commercecode"
+
+    def header_api_key_name(self):
+        return "Authorization"
