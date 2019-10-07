@@ -7,7 +7,7 @@ from transbank import transaccion_completa
 from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.error.transaction_commit_error import TransactionCommitError
 from transbank.error.transaction_refund_error import TransactionRefundError
-from transbank.error.transaction_status_error import TransactionStatusError
+from transbank.error.transaction_status_error import InscriptionStatusError
 from transbank.error.transaction_installments_error import TransactionInstallmentsError
 from transbank.transaccion_completa.request import TransactionCreateRequest, TransactionCommitRequest, \
     TransactionStatusRequest, TransactionRefundRequest, TransactionInstallmentsRequest
@@ -73,7 +73,7 @@ class Transaction(object):
         response_dict = CommitTransactionResponseSchema().loads(response_json).data
         if response.status_code in range(200, 299):
             return TransactionStatusResponse(**response_dict)
-        raise TransactionStatusError(message=response_dict["error_message"])
+        raise InscriptionStatusError(message=response_dict["error_message"])
 
     @classmethod
     def refund(cls, token: str, amount: str, options: Options = None):

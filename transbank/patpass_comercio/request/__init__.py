@@ -1,4 +1,4 @@
-class TransactionInscriptionRequest(object):
+class InscriptionStartRequest(object):
     def __init__(self,
                  url: str,
                  name: str,
@@ -34,7 +34,7 @@ class TransactionInscriptionRequest(object):
         self.ciudad = city
 
 
-class TransactionStatusRequest(object):
+class InscriptionStatusRequest(object):
     def __init__(self,
                  token: str):
         self.token = token

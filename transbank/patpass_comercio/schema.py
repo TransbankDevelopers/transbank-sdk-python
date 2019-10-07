@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields
 
 
-class TransactionInscriptionRequestSchema(Schema):
+class InscriptionStartRequestSchema(Schema):
     url = fields.Str()
     nombre = fields.Str()
     pApellido = fields.Str()
@@ -20,15 +20,15 @@ class TransactionInscriptionRequestSchema(Schema):
     ciudad = fields.Str()
 
 
-class TransactionInscriptionResponseSchema(Schema):
+class InscriptionStartResponseSchema(Schema):
     token = fields.Str()
     url = fields.Str()
 
 
-class TransactionStatusRequestSchema(Schema):
+class InscriptionStatusRequestSchema(Schema):
     token = fields.Str()
 
 
-class TransactionStatusResponseSchema(Schema):
+class InscriptionStatusResponseSchema(Schema):
     authorized = fields.Bool()
     voucherUrl = fields.Str()

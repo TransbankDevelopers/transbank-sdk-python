@@ -8,7 +8,7 @@ from transbank.webpay.webpay_plus.request import TransactionCreateRequest
 from transbank.webpay.webpay_plus.response import TransactionCreateResponse
 from transbank.webpay.webpay_plus.schema import TransactionStatusResponseSchema, TransactionCreateRequestSchema, \
     TransactionCreateResponseSchema
-from transbank.error.transaction_status_error import TransactionStatusError
+from transbank.error.transaction_status_error import InscriptionStatusError
 from transbank.webpay.webpay_plus import default_commerce_code, default_api_key, default_integration_type, \
     TransactionStatusResponse
 
@@ -56,6 +56,6 @@ class Transaction(object):
         dict_response = TransactionStatusResponseSchema().loads(json_response).data
 
         if response.status_code not in range(200, 299):
-            raise TransactionStatusError(message=dict_response["error_message"], code=response.status_code)
+            raise InscriptionStatusError(message=dict_response["error_message"], code=response.status_code)
 
         return TransactionStatusResponse(**dict_response)

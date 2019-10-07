@@ -4,12 +4,12 @@ from transbank.common.headers_builder import HeadersBuilder
 from transbank.common.integration_type import IntegrationType, patpass_comercio_host
 from transbank.common.options import Options, PatpassComercioOptions
 from transbank import patpass_comercio
-from transbank.error.transaction_inscription_error import TransactionInscriptionError
-from transbank.error.transaction_status_error import TransactionStatusError
-from transbank.patpass_comercio.request import TransactionInscriptionRequest, TransactionStatusRequest
-from transbank.patpass_comercio.response import TransactionInscriptionResponse, TransactionStatusResponse
-from transbank.patpass_comercio.schema import TransactionInscriptionRequestSchema, \
-    TransactionInscriptionResponseSchema, TransactionStatusResponseSchema, TransactionStatusRequestSchema
+from transbank.error.inscription_start_error import InscriptionStartError
+from transbank.error.inscription_status_error import InscriptionStatusError
+from transbank.patpass_comercio.request import InscriptionStartRequest, InscriptionStatusRequest
+from transbank.patpass_comercio.response import InscriptionStartResponse, InscriptionStatusResponse
+from transbank.patpass_comercio.schema import InscriptionStartRequestSchema, \
+    InscriptionStartResponseSchema, InscriptionStatusResponseSchema, InscriptionStatusRequestSchema
 
 
 class Inscription(object):
@@ -47,39 +47,39 @@ class Inscription(object):
               commerce_email: str,
               address: str,
               city: str,
-              options: Options = None) -> TransactionInscriptionResponse:
+              options: Options = None) -> InscriptionStartResponse:
         options = cls.build_options(options)
         endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), 'patInscription')
         m_amount = max_amount
         if max_amount == 0:
             m_amount = ''
 
-        request = TransactionInscriptionRequest(url, name, first_last_name, second_last_name, rut,
-                                                service_id, final_url, options.commerce_code, m_amount,
-                                                phone_number, mobile_number, patpass_name, person_email,
-                                                commerce_email, address, city)
+        request = InscriptionStartRequest(url, name, first_last_name, second_last_name, rut,
+                                          service_id, final_url, options.commerce_code, m_amount,
+                                          phone_number, mobile_number, patpass_name, person_email,
+                                          commerce_email, address, city)
 
-        response = requests.post(endpoint, data=TransactionInscriptionRequestSchema().dumps(request).data,
+        response = requests.post(endpoint, data=InscriptionStartRequestSchema().dumps(request).data,
                                  headers=HeadersBuilder.build(options))
         json_response = response.text
-        dict_response = TransactionInscriptionResponseSchema().loads(json_response).data
+        dict_response = InscriptionStartResponseSchema().loads(json_response).data
         if response.status_code not in range(200, 299):
-            raise TransactionInscriptionError(message=dict_response["description"], code=response.status_code)
+            raise InscriptionStartError(message=dict_response["description"], code=response.status_code)
 
-        return TransactionInscriptionResponse(**dict_response)
+        return InscriptionStartResponse(**dict_response)
 
     @classmethod
-    def status(cls, token: str, options: Options = None) -> TransactionStatusResponse:
+    def status(cls, token: str, options: Options = None) -> InscriptionStatusResponse:
         options = cls.build_options(options)
         endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), 'status')
 
-        request = TransactionStatusRequest(token)
+        request = InscriptionStatusRequest(token)
 
-        response = requests.post(url=endpoint, data=TransactionStatusRequestSchema().dumps(request).data,
+        response = requests.post(url=endpoint, data=InscriptionStatusRequestSchema().dumps(request).data,
                                  headers=HeadersBuilder.build(options))
         json_response = response.text
-        dict_response = TransactionStatusResponseSchema().loads(json_response).data
+        dict_response = InscriptionStatusResponseSchema().loads(json_response).data
         if response.status_code not in range(200, 299):
-            raise TransactionStatusError(message=dict_response["description"], code=response.status_code)
+            raise InscriptionStatusError(message=dict_response["description"], code=response.status_code)
 
-        return TransactionStatusResponse(**dict_response)
+        return InscriptionStatusResponse(**dict_response)
