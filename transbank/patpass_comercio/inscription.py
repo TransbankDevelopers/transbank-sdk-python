@@ -12,7 +12,7 @@ from transbank.patpass_comercio.schema import TransactionInscriptionRequestSchem
     TransactionInscriptionResponseSchema, TransactionStatusResponseSchema, TransactionStatusRequestSchema
 
 
-class Transaction(object):
+class Inscription(object):
     @classmethod
     def __base_url(cls, integration_type: IntegrationType):
         return "{}/restpatpass/v1/services".format(
@@ -31,23 +31,23 @@ class Transaction(object):
         return alt_options
 
     @classmethod
-    def inscription(cls,
-                    url: str,
-                    name: str,
-                    first_last_name: str,
-                    second_last_name: str,
-                    rut: str,
-                    service_id: str,
-                    final_url: str,
-                    max_amount: float,
-                    phone_number: str,
-                    mobile_number: str,
-                    patpass_name: str,
-                    person_email: str,
-                    commerce_email: str,
-                    address: str,
-                    city: str,
-                    options: Options = None) -> TransactionInscriptionResponse:
+    def start(cls,
+              url: str,
+              name: str,
+              first_last_name: str,
+              second_last_name: str,
+              rut: str,
+              service_id: str,
+              final_url: str,
+              max_amount: float,
+              phone_number: str,
+              mobile_number: str,
+              patpass_name: str,
+              person_email: str,
+              commerce_email: str,
+              address: str,
+              city: str,
+              options: Options = None) -> TransactionInscriptionResponse:
         options = cls.build_options(options)
         endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), 'patInscription')
         m_amount = max_amount
@@ -80,6 +80,6 @@ class Transaction(object):
         json_response = response.text
         dict_response = TransactionStatusResponseSchema().loads(json_response).data
         if response.status_code not in range(200, 299):
-            raise TransactionStatusError(message=dict_response["error_message"], code=response.status_code)
+            raise TransactionStatusError(message=dict_response["description"], code=response.status_code)
 
         return TransactionStatusResponse(**dict_response)
