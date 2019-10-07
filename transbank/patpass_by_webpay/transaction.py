@@ -4,12 +4,11 @@ from transbank.common.headers_builder import HeadersBuilder
 from transbank.common.integration_type import IntegrationType, webpay_host
 from transbank.common.options import Options, WebpayOptions
 from transbank import patpass_by_webpay
-from transbank.error.transaction_commit_error import TransactionCommitError
 from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.patpass_by_webpay.request import TransactionCreateRequest
-from transbank.patpass_by_webpay.schema import TransactionCreateRequestSchema, TransactionCreateResponseSchema, \
-    TransactionCommitResponseSchema
-from transbank.patpass_by_webpay.response import TransactionCreateResponse, TransactionCommitResponse
+from transbank.patpass_by_webpay.schema import TransactionCreateRequestSchema, TransactionCreateResponseSchema
+from transbank.patpass_by_webpay.response import TransactionCreateResponse
+from transbank.webpay.webpay_plus.response import TransactionCommitResponse, TransactionStatusResponse
 from transbank.webpay.webpay_plus.transaction import Transaction as T
 
 
@@ -55,18 +54,8 @@ class Transaction(object):
 
     @classmethod
     def commit(cls, token: str, options: Options = None) -> TransactionCommitResponse:
-        options = cls.build_options(options)
-        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
-
-        response = requests.put(url=endpoint, headers=HeadersBuilder.build(options))
-        json_response = response.text
-        dict_response = TransactionCommitResponseSchema().loads(json_response).data
-
-        if response.status_code not in range(200, 299):
-            raise TransactionCommitError(message=dict_response["error_message"], code=response.status_code)
-
-        return TransactionCommitResponse(**dict_response)
+        return T.commit(token, cls.build_options(options))
 
     @classmethod
-    def status(cls, token: str, options: Options = None):
+    def status(cls, token: str, options: Options = None) -> TransactionStatusResponse:
         return T.status(token, cls.build_options(options))
