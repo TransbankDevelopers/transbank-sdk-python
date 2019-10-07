@@ -1,13 +1,15 @@
 import requests
+from transbank.error.transaction_commit_error import TransactionCommitError
+
 from transbank.error.transaction_create_error import TransactionCreateError
 
 from transbank.common.headers_builder import HeadersBuilder
 from transbank.common.integration_type import IntegrationType, webpay_host
 from transbank.common.options import Options, WebpayOptions
 from transbank.webpay.webpay_plus.request import TransactionCreateRequest
-from transbank.webpay.webpay_plus.response import TransactionCreateResponse
+from transbank.webpay.webpay_plus.response import TransactionCreateResponse, TransactionCommitResponse
 from transbank.webpay.webpay_plus.schema import TransactionStatusResponseSchema, TransactionCreateRequestSchema, \
-    TransactionCreateResponseSchema
+    TransactionCreateResponseSchema, TransactionCommitResponseSchema
 from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.webpay.webpay_plus import default_commerce_code, default_api_key, default_integration_type, \
     TransactionStatusResponse
@@ -31,7 +33,8 @@ class Transaction(object):
         return alt_options
 
     @classmethod
-    def create(cls, buy_order: str, session_id: str, amount: float, return_url: str, options: Options = None):
+    def create(cls, buy_order: str, session_id: str, amount: float, return_url: str, options: Options = None) \
+            -> TransactionCreateResponse:
         options = cls.build_options(options)
         endpoint = cls.__base_url(options.integration_type)
         request = TransactionCreateRequest(buy_order, session_id, amount, return_url)
@@ -45,6 +48,20 @@ class Transaction(object):
             raise TransactionCreateError(message=dict_response["error_message"], code=response.status_code)
 
         return TransactionCreateResponse(**dict_response)
+
+    @classmethod
+    def commit(cls, token: str, options: Options = None) -> TransactionCommitResponse:
+        options = cls.build_options(options)
+        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
+
+        response = requests.put(url=endpoint, headers=HeadersBuilder.build(options))
+        json_response = response.text
+        dict_response = TransactionCommitResponseSchema().loads(json_response).data
+
+        if response.status_code not in range(200, 299):
+            raise TransactionCommitError(message=dict_response["error_message"], code=response.status_code)
+
+        return TransactionCommitResponse(**dict_response)
 
     @classmethod
     def status(cls, token: str, options: Options = None):
