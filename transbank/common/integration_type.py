@@ -19,3 +19,16 @@ def webpay_host(integration_type: IntegrationType) -> str:
         return None
 
     return "https://webpay3gint.transbank.cl"
+
+
+def patpass_comercio_host(integration_type: IntegrationType) -> str:
+    if integration_type is IntegrationType.LIVE:
+        return "https://www.pagoautomaticocontarjetas.cl"
+
+    if integration_type is IntegrationType.TEST:
+        return "https://pagoautomaticocontarjetasint.transbank.cl"
+
+    if integration_type is IntegrationType.MOCK:
+        return None
+
+    return "https://pagoautomaticocontarjetasint.transbank.cl"
