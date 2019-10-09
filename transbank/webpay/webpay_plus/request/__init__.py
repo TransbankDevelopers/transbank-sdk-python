@@ -9,3 +9,10 @@ class TransactionCreateRequest(object):
         return "TransactionCreateRequest(buy_order: {}, session_id: {}, amount: {}, return_url: {})".format(
             self.buy_order, self.session_id, self.amount, self.return_url)
 
+
+class TransactionRefundRequest(object):
+    def __init__(self, amount: float):
+        self.amount = amount
+
+    def __repr__(self):
+        return "TransactionRefundRequest(amount: {})".format(self.amount)

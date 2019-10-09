@@ -48,3 +48,18 @@ class TransactionCommitResponseSchema(Schema):
     payment_type_code = fields.Str()
     response_code = fields.Int()
     installments_number = fields.Int()
+
+
+class TransactionRefundRequestSchema(Schema):
+    amount = fields.Float()
+
+
+class TransactionRefundResponseSchema(Schema):
+    error_message = fields.Str()
+    amount = fields.Float()
+    type = fields.Str()
+    balance = fields.Float()
+    authorization_code = fields.Str()
+    response_code = fields.Int()
+    authorization_date = fields.Str()
+    nullified_amount = fields.Float()

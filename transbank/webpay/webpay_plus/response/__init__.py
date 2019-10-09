@@ -83,3 +83,20 @@ class TransactionCreateResponse(object):
 
     def __repr__(self):
         return "TransactionCreateResponse(token: {}, url: {})".format(self.token, self.url)
+
+
+class TransactionRefundResponse(object):
+    def __init__(self, type: str, balance: float, authorization_code: str, response_code: int, authorization_date: str,
+                 nullified_amount: float):
+        self.type = type
+        self.balance = balance
+        self.authorization_code = authorization_code
+        self.response_code = response_code
+        self.authorization_date = authorization_date
+        self.nullified_amount = nullified_amount
+
+    def __repr__(self):
+        return "TransactionRefundResponse(type: {}, balance: {}, authorization_code: {}, response_code: {}, " \
+               "authorization_date: {}, nullified_amount: {})".format(self.type, self.balance, self.authorization_code,
+                                                                      self.response_code, self.authorization_date,
+                                                                      self.nullified_amount)

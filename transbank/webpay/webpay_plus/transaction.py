@@ -6,10 +6,13 @@ from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.common.headers_builder import HeadersBuilder
 from transbank.common.integration_type import IntegrationType, webpay_host
 from transbank.common.options import Options, WebpayOptions
-from transbank.webpay.webpay_plus.request import TransactionCreateRequest
-from transbank.webpay.webpay_plus.response import TransactionCreateResponse, TransactionCommitResponse
+from transbank.error.transaction_refund_error import TransactionRefundError
+from transbank.webpay.webpay_plus.request import TransactionCreateRequest, TransactionRefundRequest
+from transbank.webpay.webpay_plus.response import TransactionCreateResponse, TransactionCommitResponse, \
+    TransactionRefundResponse
 from transbank.webpay.webpay_plus.schema import TransactionStatusResponseSchema, TransactionCreateRequestSchema, \
-    TransactionCreateResponseSchema, TransactionCommitResponseSchema
+    TransactionCreateResponseSchema, TransactionCommitResponseSchema, TransactionRefundRequestSchema, \
+    TransactionRefundResponseSchema
 from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.webpay.webpay_plus import default_commerce_code, default_api_key, default_integration_type, \
     TransactionStatusResponse
@@ -62,6 +65,22 @@ class Transaction(object):
             raise TransactionCommitError(message=dict_response["error_message"], code=response.status_code)
 
         return TransactionCommitResponse(**dict_response)
+
+    @classmethod
+    def refund(cls, token: str, amount: float, options: Options = None):
+        options = cls.build_options(options)
+        endpoint = "{}/{}/refunds".format(cls.__base_url(options.integration_type), token)
+        request = TransactionRefundRequest(amount)
+
+        response = requests.post(url=endpoint, headers=HeadersBuilder.build(options),
+                                 data=TransactionRefundRequestSchema().dumps(request).data)
+        json_response = response.text
+        dict_response = TransactionRefundResponseSchema().loads(json_response).data
+
+        if response.status_code not in range(200, 299):
+            raise TransactionRefundError(message=dict_response["error_message"], code=response.status_code)
+
+        return TransactionRefundResponse(**dict_response)
 
     @classmethod
     def status(cls, token: str, options: Options = None):
