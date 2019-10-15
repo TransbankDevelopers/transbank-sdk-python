@@ -14,7 +14,7 @@ from transbank.webpay.webpay_plus.schema import TransactionStatusResponseSchema,
     TransactionCreateResponseSchema, TransactionCommitResponseSchema, TransactionRefundRequestSchema, \
     TransactionRefundResponseSchema
 from transbank.error.transaction_status_error import TransactionStatusError
-from transbank.webpay.webpay_plus import default_commerce_code, default_api_key, default_integration_type, \
+from transbank.webpay.webpay_plus import webpay_plus_default_commerce_code, default_api_key, default_integration_type, \
     TransactionStatusResponse
 
 
@@ -26,10 +26,10 @@ class Transaction(object):
 
     @classmethod
     def build_options(cls, options: Options = None) -> Options:
-        alt_options = WebpayOptions(default_commerce_code, default_api_key, default_integration_type)
+        alt_options = WebpayOptions(webpay_plus_default_commerce_code, default_api_key, default_integration_type)
 
         if options is not None:
-            alt_options.commerce_code = options.commerce_code or default_commerce_code
+            alt_options.commerce_code = options.commerce_code or webpay_plus_default_commerce_code
             alt_options.api_key = options.api_key or default_api_key
             alt_options.integration_type = options.integration_type or default_integration_type
 
@@ -75,6 +75,7 @@ class Transaction(object):
         response = requests.post(url=endpoint, headers=HeadersBuilder.build(options),
                                  data=TransactionRefundRequestSchema().dumps(request).data)
         json_response = response.text
+        print(json_response)
         dict_response = TransactionRefundResponseSchema().loads(json_response).data
 
         if response.status_code not in range(200, 299):

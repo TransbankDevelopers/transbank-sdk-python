@@ -86,8 +86,8 @@ class TransactionCreateResponse(object):
 
 
 class TransactionRefundResponse(object):
-    def __init__(self, type: str, balance: float, authorization_code: str, response_code: int, authorization_date: str,
-                 nullified_amount: float):
+    def __init__(self, type: str, balance: float = None, authorization_code: str = None, response_code: int = None,
+                 authorization_date: str = None, nullified_amount: float = None):
         self.type = type
         self.balance = balance
         self.authorization_code = authorization_code
