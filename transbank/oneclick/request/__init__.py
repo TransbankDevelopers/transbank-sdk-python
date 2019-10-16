@@ -14,9 +14,9 @@ class InscriptionStartRequest(object):
 class InscriptionDeleteRequest(object):
     def __init__(self,
                  user_name: str,
-                 token: str):
+                 tbk_user: str):
         self.username = user_name
-        self.tbk_user = token
+        self.tbk_user = tbk_user
 
 
 class TransactionRefundRequest(object):
@@ -74,10 +74,10 @@ class MallTransactionAuthorizeDetails(object):
 class TransactionAuthorizeRequest(object):
     def __init__(self,
                  user_name: str,
-                 token: str,
+                 tbk_user: str,
                  buy_order: str,
                  details: List[MallDetails]):
         self.username = user_name
-        self.tbk_user = token
+        self.tbk_user = tbk_user
         self.buy_order = buy_order
         self.details = details

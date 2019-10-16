@@ -13,7 +13,7 @@ from transbank.oneclick.schema import InscriptionStartRequestSchema, Inscription
     InscriptionFinishResponseSchema, InscriptionDeleteRequestSchema
 
 
-class Inscription(object):
+class MallInscription(object):
     @classmethod
     def __base_url(cls, integration_type: IntegrationType):
         return "{}/rswebpaytransaction/api/oneclick/v1.0".format(
@@ -65,13 +65,15 @@ class Inscription(object):
         return InscriptionFinishResponse(**dict_response)
 
     @classmethod
-    def delete(cls, token: str, user_name: str, options: Options = None):
+    def delete(cls, tbk_user: str, user_name: str, options: Options = None):
         options = cls.build_options(options)
         endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), 'inscriptions')
 
-        request = InscriptionDeleteRequest(user_name, token)
-        try:
-            requests.delete(url=endpoint, data=InscriptionDeleteRequestSchema().dumps(request).data,
-                            headers=HeadersBuilder.build(options))
-        except:
-            raise InscriptionDeleteError()
+        request = InscriptionDeleteRequest(user_name, tbk_user)
+        data = InscriptionDeleteRequestSchema().dumps(request).data
+
+        response = requests.delete(url=endpoint, data=data,
+                                   headers=HeadersBuilder.build(options))
+
+        if response.status_code not in range(200, 299):
+            raise InscriptionDeleteError(message="Delete could not be performed", code=response.status_code)

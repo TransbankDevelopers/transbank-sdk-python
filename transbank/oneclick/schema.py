@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields
 
-from transbank.common.schema import CardDetailSchema, MallDetailsSchema
+from transbank.common.schema import CardDetailSchema
 
 
 class InscriptionStartRequestSchema(Schema):
@@ -12,6 +12,7 @@ class InscriptionStartRequestSchema(Schema):
 class InscriptionStartResponseSchema(Schema):
     token = fields.Str()
     url_webpay = fields.Str()
+    error_message = fields.Str()
 
 
 class InscriptionFinishResponseSchema(Schema):
@@ -20,11 +21,19 @@ class InscriptionFinishResponseSchema(Schema):
     authorization_code = fields.Str()
     credit_card_type = fields.Str()
     last_four_card_digits = fields.Str()
+    error_message = fields.Str()
 
 
 class InscriptionDeleteRequestSchema(Schema):
     username = fields.Str()
     tbk_user = fields.Str()
+
+
+class MallDetailsSchema(Schema):
+    commerce_code = fields.Str()
+    buy_order = fields.Str()
+    installments_number = fields.Int()
+    amount = fields.Float()
 
 
 class TransactionAuthorizeRequestSchema(Schema):
@@ -40,6 +49,7 @@ class TransactionAuthorizeResponseSchema(Schema):
     card_detail = fields.Nested(CardDetailSchema, many=False)
     buy_order = fields.Str()
     details = fields.List(fields.Raw())
+    error_message = fields.Str()
 
 
 class TransactionRefundResponseSchema(Schema):
@@ -49,6 +59,7 @@ class TransactionRefundResponseSchema(Schema):
     response_code = fields.Int()
     authorization_date = fields.Str()
     nullified_amount = fields.Float()
+    error_message = fields.Str()
 
 
 class TransactionRefundRequestSchema(Schema):
@@ -63,3 +74,4 @@ class TransactionStatusResponseSchema(Schema):
     accounting_date = fields.Str()
     transaction_date = fields.Str()
     details = fields.List(fields.Raw())
+    error_message = fields.Str()

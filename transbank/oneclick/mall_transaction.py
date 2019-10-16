@@ -15,7 +15,7 @@ from transbank.oneclick.schema import TransactionAuthorizeRequestSchema, Transac
     TransactionRefundRequestSchema, TransactionRefundResponseSchema, TransactionStatusResponseSchema
 
 
-class Transaction(object):
+class MallTransaction(object):
     @classmethod
     def __base_url(cls, integration_type: IntegrationType):
         return "{}/rswebpaytransaction/api/oneclick/v1.0".format(
@@ -33,11 +33,11 @@ class Transaction(object):
         return alt_options
 
     @classmethod
-    def authorize(cls, user_name: str, token: str, buy_order: str, details: MallTransactionAuthorizeDetails,
+    def authorize(cls, user_name: str, tbk_user: str, buy_order: str, details: MallTransactionAuthorizeDetails,
                   options: Options = None) -> TransactionAuthorizeResponse:
         options = cls.build_options(options)
         endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), 'transactions')
-        request = TransactionAuthorizeRequest(user_name, token, buy_order, details.details)
+        request = TransactionAuthorizeRequest(user_name, tbk_user, buy_order, details.details)
 
         data = TransactionAuthorizeRequestSchema().dumps(request).data
         response = requests.post(endpoint, data,
