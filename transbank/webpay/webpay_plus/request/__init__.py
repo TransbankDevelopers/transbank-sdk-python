@@ -1,4 +1,4 @@
-from typing import List, Any, Iterator
+from typing import List, Any, Iterator, Tuple
 
 
 class TransactionCreateRequest(object):
@@ -55,12 +55,12 @@ class MallTransactionCreateDetails(object):
         self.__details.remove(mall_details)
 
     @property
-    def details(self) -> Iterator[MallDetails]:
+    def details(self) -> Tuple[MallDetails]:
         return tuple(self.__details)
 
 
 class MallTransactionCreateRequest(object):
-    def __init__(self, buy_order: str, session_id: str, return_url: str, details: List[MallDetails]):
+    def __init__(self, buy_order: str, session_id: str, return_url: str, details: Tuple[MallDetails]):
         self.buy_order = buy_order
         self.session_id = session_id
         self.return_url = return_url

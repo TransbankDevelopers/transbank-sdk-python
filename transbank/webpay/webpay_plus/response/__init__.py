@@ -100,3 +100,8 @@ class TransactionRefundResponse(object):
                "authorization_date: {}, nullified_amount: {})".format(self.type, self.balance, self.authorization_code,
                                                                       self.response_code, self.authorization_date,
                                                                       self.nullified_amount)
+
+
+class MallTransactionCreateResponse(TransactionCreateResponse):
+    def __repr__(self):
+        return "MallTransactionCreateResponse(token: {}, url: {})".format(self.token, self.url)
