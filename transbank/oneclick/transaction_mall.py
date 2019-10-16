@@ -40,13 +40,10 @@ class Transaction(object):
         request = TransactionAuthorizeRequest(user_name, token, buy_order, details.details)
 
         data = TransactionAuthorizeRequestSchema().dumps(request).data
-        print(data)
         response = requests.post(endpoint, data,
                                  headers=HeadersBuilder.build(options))
         response_json = response.text
-        print(response_json)
         response_dict = TransactionAuthorizeResponseSchema().loads(response_json).data
-        print(response_dict)
         if response.status_code not in range(200, 299):
             raise TransactionAuthorizeError(message=response_dict["error_message"])
 
