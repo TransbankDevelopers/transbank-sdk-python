@@ -75,7 +75,6 @@ class Transaction(object):
         response = requests.post(url=endpoint, headers=HeadersBuilder.build(options),
                                  data=TransactionRefundRequestSchema().dumps(request).data)
         json_response = response.text
-        print(json_response)
         dict_response = TransactionRefundResponseSchema().loads(json_response).data
 
         if response.status_code not in range(200, 299):
