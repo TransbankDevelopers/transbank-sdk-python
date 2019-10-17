@@ -63,3 +63,20 @@ class TransactionRefundResponseSchema(Schema):
     response_code = fields.Int()
     authorization_date = fields.Str()
     nullified_amount = fields.Float()
+
+
+class MallDetailsSchema(Schema):
+    amount = fields.Float()
+    commerce_code = fields.Str()
+    buy_order = fields.Str()
+
+
+class MallTransactionCreateRequestSchema(Schema):
+    buy_order = fields.Str()
+    session_id = fields.Str()
+    return_url = fields.Str()
+    details = fields.Nested(MallDetailsSchema, many=True)
+
+
+class MallTransactionCreateResponseSchema(TransactionCreateResponseSchema):
+    pass
