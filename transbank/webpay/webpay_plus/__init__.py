@@ -1,5 +1,4 @@
 from transbank.common.integration_type import IntegrationType
-from transbank.webpay.webpay_plus.response import TransactionStatusResponse
 
 webpay_plus_default_commerce_code = "597055555532"  # Default COMMERCE_CODE for Webpay Plus
 webpay_plus_mall_default_commerce_code = "597055555535"  # Default COMMERCE_CODE for Webpay Plus Mall
