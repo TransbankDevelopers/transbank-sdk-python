@@ -1,3 +1,5 @@
+from typing import List
+
 from transbank.common.model import CardDetail
 
 
@@ -105,3 +107,43 @@ class TransactionRefundResponse(object):
 class MallTransactionCreateResponse(TransactionCreateResponse):
     def __repr__(self):
         return "MallTransactionCreateResponse(token: {}, url: {})".format(self.token, self.url)
+
+
+class MallDetails(object):
+    def __init__(self, amount: float, status: str, authorization_code: str, payment_type_code: str, response_code: int,
+                 installments_number: int, commerce_code: str, buy_order: str):
+        self.amount = amount
+        self.status = status
+        self.authorization_code = authorization_code
+        self.payment_type_code = payment_type_code
+        self.response_code = response_code
+        self.installments_number = installments_number
+        self.commerce_code = commerce_code
+        self.buy_order = buy_order
+
+    def __repr__(self):
+        return "MallDetails(amount: {}, status: {}, authorization_code: {}, payment_type_code: {}, response_code: {}," \
+               " installments_number: {}, commerce_code: {}, buy_order: {})"\
+            .format(self.amount, self.status, self.authorization_code, self.payment_type_code, self.response_code,
+                    self.installments_number, self.commerce_code, self.buy_order)
+
+
+class MallTransactionCommitResponse(object):
+    details = list()
+
+    def __init__(self, vci: str, details: list, buy_order: str, session_id: str, card_detail: dict,
+                 accounting_date: str, transaction_date: str):
+        self.vci = vci
+        for item in details:
+            self.details.append(MallDetails(**item))
+        self.buy_order = buy_order
+        self.session_id = session_id
+        self.card_detail = CardDetail(**card_detail)
+        self.accounting_date = accounting_date
+        self.transaction_date = transaction_date
+
+    def __repr__(self):
+        return "MallTransactionCommitResponse(vci: {}, details: {}, buy_order: {}, self.session_id: {}, " \
+               "card_detail: {}, accounting_date: {}, transaction_date: {})"\
+            .format(self.vci, self.details, self.buy_order, self.session_id, self.card_detail, self.accounting_date,
+                    self.transaction_date)

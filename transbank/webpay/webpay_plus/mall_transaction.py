@@ -1,4 +1,6 @@
 import requests
+from transbank.error.transaction_commit_error import TransactionCommitError
+
 from transbank.error.transaction_create_error import TransactionCreateError
 
 from transbank.common.headers_builder import HeadersBuilder
@@ -9,8 +11,9 @@ from transbank.common.options import Options, WebpayOptions
 from transbank.webpay.webpay_plus import webpay_plus_mall_default_commerce_code, default_api_key, \
     default_integration_type
 from transbank.webpay.webpay_plus.request import MallTransactionCreateDetails, MallTransactionCreateRequest
-from transbank.webpay.webpay_plus.response import MallTransactionCreateResponse
-from transbank.webpay.webpay_plus.schema import MallTransactionCreateRequestSchema, MallTransactionCreateResponseSchema
+from transbank.webpay.webpay_plus.response import MallTransactionCreateResponse, MallTransactionCommitResponse
+from transbank.webpay.webpay_plus.schema import MallTransactionCreateRequestSchema, MallTransactionCreateResponseSchema, \
+    MallTransactionCommitResponseSchema
 
 
 class MallTransaction(object):
@@ -32,7 +35,7 @@ class MallTransaction(object):
 
     @classmethod
     def create(cls, buy_order: str, session_id: str, return_url: str, details: MallTransactionCreateDetails,
-               options: Options = None):
+               options: Options = None) -> MallTransactionCreateResponse:
         options = cls.build_options(options)
         endpoint = cls.__base_url(options.integration_type)
         request = MallTransactionCreateRequest(buy_order, session_id, return_url, details.details)
@@ -46,3 +49,17 @@ class MallTransaction(object):
             raise TransactionCreateError(message=dict_response["error_message"], code=response.status_code)
 
         return MallTransactionCreateResponse(**dict_response)
+
+    @classmethod
+    def commit(cls, token: str, options: Options = None) -> MallTransactionCommitResponse:
+        options = cls.build_options(options)
+        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
+
+        response = requests.put(url=endpoint, headers=HeadersBuilder.build(options))
+        json_response = response.text
+        dict_response = MallTransactionCommitResponseSchema().loads(json_response).data
+
+        if response.status_code not in range(200, 299):
+            raise TransactionCommitError(message=dict_response["error_message"], code=response.status_code)
+
+        return MallTransactionCommitResponse(**dict_response)

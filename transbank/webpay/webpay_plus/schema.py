@@ -69,6 +69,11 @@ class MallDetailsSchema(Schema):
     amount = fields.Float()
     commerce_code = fields.Str()
     buy_order = fields.Str()
+    status = fields.Str()
+    authorization_code = fields.Str()
+    payment_type_code = fields.Str()
+    response_code = fields.Int()
+    installments_number = fields.Int()
 
 
 class MallTransactionCreateRequestSchema(Schema):
@@ -80,3 +85,14 @@ class MallTransactionCreateRequestSchema(Schema):
 
 class MallTransactionCreateResponseSchema(TransactionCreateResponseSchema):
     pass
+
+
+class MallTransactionCommitResponseSchema(Schema):
+    error_message = fields.Str()
+    vci = fields.Str()
+    details = fields.Nested(MallDetailsSchema, many=True)
+    buy_order = fields.Str()
+    session_id = fields.Str()
+    card_detail = fields.Nested(CardDetailSchema, many=False)
+    accounting_date = fields.Str()
+    transaction_date = fields.Str()
