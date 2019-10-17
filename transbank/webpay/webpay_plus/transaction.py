@@ -9,13 +9,12 @@ from transbank.common.options import Options, WebpayOptions
 from transbank.error.transaction_refund_error import TransactionRefundError
 from transbank.webpay.webpay_plus.request import TransactionCreateRequest, TransactionRefundRequest
 from transbank.webpay.webpay_plus.response import TransactionCreateResponse, TransactionCommitResponse, \
-    TransactionRefundResponse
+    TransactionRefundResponse, TransactionStatusResponse
 from transbank.webpay.webpay_plus.schema import TransactionStatusResponseSchema, TransactionCreateRequestSchema, \
     TransactionCreateResponseSchema, TransactionCommitResponseSchema, TransactionRefundRequestSchema, \
     TransactionRefundResponseSchema
 from transbank.error.transaction_status_error import TransactionStatusError
-from transbank.webpay.webpay_plus import webpay_plus_default_commerce_code, default_api_key, default_integration_type, \
-    TransactionStatusResponse
+from transbank.webpay.webpay_plus import webpay_plus_default_commerce_code, default_api_key, default_integration_type
 
 
 class Transaction(object):
