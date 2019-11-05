@@ -1,19 +1,18 @@
 import requests
-from transbank.error.transaction_commit_error import TransactionCommitError
 
 from transbank.error.transaction_create_error import TransactionCreateError
-
+from transbank.error.transaction_refund_error import TransactionRefundError
+from transbank.error.transaction_commit_error import TransactionCommitError
 from transbank.common.headers_builder import HeadersBuilder
-
 from transbank.common.integration_type import IntegrationType, webpay_host
-
 from transbank.common.options import Options, WebpayOptions
 from transbank.webpay.webpay_plus import webpay_plus_mall_default_commerce_code, default_api_key, \
     default_integration_type
-from transbank.webpay.webpay_plus.request import MallTransactionCreateDetails, MallTransactionCreateRequest
-from transbank.webpay.webpay_plus.response import MallTransactionCreateResponse, MallTransactionCommitResponse
+from transbank.webpay.webpay_plus.request import MallTransactionCreateDetails, MallTransactionCreateRequest, MallTransactionRefundRequest
+from transbank.webpay.webpay_plus.response import MallTransactionCreateResponse, MallTransactionCommitResponse, TransactionRefundResponse,\
+                                                 TransactionStatusResponse
 from transbank.webpay.webpay_plus.schema import MallTransactionCreateRequestSchema, MallTransactionCreateResponseSchema, \
-    MallTransactionCommitResponseSchema
+    MallTransactionCommitResponseSchema,TransactionRefundResponseSchema, MallTransactionRefundRequestSchema, MallTransactionStatusResponseSchema
 
 
 class MallTransaction(object):
@@ -63,3 +62,21 @@ class MallTransaction(object):
             raise TransactionCommitError(message=dict_response["error_message"], code=response.status_code)
 
         return MallTransactionCommitResponse(**dict_response)
+
+    @classmethod
+    def refund(cls, token: str, amount: float, child_buy_order: str, child_commerce_code:str, options: Options = None):
+        options = cls.build_options(options)
+        endpoint = "{}/{}/refunds".format(cls.__base_url(options.integration_type), token)
+
+        request = MallTransactionRefundRequest(commerce_code=child_commerce_code, buy_order=child_buy_order,  amount=amount)
+        response = requests.post(url=endpoint, headers=HeadersBuilder.build(options),
+                                 data=MallTransactionRefundRequestSchema().dumps(request).data)
+
+        json_response = response.text
+        dict_response = TransactionRefundResponseSchema().loads(json_response).data
+
+        if response.status_code not in range(200, 299):
+            raise TransactionRefundError(message=dict_response["error_message"], code=response.status_code)
+
+        return TransactionRefundResponse(**dict_response)
+    

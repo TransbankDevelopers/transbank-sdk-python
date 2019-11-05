@@ -21,6 +21,15 @@ class TransactionRefundRequest(object):
         return "TransactionRefundRequest(amount: {})".format(self.amount)
 
 
+class MallTransactionRefundRequest(object):
+    def __init__(self, commerce_code: str, buy_order: str, amount: float):
+        self.buy_order = buy_order
+        self.commerce_code = commerce_code
+        self.amount = amount
+    def __repr__(self):
+        return "TransactionRefundRequest(amount: {})".format(self.amount)
+
+
 class MallDetails(object):
     def __init__(self, amount: float, commerce_code: str, buy_order: str):
         self.amount = amount
