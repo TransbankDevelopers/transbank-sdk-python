@@ -80,3 +80,16 @@ class MallTransaction(object):
 
         return TransactionRefundResponse(**dict_response)
     
+    @classmethod
+    def status(cls, token: str, options: Options = None):
+        options = cls.build_options(options)
+        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
+
+        response = requests.get(url=endpoint, headers=HeadersBuilder.build(options))
+        json_response = response.text
+        dict_response = MallTransactionCommitResponseSchema().loads(json_response).data
+
+        if response.status_code not in range(200, 299):
+            raise TransactionStatusError(message=dict_response["error_message"], code=response.status_code)
+
+        return MallTransactionCommitResponse(**dict_response)
