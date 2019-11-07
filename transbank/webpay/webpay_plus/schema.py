@@ -20,6 +20,15 @@ class TransactionStatusResponseSchema(Schema):
     installments_amount = fields.Float()
     balance = fields.Float()
 
+class MallTransactionStatusResponseSchema(Schema):
+    vci = fields.Str()
+    details = fields.List(fields.Raw())
+    buy_order = fields.Str()
+    session_id = fields.Str()
+    card_detail = fields.Nested(CardDetailSchema, many=False)
+    accounting_date = fields.Str()
+    transaction_date = fields.Str()
+
 
 class TransactionCreateRequestSchema(Schema):
     buy_order = fields.Str()
@@ -53,6 +62,10 @@ class TransactionCommitResponseSchema(Schema):
 class TransactionRefundRequestSchema(Schema):
     amount = fields.Float()
 
+class MallTransactionRefundRequestSchema(Schema):
+    amount = fields.Float()
+    commerce_code = fields.Str()
+    buy_order = fields.Str()
 
 class TransactionRefundResponseSchema(Schema):
     error_message = fields.Str()
