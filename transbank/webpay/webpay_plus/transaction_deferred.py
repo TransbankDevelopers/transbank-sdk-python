@@ -1,18 +1,18 @@
 import requests
 from transbank.error.transaction_commit_error import TransactionCommitError
-
 from transbank.error.transaction_create_error import TransactionCreateError
-
+from transbank.error.transaction_capture_error import TransactionCaptureError
 from transbank.common.headers_builder import HeadersBuilder
 from transbank.common.integration_type import IntegrationType, webpay_host
 from transbank.common.options import Options, WebpayOptions
 from transbank.error.transaction_refund_error import TransactionRefundError
-from transbank.webpay.webpay_plus.request import TransactionCreateRequest, TransactionRefundRequest
+from transbank.webpay.webpay_plus.request import TransactionCreateRequest, TransactionRefundRequest, \
+    DeferredTransactionRequest
 from transbank.webpay.webpay_plus.response import TransactionCreateResponse, TransactionCommitResponse, \
-    TransactionRefundResponse, TransactionStatusResponse
+    TransactionRefundResponse, TransactionStatusResponse, DeferredTransactionResponse
 from transbank.webpay.webpay_plus.schema import TransactionStatusResponseSchema, TransactionCreateRequestSchema, \
     TransactionCreateResponseSchema, TransactionCommitResponseSchema, TransactionRefundRequestSchema, \
-    TransactionRefundResponseSchema
+    TransactionRefundResponseSchema, DeferredTransactionResponseSchema, DeferredTransactionRequestSchema
 from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.webpay.webpay_plus import webpay_plus_deferred_commerce_code, default_api_key, default_integration_type
 
@@ -50,3 +50,47 @@ class DeferredTransaction(object):
             raise TransactionCreateError(message=dict_response["error_message"], code=response.status_code)
 
         return TransactionCreateResponse(**dict_response)
+
+    @classmethod
+    def commit(cls, token: str, options: Options = None) -> TransactionCommitResponse:
+        options = cls.build_options(options)
+        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
+
+        response = requests.put(url=endpoint, headers=HeadersBuilder.build(options))
+        json_response = response.text
+        dict_response = TransactionCommitResponseSchema().loads(json_response).data
+
+        if response.status_code not in range(200, 299):
+            raise TransactionCommitError(message=dict_response["error_message"], code=response.status_code)
+
+        return TransactionCommitResponse(**dict_response)
+
+    @classmethod
+    def status(cls, token: str, options: Options = None):
+        options = cls.build_options(options)
+        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), token)
+
+        response = requests.get(url=endpoint, headers=HeadersBuilder.build(options))
+        json_response = response.text
+        dict_response = TransactionStatusResponseSchema().loads(json_response).data
+
+        if response.status_code not in range(200, 299):
+            raise TransactionStatusError(message=dict_response["error_message"], code=response.status_code)
+
+        return TransactionStatusResponse(**dict_response)
+
+    @classmethod
+    def capture(cls, token: str, buy_order: str, authorization_code: str, capture_amount: float, options: Options = None):
+        options = cls.build_options(options)
+        endpoint = "{}/{}/capture".format(cls.__base_url(options.integration_type), token)
+        request = DeferredTransactionRequest(buy_order, authorization_code, capture_amount)
+
+        response = requests.put(url=endpoint, headers=HeadersBuilder.build(options),
+                                 data = DeferredTransactionRequestSchema().dumps(request).data)
+        json_response = response.text
+        dict_response = DeferredTransactionResponseSchema().loads(json_response).data
+
+        if response.status_code not in range(200, 299):
+            raise TransactionCaptureError(message=dict_response["error_message"], code=response.status_code)
+        
+        return DeferredTransactionResponse(**dict_response)

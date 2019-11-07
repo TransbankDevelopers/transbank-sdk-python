@@ -65,3 +65,13 @@ class MallTransactionCreateRequest(object):
         self.session_id = session_id
         self.return_url = return_url
         self.details = details
+
+class DeferredTransactionRequest(object):
+    def __init__(self, buy_order: str, authorization_code: str, capture_amount: float):
+        self.buy_order = buy_order
+        self.authorization_code = authorization_code
+        self.capture_amount = capture_amount
+
+    def __repr__(self):
+        return "TransactionRefundRequest(buy_order: {}, authorization_code: {}, capture_amount: {})".format(
+            self.buy_order, self.authorization_code, self.capture_amount)

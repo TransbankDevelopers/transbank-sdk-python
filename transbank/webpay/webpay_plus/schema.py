@@ -64,6 +64,11 @@ class TransactionRefundResponseSchema(Schema):
     authorization_date = fields.Str()
     nullified_amount = fields.Float()
 
+class DeferredTransactionResponseSchema(Schema):
+    authorization_code = fields.Str()
+    authorization_date = fields.Str()
+    captured_amount = fields.Float()
+    response_code = fields.Int()
 
 class MallDetailsSchema(Schema):
     amount = fields.Float()
@@ -96,3 +101,9 @@ class MallTransactionCommitResponseSchema(Schema):
     card_detail = fields.Nested(CardDetailSchema, many=False)
     accounting_date = fields.Str()
     transaction_date = fields.Str()
+
+
+class DeferredTransactionRequestSchema(Schema):
+    buy_order = fields.Int()
+    capture_amount = fields.Float()
+    authorization_code = fields.Str()

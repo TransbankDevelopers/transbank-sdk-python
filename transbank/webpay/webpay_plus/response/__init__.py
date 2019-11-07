@@ -147,3 +147,16 @@ class MallTransactionCommitResponse(object):
                "card_detail: {}, accounting_date: {}, transaction_date: {})"\
             .format(self.vci, self.details, self.buy_order, self.session_id, self.card_detail, self.accounting_date,
                     self.transaction_date)
+
+
+class DeferredTransactionResponse(object):
+    def __init__(self, authorization_code: str, authorization_date: str, captured_amount: float, response_code: str ):
+        self.authorization_code = authorization_code
+        self.authorization_date = authorization_date
+        self.captured_amount = captured_amount
+        self.response_code = response_code
+
+    def __repr__(self):
+        return "TransactionCreateResponse(authorization_code: {}, authorization_date: {}, captured_amount: {}, " \
+                "response_code: {})" \
+            .format(self.authorization_code, self.authorization_date, self.captured_amount, self.response_code )
