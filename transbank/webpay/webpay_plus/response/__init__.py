@@ -157,6 +157,6 @@ class DeferredTransactionResponse(object):
         self.response_code = response_code
 
     def __repr__(self):
-        return "TransactionCreateResponse(authorization_code: {}, authorization_date: {}, captured_amount: {}, " \
+        return "DeferredTransactionResponse(authorization_code: {}, authorization_date: {}, captured_amount: {}, " \
                 "response_code: {})" \
             .format(self.authorization_code, self.authorization_date, self.captured_amount, self.response_code )

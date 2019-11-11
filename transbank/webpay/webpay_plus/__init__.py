@@ -6,3 +6,5 @@ mall_default_child_commerce_codes  = ['597055555536', '597055555537']
 default_api_key = "579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C"  # Default API_KEY for Webpay
 default_integration_type = IntegrationType.TEST  # Default integration_type is TEST
 webpay_plus_deferred_commerce_code = "597055555540"
+webpay_plus_mall_deferred_default_commerce_code = "597055555544"  # Default COMMERCE_CODE for Webpay Plus Mall Deferred
+mall_deferred_default_child_commerce_codes  = ['597055555545', '597055555546']

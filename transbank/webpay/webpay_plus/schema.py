@@ -120,3 +120,9 @@ class DeferredTransactionRequestSchema(Schema):
     buy_order = fields.Int()
     capture_amount = fields.Float()
     authorization_code = fields.Str()
+
+class MallDeferredTransactionRequestSchema(Schema):
+    commerce_code = fields.Str()
+    buy_order = fields.Str()
+    authorization_code = fields.Str()
+    capture_amount = fields.Str()
