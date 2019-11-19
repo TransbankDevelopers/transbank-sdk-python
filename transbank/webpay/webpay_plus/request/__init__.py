@@ -84,3 +84,24 @@ class DeferredTransactionRequest(object):
     def __repr__(self):
         return "TransactionRefundRequest(buy_order: {}, authorization_code: {}, capture_amount: {})".format(
             self.buy_order, self.authorization_code, self.capture_amount)
+
+class MallDeferredTransactionRequest(object):
+    def __init__(self, commerce_code: str, buy_order: str, authorization_code: str, capture_amount: float):
+        self.commerce_code = commerce_code
+        self.buy_order = buy_order
+        self.authorization_code = authorization_code
+        self.capture_amount = capture_amount
+
+    def __repr__(self):
+        return "MallDeferredTransactionRequest(commerce_code: {}, buy_order: {}, authorization_code: {}, capture_amount: {})".format(
+            self.commerce_code, self.buy_order, self.authorization_code, self.capture_amount )
+
+class MallDeferredTransactionRefundRequest(object):
+    def __init__(self, buy_order: str, commerce_code: str, amount: float):
+        self.amount = amount
+        self.buy_order = buy_order
+        self.commerce_code = commerce_code
+
+    def __repr__(self):
+        return "TransactionRefundRequest(amount: {}, buy_order: {}, commerce_code: {})".format(
+            self.amount, self.buy_order, self.commerce_code)
