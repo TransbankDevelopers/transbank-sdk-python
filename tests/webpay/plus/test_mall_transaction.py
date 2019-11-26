@@ -7,7 +7,7 @@ class TransactionTestCase(unittest.TestCase):
     buy_order_mock = str(random.randrange(1000000, 99999999))
     session_id_mock = str(random.randrange(1000000, 99999999))
     return_url_mock = "https://url_return.com"
-
+    token_mock = 'ed11ddebcb970cd879e2b0ab843bd3c918ca8152e2ae51c038ac314aabc87ca7'
     def get_random_str(self):
         return str(random.randrange(1000000, 99999999))
 
@@ -33,4 +33,21 @@ class TransactionTestCase(unittest.TestCase):
         )
         self.assertIsNotNone(response.url)
         self.assertIsNotNone(response.token)
+
+    def test_when_transaction_commit(self):
+        response = MallTransaction.commit(token=self.token_mock)
+        self.assertIsNotNone(response.vci)
+        self.assertIsNotNone(response.details[0].amount)
+        self.assertIsNotNone(response.details[0].status)
+        self.assertIsNotNone(response.details[0].authorization_code)
+        self.assertIsNotNone(response.details[0].response_code)
+        self.assertIsNotNone(response.details[0].installments_number)
+        self.assertIsNotNone(response.details[0].commerce_code)
+        self.assertIsNotNone(response.details[1].amount)
+        self.assertIsNotNone(response.details[1].status)
+        self.assertIsNotNone(response.details[1].authorization_code)
+        self.assertIsNotNone(response.details[1].response_code)
+        self.assertIsNotNone(response.details[1].installments_number)
+        self.assertIsNotNone(response.details[1].commerce_code)
+
 
