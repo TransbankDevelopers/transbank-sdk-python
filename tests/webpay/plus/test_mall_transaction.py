@@ -2,8 +2,9 @@ import unittest
 import random
 from transbank.webpay.webpay_plus.mall_transaction import *
 from transbank.webpay.webpay_plus import mall_default_child_commerce_codes
-class TransactionTestCase(unittest.TestCase):
 
+
+class TransactionMallTestCase(unittest.TestCase):
     return_url_mock = "https://url_return.com"
     token_mock = 'ed11ddebcb970cd879e2b0ab843bd3c918ca8152e2ae51c038ac314aabc87ca7'
     buy_order_child_refund_mock = 'abcdef1574772288'
@@ -61,3 +62,20 @@ class TransactionTestCase(unittest.TestCase):
         self.assertIsNotNone(response.authorization_date)
         self.assertIsNotNone(response.nullified_amount)
         return response
+
+    def test_when_transaction_status(self):
+        response = MallTransaction.status(token=self.token_mock)
+        self.assertIsNotNone(response.vci)
+        self.assertIsNotNone(response.details[0].amount)
+        self.assertIsNotNone(response.details[0].status)
+        self.assertIsNotNone(response.details[0].authorization_code)
+        self.assertIsNotNone(response.details[0].response_code)
+        self.assertIsNotNone(response.details[0].installments_number)
+        self.assertIsNotNone(response.details[0].commerce_code)
+        self.assertIsNotNone(response.details[1].amount)
+        self.assertIsNotNone(response.details[1].status)
+        self.assertIsNotNone(response.details[1].authorization_code)
+        self.assertIsNotNone(response.details[1].response_code)
+        self.assertIsNotNone(response.details[1].installments_number)
+        self.assertIsNotNone(response.details[1].commerce_code)
+
