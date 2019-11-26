@@ -3,6 +3,7 @@ import random
 import requests_mock
 from transbank.webpay.webpay_plus.transaction import *
 
+
 class TransactionTestCase(unittest.TestCase):
 
     buy_order_mock = str(random.randrange(1000000, 99999999))
@@ -37,7 +38,7 @@ class TransactionTestCase(unittest.TestCase):
         self.assertIsNotNone(response.installments_number)
 
     def test_when_transaction_commit(self):
-        response = Transaction.status(token=self.token)
+        response = Transaction.status(token=self.token_mock)
         self.assertIsNotNone(response.vci)
         self.assertIsNotNone(response.amount)
         self.assertIsNotNone(response.status)
@@ -50,3 +51,13 @@ class TransactionTestCase(unittest.TestCase):
         self.assertIsNotNone(response.payment_type_code)
         self.assertIsNotNone(response.response_code)
         self.assertIsNotNone(response.installments_number)
+
+    def test_when_transaction_refund(self):
+        response = Transaction.refund(token=self.token_mock, amount=1)
+        self.assertIsNotNone(response.type)
+        self.assertIsNotNone(response.balance)
+        self.assertIsNotNone(response.authorization_date)
+        self.assertIsNotNone(response.response_code)
+        self.assertIsNotNone(response.authorization_code)
+        self.assertIsNotNone(response.nullified_amount)
+
