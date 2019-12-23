@@ -5,7 +5,7 @@ services:
     stdin_open: true
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker-unit-test/Dockerfile
     command: bash
     volumes:
     - .:/sdk
