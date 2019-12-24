@@ -19,8 +19,8 @@ class InscriptionFinishResponseSchema(Schema):
     response_code = fields.Int()
     tbk_user = fields.Str()
     authorization_code = fields.Str()
-    credit_card_type = fields.Str()
-    last_four_card_digits = fields.Str()
+    card_type = fields.Str()
+    card_number = fields.Str()
     error_message = fields.Str()
 
 

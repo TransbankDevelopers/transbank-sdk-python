@@ -12,18 +12,18 @@ class InscriptionStartResponse(object):
 
 class InscriptionFinishResponse(object):
     def __init__(self, response_code: int, tbk_user: str, authorization_code: str,
-                 credit_card_type: str = None, last_four_card_digits: str = None):
+                 card_type: str = None, card_number: str = None):
         self.response_code = response_code
         self.tbk_user = tbk_user
         self.authorization_code = authorization_code
-        self.credit_card_type = credit_card_type
-        self.last_four_card_digits = last_four_card_digits
+        self.card_type = card_type
+        self.card_number = card_number
 
     def __repr__(self):
-        return "response_code: {}, tbk_user: {}, authorization_code: {}, credit_card_type: {}, " \
-               "last_four_card_digits: " \
-               "{}".format(self.response_code, self.tbk_user, self.authorization_code, self.credit_card_type,
-                           self.last_four_card_digits)
+        return "response_code: {}, tbk_user: {}, authorization_code: {}, card_type: {}, " \
+               "card_number: " \
+               "{}".format(self.response_code, self.tbk_user, self.authorization_code, self.card_type,
+                           self.card_number)
 
 
 class TransactionAuthorizeResponse(object):
