@@ -1,0 +1,20 @@
+version: '2'
+services:
+  web: &web
+    tty: true
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: docker-unit-test/Dockerfile
+    command: bash
+    volumes:
+    - .:/sdk
+    volumes_from:
+      - python_cache
+    ports:
+    - "8000:8000"
+
+  python_cache:
+    image:  python:3.7.4-stretch
+    volumes:
+    - /usr/local/lib/python3.7/site-packages
