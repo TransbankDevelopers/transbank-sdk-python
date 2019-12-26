@@ -19,7 +19,7 @@ Instalar [Docker](https://docs.docker.com/engine/installation/linux/docker-ce/ub
 
 Esta imagin de docker sirve para correr y comprobar la compatibilidad del sdk con distintas versiones de python
 
-**NOTA:** La primera vez que se ejecuta ./docker-build.sh demorará en instalar todo, esperar al menos unos 5 minutos.
+**NOTA:** La primera vez que se ejecuta ./build.sh demorará en instalar todo, esperar al menos unos 5 minutos.
 
 ### Construir el contenedor desde cero
 
