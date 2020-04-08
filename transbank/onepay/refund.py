@@ -2,6 +2,7 @@ from datetime import datetime
 import requests
 
 from transbank import onepay
+from transbank.error.invalid_amount_error import InvalidAmountError
 
 from transbank.onepay.schema import RefundCreateRequestSchema, SendRefundResponseSchema
 from transbank.onepay.error import RefundCreateError
@@ -12,6 +13,7 @@ class RefundCreateRequest(Signable):
     signable_attributes = ['occ', 'external_unique_number', 'authorization_code', 'issued_at' ,'nullify_amount']
 
     def __init__(self, occ, external_unique_number, authorization_code, issued_at, nullify_amount, options = None):
+        InvalidAmountError.is_valid(nullify_amount, nullable=True)
         self.occ = occ
         self.external_unique_number = external_unique_number
         self.authorization_code = authorization_code

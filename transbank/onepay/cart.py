@@ -1,7 +1,11 @@
 # encoding: utf-8
 
+from transbank.error.invalid_amount_error import InvalidAmountError
+
+
 class Item(object):
     def __init__(self, description, quantity, amount, additional_data = "", expire = 0):
+
         self.description = description
         self.quantity = quantity
         self.amount = amount
@@ -24,6 +28,7 @@ class Item(object):
 
     @amount.setter
     def amount(self, value):
+        InvalidAmountError.is_valid(value)
         self.__amount = value
 
 

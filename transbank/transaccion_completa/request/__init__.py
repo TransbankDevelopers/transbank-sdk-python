@@ -1,3 +1,5 @@
+from transbank.error.invalid_amount_error import InvalidAmountError
+
 class TransactionCommitRequest(object):
     def __init__(self, id_query_installments: str, deferred_period_index: float, grace_period):
         self.id_query_installments = id_query_installments
@@ -12,6 +14,7 @@ class TransactionCommitRequest(object):
 class TransactionCreateRequest(object):
     def __init__(self, buy_order: str, session_id: str, amount: float, card_number: str, cvv: str,
                  card_expiration_date: str):
+        InvalidAmountError.is_valid(amount)
         self.buy_order = buy_order
         self.session_id = session_id
         self.amount = amount

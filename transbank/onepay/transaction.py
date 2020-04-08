@@ -4,6 +4,7 @@ from enum import Enum
 import requests
 
 from transbank.onepay.schema import ItemSchema, TransactionCreateRequestSchema, TransactionCreateResponseSchema, SendTransactionResponseSchema, TransactionCommitRequestSchema, SendCommitResponseSchema
+from transbank.error.invalid_amount_error import InvalidAmountError
 
 from transbank.onepay.cart import ShoppingCart
 from transbank.onepay.error import TransactionCreateError, SignError, TransactionCommitError
@@ -75,6 +76,7 @@ class TransactionCommitResponse(Signable):
     signable_attributes = ['occ', 'authorization_code', 'issued_at', 'amount', 'installments_amount', 'installments_number', 'buy_order']
 
     def __init__(self, occ, authorization_code, signature, transaction_desc, buy_order, issued_at, amount, installments_amount, installments_number):
+        InvalidAmountError.is_valid(amount)
         self.occ = occ
         self.authorization_code = authorization_code
         self.signature = signature
