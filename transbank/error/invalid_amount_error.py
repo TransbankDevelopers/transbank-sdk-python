@@ -17,5 +17,8 @@ class InvalidAmountError(TransbankError):
             float(amount)
         except ValueError:
             raise InvalidAmountError(InvalidAmountError.NOT_NUMERIC_MESSAGE)
-        if not str.isdigit(str(amount)):
+        amount_str = str(amount)
+        if amount_str.startswith("-"):  # ignore sign
+            amount_str = amount_str[1:]
+        if not str.isdigit(amount_str):
             raise InvalidAmountError(InvalidAmountError.HAS_DECIMALS_MESSAGE)
