@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-from transbank.error.invalid_amount_error import InvalidAmountError
+from transbank.validators.amount_validator import AmountValidator
 
 
 class Item(object):
@@ -28,7 +28,7 @@ class Item(object):
 
     @amount.setter
     def amount(self, value):
-        InvalidAmountError.is_valid(value)
+        AmountValidator.validate(value)
         self.__amount = value
 
 

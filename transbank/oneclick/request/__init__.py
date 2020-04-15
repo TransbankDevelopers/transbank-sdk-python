@@ -1,5 +1,5 @@
 from typing import List, Iterator
-from transbank.error.invalid_amount_error import InvalidAmountError
+from transbank.validators.amount_validator import AmountValidator
 
 
 class InscriptionStartRequest(object):
@@ -25,7 +25,7 @@ class TransactionRefundRequest(object):
                  commerce_code: str,
                  detail_buy_order: str,
                  amount: float):
-        InvalidAmountError.is_valid(amount)
+        AmountValidator.validate(amount)
         self.commerce_code = commerce_code
         self.detail_buy_order = detail_buy_order
         self.amount = amount
@@ -33,7 +33,7 @@ class TransactionRefundRequest(object):
 
 class MallDetails(object):
     def __init__(self, commerce_code: str, buy_order: str, installments_number: int, amount: float):
-        InvalidAmountError.is_valid(amount)
+        AmountValidator.validate(amount)
         self.commerce_code = commerce_code
         self.buy_order = buy_order
         self.installments_number = installments_number
