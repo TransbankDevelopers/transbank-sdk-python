@@ -54,9 +54,8 @@ class MallDetails(object):
 
 
 class MallTransactionAuthorizeDetails(object):
-    __details = []
-
     def __init__(self, commerce_code: str, buy_order: str, installments_number: int, amount: float):
+        self.__details = []
         self.add(commerce_code, buy_order, installments_number, amount)
 
     def add(self, commerce_code: str, buy_order: str, installments_number: int,
