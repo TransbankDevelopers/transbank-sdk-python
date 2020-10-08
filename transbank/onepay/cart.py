@@ -1,7 +1,11 @@
 # encoding: utf-8
 
+from transbank.validators.amount_validator import AmountValidator
+
+
 class Item(object):
     def __init__(self, description, quantity, amount, additional_data = "", expire = 0):
+
         self.description = description
         self.quantity = quantity
         self.amount = amount
@@ -24,6 +28,7 @@ class Item(object):
 
     @amount.setter
     def amount(self, value):
+        AmountValidator.validate(value)
         self.__amount = value
 
 
