@@ -21,10 +21,10 @@ jobs:
         sonarcloud:
           organization: transbankdevelopers
           token:
-            secure: mZ4G3upadS4wnxMTmwiry12AHyOV0fer9gRVJTMbjTFU2Qi5Bkz2PAwiEf0AFs/muZZzu4iqhL1ff3OhtwrtprgPDK1uPlZ3fb51Rd6YhaoOFxGTz+fhZLcHEo1AG/5YDn2tvEQ1pSjNdYH40E2djzkQ+APJ+R6DTsGIvBJdplxBjOJRLuQ+Iq5mCnplciaJhqrANit202BjVYkFBdTssvqhCez0GV2GmWGbRuKkfbKr9MFwCEjQxvdfVUBdwRbkBou3S8q0m8Y4MyYCCLtceW5IRlu+oTHwsxELB+oyFb4HyNRJy5PgFRT2mHWuWiPxrcThAZmn/kTnIiQ0NQkR2piNQMsIENnnndQd88Xdqg5gRXitoqJxpwJiu11ZRbJUG162q2sqMoYwjdQnJ0+jQ6WUDiJft0fQaTIC5AWZfnqcwvKgdbJ1Anyh8GLgSWI/BSELFyYnEcHiCQewhe+6OzIfFg/oLKigvLSLa4egNW+VbvkVNi1q9vyRxxRBeqwwNKCQ/VBrmGK4coojlte/exSl5ZhWld8ei+D0Iuw9PwxDwcbnV1kfQk0FgqYq9+LzAjgbyZUYEbI+2qMTegth5+GJjM5I5PkX6UsD2bl1vN7sPh7Tyec2Z+E2iJBW2KKNh1iyPHC+a3bkb0TkHryRtVOv1zqeHiz0gyv+3trO4Hg=
+            secure: NJwpmGuauUP+OLnpbN9nmDqmSXdo/84q8/CdL9UFsFSjVabd8rqE8Q6e8lrpZHV10kf2Gft13ACCuNnJq9aJcmS9d4A/ir4zZ7Eux1qJ5QvDkhTh5IFyGCAEh/gYtRLkmaPXwl5ueSHwyx+go5Ka/ilFkF/S3jVqdXKA1qfe+rTIoDeWeK4pP6ggebzGXZE+WQ11D3kolvbHEVhhIxFuayxw9nszxEuVda0D47bN6Z3+ykwNRGLKJTQLiwT8D5kTsbaYc4mHnItOV+T51WVmdXEOM10LkzBOabQarnVlyeRti5LCCSNY13vCoi6kbpR+61zi27s4iE09UXAt5HaoLa52OzoNRDyJp3efLcHpPym9oIlMNuS+2iAjlT/zLNnNZuCunoZ687XKMI+sgnt16Ydn2UrcinY/Yy/DBYIdDoNrnsxjuE258ySkW6+CKpYVQ5R/rL5iA/XgPgnbiKFZnkxaTRE4k8NcRyxkfG9zYn3boB2ZQ5+tiOmjJcctJ+KKUheX9ekI5DV8P9Gq2QaIElKIyJ2yBj73rjjLOv6YVy1OFexIV34Es02vJjMHpUGG2ctwzVb9bNThZrcbhMERq3ZTjf+ohJouSMDR4KRHCSL/VSxVAkm1hepPNLMHN//veEf5YAiYt8dFBnQs1fv+c6wa2Z7HlUa4UhEVcf9NbWY=
       script:
       - pipenv run citests
-      - sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=./transbank -Dsonar.python.coverage.reportPath=coverage.xml
+      - sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=./transbank -Dsonar.python.coverage.reportPaths=coverage.xml
     - stage: deploy
       if: tag IS present
       script: skip
