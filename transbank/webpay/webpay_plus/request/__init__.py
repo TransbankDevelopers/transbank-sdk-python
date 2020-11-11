@@ -49,7 +49,7 @@ class MallDetails(object):
 
 
 class MallTransactionCreateDetails(object):
-    __details: List[MallDetails] = []
+    __details = []
 
     def __init__(self, amount: float, commerce_code: str, buy_order: str):
         self.add(amount, commerce_code, buy_order)
