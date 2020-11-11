@@ -11,7 +11,7 @@ class InscriptionStartResponse(object):
 
 
 class InscriptionFinishResponse(object):
-    def __init__(self, response_code: int, tbk_user: str, authorization_code: str,
+    def __init__(self, response_code: int, tbk_user: str = None, authorization_code: str = None,
                  card_type: str = None, card_number: str = None):
         self.response_code = response_code
         self.tbk_user = tbk_user
