@@ -4,6 +4,20 @@ Todos los cambios notables a este proyecto serán docuemntados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2020-11-12
+### Added
+- Se agrega soporte para:
+    - Webpay Plus Rest
+        - modalidad normal
+        - modalidad captura diferida
+        - modalidad mall
+        - modalidad mall captura diferida
+    - Patpass by Webpay Rest
+    - Patpass Comercio Rest
+    - Transacción completa Rest
+        - modalidad mall
+### Fixed
+- Se arregla constructor de Oneclick Inscription Finish para soportar parámetros opcionales al abortar pago. Gracias a @atpollmann
 
 ## [1.2.1] - 2020-10-08
 ### Fixed
