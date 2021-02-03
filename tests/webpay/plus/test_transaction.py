@@ -2,6 +2,7 @@ import unittest
 import random
 import requests_mock
 from transbank.webpay.webpay_plus.transaction import *
+from transbank.webpay.webpay_plus import WebpayPlus
 
 
 class TransactionTestCase(unittest.TestCase):
@@ -21,6 +22,19 @@ class TransactionTestCase(unittest.TestCase):
         )
         self.assertIsNotNone(response.url)
         self.assertIsNotNone(response.token)
+
+    def test_when_transaction_create_using_my_credentials(self):
+        WebpayPlus.configure_for_integration('597012345678', 'ASHIFAOSBFAS')
+
+        response = Transaction.create(
+            buy_order=self.buy_order_mock,
+            session_id=self.session_id_mock,
+            amount=self.amount_mock,
+            return_url=self.return_url_mock,
+        )
+
+        self.assertIsNone(response.url)
+        self.assertIsNone(response.token)
 
     # These can't be tested until we have a mock URL
     # def test_when_transaction_status(self):
