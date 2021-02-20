@@ -48,11 +48,12 @@ class MallDetails(object):
             and self.buy_order == other.buy_order
 
 
-class MallTransactionCreateDetails(object):
+class MallTransactionCreateDetails:
     __details = []
 
     def __init__(self, amount: float, commerce_code: str, buy_order: str):
-        self.add(amount, commerce_code, buy_order)
+        mall_details = MallDetails(amount, commerce_code, buy_order)
+        self.__details = [mall_details]
 
     def add(self, amount: float, commerce_code: str, buy_order: str) -> "MallTransactionCreateDetails":
         mall_details = MallDetails(amount, commerce_code, buy_order)
