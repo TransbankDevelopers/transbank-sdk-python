@@ -62,17 +62,17 @@ class TransactionTestCase(unittest.TestCase):
 
         response = Transaction.status(token=response.token)
         print(response)
-        self.assertIsNotNone(response.vci)
+        # self.assertIsNotNone(response.vci) # This is empty when asking status of Initialized tx
         self.assertIsNotNone(response.amount)
         self.assertIsNotNone(response.status)
-        self.assertIsNotNone(response.buy_order)
+        self.assertIsNotNone(response.buy_order) 
         self.assertIsNotNone(response.session_id)
-        self.assertIsNotNone(response.card_detail.card_number)
+        # self.assertIsNotNone(response.card_detail.card_number) # This is empty when asking status of Initialized tx
         self.assertIsNotNone(response.accounting_date)
         self.assertIsNotNone(response.transaction_date)
-        self.assertIsNotNone(response.authorization_code)
-        self.assertIsNotNone(response.payment_type_code)
-        self.assertIsNotNone(response.response_code)
+        # self.assertIsNotNone(response.authorization_code) # This is empty when asking status of Initialized tx
+        # self.assertIsNotNone(response.payment_type_code) # This is empty when asking status of Initialized tx
+        # self.assertIsNotNone(response.response_code) # This is empty when asking status of Initialized tx
         self.assertIsNotNone(response.installments_number)
 
     # def test_when_transaction_commit(self):
