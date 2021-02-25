@@ -8,3 +8,32 @@ default_integration_type = IntegrationType.TEST
 webpay_plus_deferred_commerce_code = "597055555540"
 webpay_plus_mall_deferred_default_commerce_code = "597055555544"
 mall_deferred_default_child_commerce_codes  = ['597055555545', '597055555546']
+
+class WebpayPlus:
+    __commerce_code = webpay_plus_default_commerce_code
+    __api_key = default_api_key
+    __integration_type = default_integration_type
+
+    @classmethod
+    def configure_for_integration(cls, commerce_code, api_key):
+        cls.__commerce_code = commerce_code
+        cls.__api_key = api_key
+        cls.__integration_type = IntegrationType.TEST
+
+    @classmethod
+    def configure_for_production(cls, commerce_code, api_key):
+        cls.__commerce_code = commerce_code
+        cls.__api_key = api_key
+        cls.__integration_type = IntegrationType.LIVE
+
+    @classmethod
+    def get_commerce_code(cls):
+        return cls.__commerce_code
+
+    @classmethod
+    def get_api_key(cls):
+        return cls.__api_key
+
+    @classmethod
+    def get_integration_type(cls):
+        return cls.__integration_type

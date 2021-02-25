@@ -2,6 +2,9 @@ import unittest
 import random
 import requests_mock
 from transbank.webpay.webpay_plus.transaction import *
+from transbank.webpay.webpay_plus import WebpayPlus
+from transbank.webpay.webpay_plus import webpay_plus_default_commerce_code, default_api_key
+from transbank.error.transaction_create_error import TransactionCreateError
 
 
 class TransactionTestCase(unittest.TestCase):
@@ -22,21 +25,55 @@ class TransactionTestCase(unittest.TestCase):
         self.assertIsNotNone(response.url)
         self.assertIsNotNone(response.token)
 
-    # These can't be tested until we have a mock URL
-    # def test_when_transaction_status(self):
-    #     response = Transaction.status(token=self.token_mock)
-    #     self.assertIsNotNone(response.vci)
-    #     self.assertIsNotNone(response.amount)
-    #     self.assertIsNotNone(response.status)
-    #     self.assertIsNotNone(response.buy_order)
-    #     self.assertIsNotNone(response.session_id)
-    #     self.assertIsNotNone(response.card_detail.card_number)
-    #     self.assertIsNotNone(response.accounting_date)
-    #     self.assertIsNotNone(response.transaction_date)
-    #     self.assertIsNotNone(response.authorization_code)
-    #     self.assertIsNotNone(response.payment_type_code)
-    #     self.assertIsNotNone(response.response_code)
-    #     self.assertIsNotNone(response.installments_number)
+    def test_when_transaction_create_using_invalid_credentials(self):
+        with self.assertRaises(TransactionCreateError) as context:
+            WebpayPlus.configure_for_integration('597012345678', 'FakeApiKeySecret')
+
+            response = Transaction.create(
+                buy_order=self.buy_order_mock,
+                session_id=self.session_id_mock,
+                amount=self.amount_mock,
+                return_url=self.return_url_mock,
+            )
+
+        self.assertTrue('Not Authorized' in context.exception.message)
+
+    def test_when_transaction_create_using_invalid_credentials(self):
+        WebpayPlus.configure_for_integration(webpay_plus_default_commerce_code, default_api_key)
+
+        response = Transaction.create(
+            buy_order=self.buy_order_mock,
+            session_id=self.session_id_mock,
+            amount=self.amount_mock,
+            return_url=self.return_url_mock,
+        )
+
+        self.assertIsNotNone(response.url)
+        self.assertIsNotNone(response.token)
+
+
+    def test_when_transaction_status(self):
+        response = Transaction.create(
+            buy_order=self.buy_order_mock,
+            session_id=self.session_id_mock,
+            amount=self.amount_mock,
+            return_url=self.return_url_mock,
+        )
+
+        response = Transaction.status(token=response.token)
+        print(response)
+        # self.assertIsNotNone(response.vci) # This is empty when asking status of Initialized tx
+        self.assertIsNotNone(response.amount)
+        self.assertIsNotNone(response.status)
+        self.assertIsNotNone(response.buy_order) 
+        self.assertIsNotNone(response.session_id)
+        # self.assertIsNotNone(response.card_detail.card_number) # This is empty when asking status of Initialized tx
+        self.assertIsNotNone(response.accounting_date)
+        self.assertIsNotNone(response.transaction_date)
+        # self.assertIsNotNone(response.authorization_code) # This is empty when asking status of Initialized tx
+        # self.assertIsNotNone(response.payment_type_code) # This is empty when asking status of Initialized tx
+        # self.assertIsNotNone(response.response_code) # This is empty when asking status of Initialized tx
+        self.assertIsNotNone(response.installments_number)
 
     # def test_when_transaction_commit(self):
     #     response = Transaction.status(token=self.token_mock)

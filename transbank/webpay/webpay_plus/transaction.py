@@ -15,6 +15,7 @@ from transbank.webpay.webpay_plus.schema import TransactionStatusResponseSchema,
     TransactionRefundResponseSchema
 from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.webpay.webpay_plus import webpay_plus_default_commerce_code, default_api_key, default_integration_type
+from transbank.webpay.webpay_plus import WebpayPlus
 
 
 class Transaction(object):
@@ -25,12 +26,12 @@ class Transaction(object):
 
     @classmethod
     def build_options(cls, options: Options = None) -> Options:
-        alt_options = WebpayOptions(webpay_plus_default_commerce_code, default_api_key, default_integration_type)
+        alt_options = WebpayOptions(WebpayPlus.get_commerce_code(), WebpayPlus.get_api_key(), WebpayPlus.get_integration_type())
 
         if options is not None:
-            alt_options.commerce_code = options.commerce_code or webpay_plus_default_commerce_code
-            alt_options.api_key = options.api_key or default_api_key
-            alt_options.integration_type = options.integration_type or default_integration_type
+            alt_options.commerce_code = options.commerce_code or alt_options.commerce_code
+            alt_options.api_key = options.api_key or alt_options.api_key
+            alt_options.integration_type = options.integration_type or alt_options.integration_type
 
         return alt_options
 
