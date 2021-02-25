@@ -52,7 +52,11 @@ class MallTransactionCreateDetails(object):
     __details = []
 
     def __init__(self, amount: float, commerce_code: str, buy_order: str):
+        self.clean()
         self.add(amount, commerce_code, buy_order)
+
+    def clean(self):
+        self.__details = []
 
     def add(self, amount: float, commerce_code: str, buy_order: str) -> "MallTransactionCreateDetails":
         mall_details = MallDetails(amount, commerce_code, buy_order)
