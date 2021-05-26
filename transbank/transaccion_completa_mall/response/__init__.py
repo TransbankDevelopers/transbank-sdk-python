@@ -87,6 +87,23 @@ class TransactionRefundResponse(object):
                    self.response_code)
 
 
+class TransactionCaptureResponse(object):
+    def __init__(self, authorization_code: str, authorization_date: str,
+                 captured_amount: float, response_code: str):
+        self.authorization_code = authorization_code
+        self.authorization_date = authorization_date
+        self.captured_amount = captured_amount
+        self.response_code = response_code
+
+    def __repr__(self):
+        return """
+        authorization_code: {},
+        authorization_date: {},
+        captured_amount: {},
+        response_code: {}
+        """.format(self.authorization_code, self.authorization_date, self.captured_amount, self.response_code)
+
+
 class TransactionInstallmentsResponse(object):
     def __init__(self, installments_amount: float, id_query_installments: str, deferred_periods: str):
         self.installments_amount = installments_amount

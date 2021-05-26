@@ -8,14 +8,16 @@ from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.error.transaction_commit_error import TransactionCommitError
 from transbank.error.transaction_refund_error import TransactionRefundError
 from transbank.error.transaction_status_error import TransactionStatusError
+from transbank.error.transaction_capture_error import TransactionCaptureError
 from transbank.error.transaction_installments_error import TransactionInstallmentsError
 from transbank.transaccion_completa.request import TransactionCreateRequest, TransactionCommitRequest, \
-    TransactionStatusRequest, TransactionRefundRequest, TransactionInstallmentsRequest
+    TransactionStatusRequest, TransactionRefundRequest, TransactionCaptureRequest, TransactionInstallmentsRequest
 from transbank.transaccion_completa.response import TransactionCreateResponse, TransactionCommitResponse, \
-    TransactionStatusResponse, TransactionRefundResponse, TransactionInstallmentsResponse
+    TransactionStatusResponse, TransactionRefundResponse, TransactionCaptureResponse, TransactionInstallmentsResponse
 from transbank.transaccion_completa.schema import CreateTransactionRequestSchema, CreateTransactionResponseSchema, \
     CommitTransactionRequestSchema, CommitTransactionResponseSchema, InstallmentsTransactionRequestSchema, \
-    InstallmentsTransactionResponseSchema, RefundTransactionRequestSchema, RefundTransactionResponseSchema
+    InstallmentsTransactionResponseSchema, RefundTransactionRequestSchema, RefundTransactionResponseSchema, \
+    CaptureTransactionRequestSchema, CaptureTransactionResponseSchema
 
 
 class Transaction(object):
@@ -87,6 +89,21 @@ class Transaction(object):
         if response.status_code in range(200, 299):
             return TransactionRefundResponse(**response_dict)
         raise TransactionRefundError(message=response_dict["error_message"])
+
+    @classmethod
+    def capture(cls, token: str, buy_order: str, authorization_code: str, capture_amount: float, options: Options = None):
+        options = cls.build_options(options)
+        endpoint = '{}/{}/capture'.format(cls.__base_url(options.integration_type), token)
+        request = TransactionCaptureRequest(buy_order=buy_order, authorization_code=authorization_code,
+                                            capture_amount=capture_amount)
+        response = requests.put(endpoint, data=CaptureTransactionRequestSchema().dumps(request).data,
+                                 headers=HeadersBuilder.build(options))
+        response_json = response.text
+        response_dict = CaptureTransactionResponseSchema().loads(response_json).data
+        if response.status_code in range (200,209):
+            return TransactionCaptureResponse(**response_dict)
+        raise TransactionCaptureError(message=response_dict["error_message"])
+
 
     @classmethod
     def installments(cls, token: str, installments_number: float, options: Options = None):

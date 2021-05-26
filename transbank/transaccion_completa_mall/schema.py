@@ -80,3 +80,17 @@ class RefundTransactionResponseSchema(Schema):
     nullified_amount = fields.Raw()
     balance = fields.Raw()
     response_code = fields.Raw()
+
+
+class CaptureTransactionRequestSchema(Schema):
+    commerce_code = fields.Str()
+    buy_order = fields.Str()
+    authorization_code = fields.Str()
+    capture_amount = fields.Float()
+
+
+class CaptureTransactionResponseSchema(Schema):
+    authorization_code = fields.Str()
+    authorization_date = fields.Str()
+    captured_amount = fields.Float()
+    response_code = fields.Raw()

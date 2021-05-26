@@ -42,6 +42,14 @@ class TransactionRefundRequest(object):
         self.amount = amount
 
 
+class TransactionCaptureRequest(object):
+    def __init__(self, commerce_code: str, buy_order: str, authorization_code: str, capture_amount: float):
+        self.commerce_code = commerce_code
+        self.buy_order= buy_order
+        self.authorization_code = authorization_code
+        self.capture_amount = capture_amount
+
+
 class TransactionInstallmentsRequest(object):
     def __init__(self, installments_number: float, buy_order: str, commerce_code: str):
         self.installments_number = installments_number
