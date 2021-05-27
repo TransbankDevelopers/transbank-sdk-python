@@ -4,6 +4,10 @@ Todos los cambios notables a este proyecto serán docuemntados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2021-05-27
+### Added
+- Se agrega soporte para Captura Diferida en Transacción Completa modalidad normal y mall.
+
 ## [1.4.0] - 2021-02-25
 ### Added
 - Se agregan métodos para hacer más simple la configuración de Webpay Plus
