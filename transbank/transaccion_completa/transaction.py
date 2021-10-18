@@ -23,7 +23,7 @@ from transbank.transaccion_completa.schema import CreateTransactionRequestSchema
 class Transaction(object):
     @classmethod
     def __base_url(cls, integration_type: IntegrationType):
-        return "{}/rswebpaytransaction/api/webpay/v1.0/transactions".format(
+        return "{}/rswebpaytransaction/api/webpay/v1.2/transactions".format(
             webpay_host(integration_type))
 
     @classmethod

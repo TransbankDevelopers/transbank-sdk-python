@@ -22,7 +22,7 @@ from transbank.webpay.webpay_plus.schema import MallTransactionCreateRequestSche
 class MallDeferredTransaction(object):
     @classmethod
     def __base_url(cls, integration_type: IntegrationType) -> str:
-        return "{}/rswebpaytransaction/api/webpay/v1.0/transactions".format(
+        return "{}/rswebpaytransaction/api/webpay/v1.2/transactions".format(
             webpay_host(integration_type))
 
     @classmethod
@@ -66,7 +66,7 @@ class MallDeferredTransaction(object):
             raise TransactionCommitError(message=dict_response["error_message"], code=response.status_code)
 
         return MallTransactionCommitResponse(**dict_response)
-    
+
     @classmethod
     def status(cls, token: str, options: Options = None):
         options = cls.build_options(options)
@@ -80,7 +80,7 @@ class MallDeferredTransaction(object):
             raise TransactionStatusError(message=dict_response["error_message"], code=response.status_code)
 
         return MallTransactionCommitResponse(**dict_response)
-    
+
     @classmethod
     def capture(cls, token: str, buy_order: str, authorization_code: str, capture_amount: float, commerce_code: str, options: Options = None):
         options = cls.build_options(options)
@@ -94,7 +94,7 @@ class MallDeferredTransaction(object):
 
         if response.status_code not in range(200, 299):
             raise TransactionCaptureError(message=dict_response["error_message"], code=response.status_code)
-        
+
         return DeferredTransactionResponse(**dict_response)
 
     @classmethod

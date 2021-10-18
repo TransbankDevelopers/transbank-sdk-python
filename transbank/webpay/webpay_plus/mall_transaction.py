@@ -18,7 +18,7 @@ from transbank.webpay.webpay_plus.schema import MallTransactionCreateRequestSche
 class MallTransaction(object):
     @classmethod
     def __base_url(cls, integration_type: IntegrationType) -> str:
-        return "{}/rswebpaytransaction/api/webpay/v1.0/transactions".format(
+        return "{}/rswebpaytransaction/api/webpay/v1.2/transactions".format(
             webpay_host(integration_type))
 
     @classmethod
@@ -79,7 +79,7 @@ class MallTransaction(object):
             raise TransactionRefundError(message=dict_response["error_message"], code=response.status_code)
 
         return TransactionRefundResponse(**dict_response)
-    
+
     @classmethod
     def status(cls, token: str, options: Options = None):
         options = cls.build_options(options)

@@ -21,7 +21,7 @@ from transbank.webpay.webpay_plus import WebpayPlus
 class Transaction(object):
     @classmethod
     def __base_url(cls, integration_type: IntegrationType) -> str:
-        return "{}/rswebpaytransaction/api/webpay/v1.0/transactions".format(
+        return "{}/rswebpaytransaction/api/webpay/v1.2/transactions".format(
             webpay_host(integration_type))
 
     @classmethod
