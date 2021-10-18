@@ -20,7 +20,7 @@ from transbank.webpay.webpay_plus import webpay_plus_deferred_commerce_code, def
 class DeferredTransaction(object):
     @classmethod
     def __base_url(cls, integration_type: IntegrationType) -> str:
-        return "{}/rswebpaytransaction/api/webpay/v1.0/transactions".format(
+        return "{}/rswebpaytransaction/api/webpay/v1.2/transactions".format(
             webpay_host(integration_type))
 
     @classmethod
@@ -92,7 +92,7 @@ class DeferredTransaction(object):
 
         if response.status_code not in range(200, 299):
             raise TransactionCaptureError(message=dict_response["error_message"], code=response.status_code)
-        
+
         return DeferredTransactionResponse(**dict_response)
 
     @classmethod

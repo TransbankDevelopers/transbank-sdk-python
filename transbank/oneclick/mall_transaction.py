@@ -18,7 +18,7 @@ from transbank.oneclick.schema import TransactionAuthorizeRequestSchema, Transac
 class MallTransaction(object):
     @classmethod
     def __base_url(cls, integration_type: IntegrationType):
-        return "{}/rswebpaytransaction/api/oneclick/v1.0".format(
+        return "{}/rswebpaytransaction/api/oneclick/v1.2".format(
             webpay_host(integration_type))
 
     @classmethod
