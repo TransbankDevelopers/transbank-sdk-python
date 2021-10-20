@@ -4,6 +4,11 @@ Todos los cambios notables a este proyecto serán docuemntados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2021-10-19
+### Added
+Los métodos apuntan a la versión 1.2 del API de Transbank, por lo que ahora las redirecciones de vuelta en el
+returnUrl serán por GET en vez de POST.
+
 ## [1.5.0] - 2021-05-27
 ### Added
 - Se agrega soporte para Captura Diferida en Transacción Completa modalidad normal y mall.
