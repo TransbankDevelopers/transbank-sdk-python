@@ -13,7 +13,7 @@ pylint = "*"
 requests-mock = "<=1.5.2"
 
 [packages]
-marshmallow = '<=2.15.6'
+marshmallow = '<=2.21.0'
 requests = '>=2.22.0'
 mock = "*"
 
