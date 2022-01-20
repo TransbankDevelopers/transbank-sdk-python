@@ -13,11 +13,11 @@ class TransactionMallTestCase(unittest.TestCase):
         return str(random.randrange(1000000, 99999999))
 
     def get_mall_transaction_details(self):
-        commerce_code_child_1 = IntegrationCommerceCodes.ONECLICK_MALL_CHILD1
+        commerce_code_child_1 = IntegrationCommerceCodes.WEBPAY_PLUS_MALL_CHILD1
         buy_order_child_1 = self.get_random_str()
         amount_child_1 = self.get_random_str()
 
-        commerce_code_child_2 = IntegrationCommerceCodes.ONECLICK_MALL_CHILD2
+        commerce_code_child_2 = IntegrationCommerceCodes.WEBPAY_PLUS_MALL_CHILD2
         buy_order_child_2 = self.get_random_str()
         amount_child_2 = self.get_random_str()
 
@@ -32,8 +32,8 @@ class TransactionMallTestCase(unittest.TestCase):
             return_url=self.return_url_mock,
             details=self.get_mall_transaction_details()
         )
-        self.assertIsNotNone(response.url)
-        self.assertIsNotNone(response.token)
+        self.assertIsNotNone(response['url'])
+        self.assertIsNotNone(response['token'])
 
     # These can't be tested until we have a mock URL
     # def test_when_transaction_commit(self):

@@ -20,8 +20,8 @@ class TransactionTestCase(unittest.TestCase):
             amount=self.amount_mock,
             return_url=self.return_url_mock,
         )
-        self.assertIsNotNone(response.url)
-        self.assertIsNotNone(response.token)
+        self.assertIsNotNone(response['url'])
+        self.assertIsNotNone(response['token'])
 
     def test_when_transaction_create_using_invalid_credentials(self):
         with self.assertRaises(TransactionCreateError) as context:
@@ -45,8 +45,8 @@ class TransactionTestCase(unittest.TestCase):
             return_url=self.return_url_mock,
         )
 
-        self.assertIsNotNone(response.url)
-        self.assertIsNotNone(response.token)
+        self.assertIsNotNone(response['url'])
+        self.assertIsNotNone(response['token'])
 
 
     def test_when_transaction_status(self):
@@ -57,20 +57,20 @@ class TransactionTestCase(unittest.TestCase):
             return_url=self.return_url_mock,
         )
 
-        response = Transaction().status(token=response.token)
+        response = Transaction().status(token=response['token'])
         print(response)
         # self.assertIsNotNone(response.vci) # This is empty when asking status of Initialized tx
-        self.assertIsNotNone(response.amount)
-        self.assertIsNotNone(response.status)
-        self.assertIsNotNone(response.buy_order)
-        self.assertIsNotNone(response.session_id)
+        self.assertIsNotNone(response['amount'])
+        self.assertIsNotNone(response['status'])
+        self.assertIsNotNone(response['buy_order'])
+        self.assertIsNotNone(response['session_id'])
         # self.assertIsNotNone(response.card_detail.card_number) # This is empty when asking status of Initialized tx
-        self.assertIsNotNone(response.accounting_date)
-        self.assertIsNotNone(response.transaction_date)
+        self.assertIsNotNone(response['accounting_date'])
+        self.assertIsNotNone(response['transaction_date'])
         # self.assertIsNotNone(response.authorization_code) # This is empty when asking status of Initialized tx
         # self.assertIsNotNone(response.payment_type_code) # This is empty when asking status of Initialized tx
         # self.assertIsNotNone(response.response_code) # This is empty when asking status of Initialized tx
-        self.assertIsNotNone(response.installments_number)
+        self.assertIsNotNone(response['installments_number'])
 
     # def test_when_transaction_commit(self):
     #     response = Transaction.status(token=self.token_mock)
