@@ -35,11 +35,13 @@ class RequestService(object):
     def process_response(cls, response: any):
         if not response.text:
             return 
-        print(response.text)
         dict_response = json.loads(response.text)
-        print(dict_response)
         if response.status_code not in (200, 299):
-            raise TransbankError(message=dict_response["error_message"], code=response.status_code)
+            if "error_message" in dict_response:
+                raise TransbankError(message=dict_response["error_message"], code=response.status_code)
+            if "description" in dict_response:
+                raise TransbankError(message=dict_response["description"], code=response.status_code)
+            raise TransbankError(message=response.text, code=response.status_code)
         return dict_response
 
     @classmethod

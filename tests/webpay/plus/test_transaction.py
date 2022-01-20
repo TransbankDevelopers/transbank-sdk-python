@@ -1,8 +1,6 @@
 import unittest
 import random
-import requests_mock
 from transbank.webpay.webpay_plus.transaction import *
-from transbank.webpay.webpay_plus import WebpayPlus
 from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
 from transbank.common.integration_api_keys import IntegrationApiKeys
@@ -16,7 +14,7 @@ class TransactionTestCase(unittest.TestCase):
     token_mock = 'e882245dcdc2f8f3633dab59dd11b2ce43ef2cffc011346d6720cc4d7e397bb4'
 
     def test_when_transaction_create(self):
-        response = Transaction.create(
+        response = Transaction().create(
             buy_order=self.buy_order_mock,
             session_id=self.session_id_mock,
             amount=self.amount_mock,
@@ -27,9 +25,9 @@ class TransactionTestCase(unittest.TestCase):
 
     def test_when_transaction_create_using_invalid_credentials(self):
         with self.assertRaises(TransactionCreateError) as context:
-            WebpayPlus.configure_for_integration('597012345678', 'FakeApiKeySecret')
+            tx = Transaction().configure_for_integration('597012345678', 'FakeApiKeySecret')
 
-            response = Transaction.create(
+            response = tx.create(
                 buy_order=self.buy_order_mock,
                 session_id=self.session_id_mock,
                 amount=self.amount_mock,
@@ -39,9 +37,8 @@ class TransactionTestCase(unittest.TestCase):
         self.assertTrue('Not Authorized' in context.exception.message)
 
     def test_when_transaction_create_using_invalid_credentials(self):
-        WebpayPlus.configure_for_integration(IntegrationCommerceCodes.WEBPAY_PLUS, IntegrationApiKeys.WEBPAY)
 
-        response = Transaction.create(
+        response = Transaction().create(
             buy_order=self.buy_order_mock,
             session_id=self.session_id_mock,
             amount=self.amount_mock,
@@ -53,14 +50,14 @@ class TransactionTestCase(unittest.TestCase):
 
 
     def test_when_transaction_status(self):
-        response = Transaction.create(
+        response = Transaction().create(
             buy_order=self.buy_order_mock,
             session_id=self.session_id_mock,
             amount=self.amount_mock,
             return_url=self.return_url_mock,
         )
 
-        response = Transaction.status(token=response.token)
+        response = Transaction().status(token=response.token)
         print(response)
         # self.assertIsNotNone(response.vci) # This is empty when asking status of Initialized tx
         self.assertIsNotNone(response.amount)

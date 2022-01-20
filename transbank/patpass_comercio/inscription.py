@@ -17,7 +17,7 @@ class Inscription(object):
 
     def __init__(self, options: PatpassComercioOptions = None):
         if options is None:
-            self.options = PatpassComercioOptions(IntegrationCommerceCodes.PATPASS_COMERCIO, IntegrationApiKeys.PATPASS_COMERCIO, IntegrationType.TEST)
+            self.configure_for_testing()
         else:
             self.options = options  
 
@@ -57,4 +57,13 @@ class Inscription(object):
         except TransbankError as e:
             raise InscriptionStatusError(e.message, e.code)
 
+    def configure_for_integration(self, commerce_code, api_key):
+        self.options = PatpassComercioOptions(commerce_code, api_key, IntegrationType.TEST)
+        return self
 
+    def configure_for_production(self, commerce_code, api_key):
+        self.options = PatpassComercioOptions(commerce_code, api_key, IntegrationType.LIVE)
+        return self
+
+    def configure_for_testing(self):
+        return self.configure_for_integration(IntegrationCommerceCodes.PATPASS_COMERCIO, IntegrationApiKeys.PATPASS_COMERCIO)

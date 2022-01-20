@@ -26,7 +26,7 @@ class TransactionMallTestCase(unittest.TestCase):
         return details
 
     def test_when_transaction_create(self):
-        response = MallTransaction.create(
+        response = MallTransaction().create(
             buy_order=self.get_random_str(),
             session_id=self.get_random_str(),
             return_url=self.return_url_mock,
