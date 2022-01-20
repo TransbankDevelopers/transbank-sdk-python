@@ -2,7 +2,7 @@ from typing import List, Iterator
 from transbank.validators.amount_validator import AmountValidator
 
 
-class InscriptionStartRequest(object):
+class MallInscriptionStartRequest(object):
     def __init__(self,
                  user_name: str,
                  email: str,
@@ -12,23 +12,12 @@ class InscriptionStartRequest(object):
         self.response_url = response_url
 
 
-class InscriptionDeleteRequest(object):
+class MallInscriptionDeleteRequest(object):
     def __init__(self,
                  user_name: str,
                  tbk_user: str):
         self.username = user_name
         self.tbk_user = tbk_user
-
-
-class TransactionRefundRequest(object):
-    def __init__(self,
-                 commerce_code: str,
-                 detail_buy_order: str,
-                 amount: float):
-        AmountValidator.validate(amount)
-        self.commerce_code = commerce_code
-        self.detail_buy_order = detail_buy_order
-        self.amount = amount
 
 
 class MallDetails(object):
@@ -52,7 +41,6 @@ class MallDetails(object):
                and self.installments_number == other.installments_number \
                and self.amount == other.amount
 
-
 class MallTransactionAuthorizeDetails(object):
     def __init__(self, commerce_code: str, buy_order: str, installments_number: int, amount: float):
         self.__details = []
@@ -73,13 +61,48 @@ class MallTransactionAuthorizeDetails(object):
         return tuple(self.__details)
 
 
-class TransactionAuthorizeRequest(object):
+
+
+
+class MallTransactionAuthorizeRequest(object):
     def __init__(self,
-                 user_name: str,
+                 username: str,
                  tbk_user: str,
                  buy_order: str,
                  details: List[MallDetails]):
-        self.username = user_name
+        self.username = username
         self.tbk_user = tbk_user
         self.buy_order = buy_order
         self.details = details
+
+
+class MallTransactionCaptureRequest(object):
+    def __init__(self, commerce_code: str, buy_order: str, authorization_code: str, capture_amount: float):
+        self.commerce_code = commerce_code
+        self.buy_order = buy_order
+        self.authorization_code = authorization_code
+        self.capture_amount = capture_amount
+
+    def __repr__(self):
+        return "MallTransactionCaptureRequest(commerce_code: {}, buy_order: {}, authorization_code: {}, capture_amount: {})".format(
+            self.commerce_code, self.buy_order, self.authorization_code, self.capture_amount )
+
+
+class MallTransactionRefundRequest(object):
+    def __init__(self,
+                 commerce_code: str,
+                 detail_buy_order: str,
+                 amount: float):
+        AmountValidator.validate(amount)
+        self.commerce_code = commerce_code
+        self.detail_buy_order = detail_buy_order
+        self.amount = amount
+
+
+
+
+
+
+
+
+

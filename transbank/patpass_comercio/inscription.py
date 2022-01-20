@@ -1,85 +1,60 @@
-import requests
-
-from transbank.common.headers_builder import HeadersBuilder
-from transbank.common.integration_type import IntegrationType, patpass_comercio_host
-from transbank.common.options import Options, PatpassComercioOptions
-from transbank import patpass_comercio
+from transbank.common.options import PatpassComercioOptions
+from transbank.common.request_service import RequestService
+from transbank.common.api_constants import ApiConstants
+from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
+from transbank.common.integration_type import IntegrationType
+from transbank.common.integration_api_keys import IntegrationApiKeys
+from transbank.patpass_comercio.request import InscriptionStartRequest, InscriptionStatusRequest
+from transbank.patpass_comercio.schema import InscriptionStartRequestSchema, InscriptionStatusRequestSchema
+from transbank.error.transbank_error import TransbankError
 from transbank.error.inscription_start_error import InscriptionStartError
 from transbank.error.inscription_status_error import InscriptionStatusError
-from transbank.patpass_comercio.request import InscriptionStartRequest, InscriptionStatusRequest
-from transbank.patpass_comercio.response import InscriptionStartResponse, InscriptionStatusResponse
-from transbank.patpass_comercio.schema import InscriptionStartRequestSchema, \
-    InscriptionStartResponseSchema, InscriptionStatusResponseSchema, InscriptionStatusRequestSchema
-
 
 class Inscription(object):
-    @classmethod
-    def __base_url(cls, integration_type: IntegrationType):
-        return "{}/restpatpass/v1/services".format(
-            patpass_comercio_host(integration_type))
 
-    @classmethod
-    def build_options(cls, options: Options = None) -> Options:
-        alt_options = PatpassComercioOptions(patpass_comercio.commerce_code, patpass_comercio.api_key,
-                                             patpass_comercio.integration_type)
+    START_ENDPOINT = ApiConstants.PATPASS_ENDPOINT + '/patInscription'
+    STATUS_ENDPOINT = ApiConstants.PATPASS_ENDPOINT + '/status'
 
-        if options is not None:
-            alt_options.commerce_code = options.commerce_code or patpass_comercio.commerce_code
-            alt_options.api_key = options.api_key or patpass_comercio.api_key
-            alt_options.integration_type = options.integration_type or patpass_comercio.integration_type
+    def __init__(self, options: PatpassComercioOptions = None):
+        if options is None:
+            self.options = PatpassComercioOptions(IntegrationCommerceCodes.PATPASS_COMERCIO, IntegrationApiKeys.PATPASS_COMERCIO, IntegrationType.TEST)
+        else:
+            self.options = options  
 
-        return alt_options
-
-    @classmethod
-    def start(cls,
-              url: str,
+    def start(self, url: str,
               name: str,
-              first_last_name: str,
+              last_name: str,
               second_last_name: str,
               rut: str,
               service_id: str,
               final_url: str,
               max_amount: float,
-              phone_number: str,
-              mobile_number: str,
+              phone: str,
+              cell_phone: str,
               patpass_name: str,
               person_email: str,
               commerce_email: str,
               address: str,
-              city: str,
-              options: Options = None) -> InscriptionStartResponse:
-        options = cls.build_options(options)
-        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), 'patInscription')
-        m_amount = max_amount
-        if max_amount == 0:
-            m_amount = ''
-
-        request = InscriptionStartRequest(url, name, first_last_name, second_last_name, rut,
-                                          service_id, final_url, options.commerce_code, m_amount,
-                                          phone_number, mobile_number, patpass_name, person_email,
+              city: str):
+        try:
+            m_amount = max_amount
+            if max_amount == 0:
+                m_amount = ''
+            endpoint = Inscription.START_ENDPOINT
+            request = InscriptionStartRequest(url, name, last_name, second_last_name, rut,
+                                          service_id, final_url, self.options.commerce_code, m_amount,
+                                          phone, cell_phone, patpass_name, person_email,
                                           commerce_email, address, city)
+            return RequestService.post(endpoint, InscriptionStartRequestSchema().dumps(request).data, self.options)
+        except TransbankError as e:
+            raise InscriptionStartError(e.message, e.code)
+    
+    def status(self, token: str):
+        try:
+            endpoint = Inscription.STATUS_ENDPOINT
+            request = InscriptionStatusRequest(token)
+            return RequestService.post(endpoint, InscriptionStatusRequestSchema().dumps(request).data, self.options)
+        except TransbankError as e:
+            raise InscriptionStatusError(e.message, e.code)
 
-        response = requests.post(endpoint, data=InscriptionStartRequestSchema().dumps(request).data,
-                                 headers=HeadersBuilder.build(options))
-        json_response = response.text
-        dict_response = InscriptionStartResponseSchema().loads(json_response).data
-        if response.status_code not in range(200, 299):
-            raise InscriptionStartError(message=dict_response["description"], code=response.status_code)
 
-        return InscriptionStartResponse(**dict_response)
-
-    @classmethod
-    def status(cls, token: str, options: Options = None) -> InscriptionStatusResponse:
-        options = cls.build_options(options)
-        endpoint = '{}/{}'.format(cls.__base_url(options.integration_type), 'status')
-
-        request = InscriptionStatusRequest(token)
-
-        response = requests.post(url=endpoint, data=InscriptionStatusRequestSchema().dumps(request).data,
-                                 headers=HeadersBuilder.build(options))
-        json_response = response.text
-        dict_response = InscriptionStatusResponseSchema().loads(json_response).data
-        if response.status_code not in range(200, 299):
-            raise InscriptionStatusError(message=dict_response["description"], code=response.status_code)
-
-        return InscriptionStatusResponse(**dict_response)

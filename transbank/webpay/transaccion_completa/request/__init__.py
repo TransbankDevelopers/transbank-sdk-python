@@ -22,23 +22,15 @@ class TransactionCreateRequest(object):
         self.cvv = cvv
         self.card_expiration_date = card_expiration_date
 
-
-class TransactionStatusRequest(object):
-    def __init__(self, token: str):
-        self.token = token
-
-
 class TransactionRefundRequest(object):
     def __init__(self, amount: float):
         self.amount = amount
-
 
 class TransactionCaptureRequest(object):
     def __init__(self, buy_order: str, authorization_code: str, capture_amount: float):
         self.buy_order = buy_order
         self.authorization_code = authorization_code
         self.capture_amount = capture_amount
-
 
 class TransactionInstallmentsRequest(object):
     def __init__(self, installments_number: float):

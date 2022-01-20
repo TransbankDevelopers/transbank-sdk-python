@@ -1,7 +1,7 @@
 import unittest
 import random
 from transbank.webpay.webpay_plus.mall_transaction import *
-from transbank.webpay.webpay_plus import mall_default_child_commerce_codes
+from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
 
 
 class TransactionMallTestCase(unittest.TestCase):
@@ -13,11 +13,11 @@ class TransactionMallTestCase(unittest.TestCase):
         return str(random.randrange(1000000, 99999999))
 
     def get_mall_transaction_details(self):
-        commerce_code_child_1 = mall_default_child_commerce_codes[0]
+        commerce_code_child_1 = IntegrationCommerceCodes.ONECLICK_MALL_CHILD1
         buy_order_child_1 = self.get_random_str()
         amount_child_1 = self.get_random_str()
 
-        commerce_code_child_2 = mall_default_child_commerce_codes[1]
+        commerce_code_child_2 = IntegrationCommerceCodes.ONECLICK_MALL_CHILD2
         buy_order_child_2 = self.get_random_str()
         amount_child_2 = self.get_random_str()
 

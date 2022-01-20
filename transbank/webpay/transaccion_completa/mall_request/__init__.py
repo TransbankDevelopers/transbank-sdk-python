@@ -13,12 +13,13 @@ class TransactionCommitRequest(object):
 
 
 class TransactionCreateRequest(object):
-    def __init__(self, buy_order: str, session_id: str, card_number: str, card_expiration_date: str, details: list):
+    def __init__(self, buy_order: str, session_id: str, card_number: str, card_expiration_date: str, details: list, cvv: str):
         self.buy_order = buy_order
         self.session_id = session_id
         self.card_number = card_number
         self.card_expiration_date = card_expiration_date
         self.details = self.create_details(details)
+        self.cvv = cvv
 
     def create_details(self, details: list) -> list:
         return [
