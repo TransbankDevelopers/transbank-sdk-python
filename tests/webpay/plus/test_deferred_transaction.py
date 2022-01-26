@@ -1,7 +1,7 @@
 import unittest
 import random
 import requests_mock
-from transbank.webpay.webpay_plus.deferred_transaction import *
+from transbank.webpay.webpay_plus.transaction import *
 
 
 class TransactionDeferredTestCase(unittest.TestCase):
@@ -13,14 +13,14 @@ class TransactionDeferredTestCase(unittest.TestCase):
     token_mock = 'e547ea9ddf27ac6c9b9691ccc399921ddd67d4264467bc7e925a294dad16b244'
 
     def test_when_deferred_transaction_create(self):
-        response = DeferredTransaction.create(
+        response = Transaction().create(
             buy_order=self.buy_order_mock,
             session_id=self.session_id_mock,
             amount=self.amount_mock,
             return_url=self.return_url_mock,
         )
-        self.assertIsNotNone(response.url)
-        self.assertIsNotNone(response.token)
+        self.assertIsNotNone(response['url'])
+        self.assertIsNotNone(response['token'])
 
     # These can't be tested until we have a mock URL
     # def test_when_deferred_transaction_commit(self):

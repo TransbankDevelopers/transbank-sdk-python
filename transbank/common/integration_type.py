@@ -7,7 +7,6 @@ class IntegrationType(Enum):
     TEST = 2
     MOCK = 3
 
-
 def webpay_host(integration_type: IntegrationType) -> str:
     if integration_type is IntegrationType.LIVE:
         return "https://webpay3g.transbank.cl"

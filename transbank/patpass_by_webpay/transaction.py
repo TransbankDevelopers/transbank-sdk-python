@@ -1,61 +1,59 @@
-import requests
-
-from transbank.common.headers_builder import HeadersBuilder
-from transbank.common.integration_type import IntegrationType, webpay_host
-from transbank.common.options import Options, WebpayOptions
-from transbank import patpass_by_webpay
-from transbank.error.transaction_create_error import TransactionCreateError
+from transbank.common.options import WebpayOptions
+from transbank.common.request_service import RequestService
+from transbank.common.api_constants import ApiConstants
+from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
+from transbank.common.webpay_transaction import WebpayTransaction
+from transbank.common.integration_api_keys import IntegrationApiKeys
+from transbank.common.validation_util import ValidationUtil
+from transbank.patpass_by_webpay.schema import TransactionCreateRequestSchema
 from transbank.patpass_by_webpay.request import TransactionCreateRequest
-from transbank.patpass_by_webpay.schema import TransactionCreateRequestSchema, TransactionCreateResponseSchema
-from transbank.patpass_by_webpay.response import TransactionCreateResponse
-from transbank.webpay.webpay_plus.response import TransactionCommitResponse, TransactionStatusResponse
-from transbank.webpay.webpay_plus.transaction import Transaction as T
+from transbank.error.transbank_error import TransbankError
+from transbank.error.transaction_create_error import TransactionCreateError
+from transbank.error.transaction_commit_error import TransactionCommitError
+from transbank.error.transaction_status_error import TransactionStatusError
 
+class Transaction(WebpayTransaction):
+    CREATE_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/'
+    COMMIT_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}'
+    STATUS_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}'
 
-class Transaction(object):
-    @classmethod
-    def __base_url(cls, integration_type: IntegrationType) -> str:
-        return "{}/rswebpaytransaction/api/webpay/v1.2/transactions".format(
-            webpay_host(integration_type))
+    def __init__(self, options: WebpayOptions = None):
+        if options is None:
+            self.configure_for_testing()
+        else: 
+            super().__init__(options)
 
-    @classmethod
-    def build_options(cls, options: Options = None) -> Options:
-        alt_options = WebpayOptions(patpass_by_webpay.commerce_code, patpass_by_webpay.api_key,
-                                    patpass_by_webpay.integration_type)
-
-        if options is not None:
-            alt_options.commerce_code = options.commerce_code or patpass_by_webpay.commerce_code
-            alt_options.api_key = options.api_key or patpass_by_webpay.api_key
-            alt_options.integration_type = options.integration_type or patpass_by_webpay.integration_type
-
-        return alt_options
-
-    @classmethod
-    def create(cls, buy_order: str, session_id: str, amount: float, return_url: str, service_id: str,
+    def create(self, buy_order: str, session_id: str, amount: float, return_url: str, service_id: str,
                card_holder_id: str,
                card_holder_name: str, card_holder_last_name1: str, card_holder_last_name2: str, card_holder_mail: str,
-               cellphone_number: str, expiration_date: str, commerce_mail: str, uf_flag: bool,
-               options: Options = None) -> TransactionCreateResponse:
-        options = cls.build_options(options)
-        endpoint = cls.__base_url(options.integration_type)
-        request = TransactionCreateRequest(buy_order, session_id, amount, return_url, service_id, card_holder_id,
+               cellphone_number: str, expiration_date: str, commerce_mail: str, uf_flag: bool):
+        ValidationUtil.has_text_with_max_length(buy_order, ApiConstants.BUY_ORDER_LENGTH, "buy_order")
+        ValidationUtil.has_text_with_max_length(session_id, ApiConstants.SESSION_ID_LENGTH, "session_id")
+        ValidationUtil.has_text_with_max_length(return_url, ApiConstants.RETURN_URL_LENGTH, "return_url")
+        try:
+            endpoint = Transaction.CREATE_ENDPOINT
+            request = TransactionCreateRequest(buy_order, session_id, amount, return_url, service_id, card_holder_id,
                                            card_holder_name, card_holder_last_name1, card_holder_last_name2,
                                            card_holder_mail, cellphone_number, expiration_date, commerce_mail, uf_flag)
+            return RequestService.post(endpoint, TransactionCreateRequestSchema().dumps(request).data, self.options)
+        except TransbankError as e:
+            raise TransactionCreateError(e.message, e.code)
 
-        response = requests.post(endpoint, data=TransactionCreateRequestSchema().dumps(request).data,
-                                 headers=HeadersBuilder.build(options))
-        json_response = response.text
-        dict_response = TransactionCreateResponseSchema().loads(json_response).data
+    def commit(self, token: str):
+        ValidationUtil.has_text_with_max_length(token, ApiConstants.TOKEN_LENGTH, "token")
+        try:
+            endpoint = Transaction.COMMIT_ENDPOINT.format(token)
+            return RequestService.put(endpoint, {}, self.options)
+        except TransbankError as e:
+            raise TransactionCommitError(e.message, e.code)
+    
+    def status(self, token: str):
+        ValidationUtil.has_text_with_max_length(token, ApiConstants.TOKEN_LENGTH, "token")
+        try:
+            endpoint = Transaction.STATUS_ENDPOINT.format(token)
+            return RequestService.get(endpoint, self.options)
+        except TransbankError as e:
+            raise TransactionStatusError(e.message, e.code)
 
-        if response.status_code not in range(200, 299):
-            raise TransactionCreateError(message=dict_response["error_message"], code=response.status_code)
-
-        return TransactionCreateResponse(**dict_response)
-
-    @classmethod
-    def commit(cls, token: str, options: Options = None) -> TransactionCommitResponse:
-        return T.commit(token, cls.build_options(options))
-
-    @classmethod
-    def status(cls, token: str, options: Options = None) -> TransactionStatusResponse:
-        return T.status(token, cls.build_options(options))
+    def configure_for_testing(self):
+        return self.configure_for_integration(IntegrationCommerceCodes.PATPASS_BY_WEBPAY, IntegrationApiKeys.WEBPAY)
