@@ -13,7 +13,7 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Changed
 
 - Se refactoriza y migra todos los productos desde clases estáticas a clases instanciables
-- Todos las respuestas de los métodos pasan a ser 'dictionaries'
+- Todas las respuestas de los métodos pasan a ser 'dictionaries'
 - Se unifica 'Transaction' y 'DeferredTransaction' en WebpayPlus
 - Se unifica 'MallTransaction' y 'MallDeferredTransaction' en WebpayPlus y Oneclick
 - Se reordenan los parámetros del método refund de WebpayPlus Mall a 'refund(token: str, child_buy_order: str, child_commerce_code:str, amount: float)'
@@ -27,7 +27,7 @@ y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Se agregan validaciones de obligatoriedad y tamaño de los parámetros a los métodos de WebpayPlus, Oneclick, Webpay Modal, Transacción Completa
 - Se agrega una clase de constantes con los códigos de comercio de integración: 'IntegrationCommerceCodes'
 - Se agrega una clase de constantes con las claves de comercio de integración: 'IntegrationApiKeys'
-- Se agrega el método capture de Oneclick a 'capture(child_commerce_code: str, child_buy_order: str, authorization_code: str, capture_amount: float)'
+- Se agrega el método capture a Oneclick 'capture(child_commerce_code: str, child_buy_order: str, authorization_code: str, capture_amount: float)'
 
 ## [2.0.1] - 2021-10-28
 ### Fixed
