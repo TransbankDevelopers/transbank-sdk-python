@@ -1,35 +1,35 @@
 language: python
 python:
 - '3.7'
-
 install:
 - pip install pipenv --upgrade
 - pipenv install --dev --skip-lock
 script:
 - pipenv run tests
-
 jobs:
   include:
-    - python: '3.7'
-      dist: xenial
-      sudo: true
-    - stage: sonarcloud
-      if: tag IS NOT present AND branch = master
-      addons:
-        sonarcloud:
-          organization: transbankdevelopers
-          token:
-            secure: NJwpmGuauUP+OLnpbN9nmDqmSXdo/84q8/CdL9UFsFSjVabd8rqE8Q6e8lrpZHV10kf2Gft13ACCuNnJq9aJcmS9d4A/ir4zZ7Eux1qJ5QvDkhTh5IFyGCAEh/gYtRLkmaPXwl5ueSHwyx+go5Ka/ilFkF/S3jVqdXKA1qfe+rTIoDeWeK4pP6ggebzGXZE+WQ11D3kolvbHEVhhIxFuayxw9nszxEuVda0D47bN6Z3+ykwNRGLKJTQLiwT8D5kTsbaYc4mHnItOV+T51WVmdXEOM10LkzBOabQarnVlyeRti5LCCSNY13vCoi6kbpR+61zi27s4iE09UXAt5HaoLa52OzoNRDyJp3efLcHpPym9oIlMNuS+2iAjlT/zLNnNZuCunoZ687XKMI+sgnt16Ydn2UrcinY/Yy/DBYIdDoNrnsxjuE258ySkW6+CKpYVQ5R/rL5iA/XgPgnbiKFZnkxaTRE4k8NcRyxkfG9zYn3boB2ZQ5+tiOmjJcctJ+KKUheX9ekI5DV8P9Gq2QaIElKIyJ2yBj73rjjLOv6YVy1OFexIV34Es02vJjMHpUGG2ctwzVb9bNThZrcbhMERq3ZTjf+ohJouSMDR4KRHCSL/VSxVAkm1hepPNLMHN//veEf5YAiYt8dFBnQs1fv+c6wa2Z7HlUa4UhEVcf9NbWY=
-      script:
-      - pipenv run citests
-      - sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io -Dsonar.sources=./transbank -Dsonar.python.coverage.reportPaths=coverage.xml
-    - stage: deploy
-      if: tag IS present
-      script: skip
-      deploy:
-        provider: pypi
-        user: transbankdevelopers
-        password:
-          secure: Ta1oYdeP9+iRvS9RyKev+Lx7n+iYKVO9C2d7uobGxbiWZnrEqXqf866Mwpgg+9Xq/9xibTRZszTIKFG36yVFodtV1+qN5SBpa/XFlhhn35d4hAGErl7/uVJpFkR1Y2ksi5JH3NIpKSfERpUJ6dYZTAd0BXT6LLXTB4k2wl1OGCkcduHWxZRaM/MU7CguK1Xbi24Dmv2E8xzu0aMbCoJ0pFWihZarSjElIun6Rvex9tb0ZZhqBuOj0PxRhL2m3clU893wfeQuxhtgVMLfdyHLytUWxGLHLcLEiBONQN2gA5MqvdkCsX9wXwTG9PrmNCUtpZQc8T/lB2HhWvJcNSSOAHv0mUtw/t/vqHj5CYHmbM9tIDyhl58hLRA1b5WxvORrcYFqmhy4KFXKgHn8DRzoEadqanvQZ9ouBsKI/xKbtmoJIVqAUVbxyixge4Iun4N7HhRL69lEoyfRr0sxWGc/eQDrijS2JPiuqP3GbbKGiDlxoPq3e+CThy8gJYICGCddEZPpic8KO3pSN2jR6vNqtXlNJqcwYrj7gpk9baUpv3YLQDDYw92fmLdNFXBW9NI9ntTqF7LeqYrImJ7UOxKF0SLprRxDxrvi1yRyuMOQPCbmjWeeSpTzp+9xU85Er1aaCx1XRobIOWAQRJF1GmzRJ75CbzEraPvKMz2UD3pgf5g=
-        on:
-          tags: true
+  - python: '3.7'
+    dist: xenial
+    sudo: true
+  - stage: sonarcloud
+    if: tag IS NOT present AND branch = master
+    addons:
+      sonarcloud:
+        organization: transbankdevelopers
+        token:
+          secure: NJwpmGuauUP+OLnpbN9nmDqmSXdo/84q8/CdL9UFsFSjVabd8rqE8Q6e8lrpZHV10kf2Gft13ACCuNnJq9aJcmS9d4A/ir4zZ7Eux1qJ5QvDkhTh5IFyGCAEh/gYtRLkmaPXwl5ueSHwyx+go5Ka/ilFkF/S3jVqdXKA1qfe+rTIoDeWeK4pP6ggebzGXZE+WQ11D3kolvbHEVhhIxFuayxw9nszxEuVda0D47bN6Z3+ykwNRGLKJTQLiwT8D5kTsbaYc4mHnItOV+T51WVmdXEOM10LkzBOabQarnVlyeRti5LCCSNY13vCoi6kbpR+61zi27s4iE09UXAt5HaoLa52OzoNRDyJp3efLcHpPym9oIlMNuS+2iAjlT/zLNnNZuCunoZ687XKMI+sgnt16Ydn2UrcinY/Yy/DBYIdDoNrnsxjuE258ySkW6+CKpYVQ5R/rL5iA/XgPgnbiKFZnkxaTRE4k8NcRyxkfG9zYn3boB2ZQ5+tiOmjJcctJ+KKUheX9ekI5DV8P9Gq2QaIElKIyJ2yBj73rjjLOv6YVy1OFexIV34Es02vJjMHpUGG2ctwzVb9bNThZrcbhMERq3ZTjf+ohJouSMDR4KRHCSL/VSxVAkm1hepPNLMHN//veEf5YAiYt8dFBnQs1fv+c6wa2Z7HlUa4UhEVcf9NbWY=
+    script:
+    - pipenv run citests
+    - sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank
+      Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io
+      -Dsonar.sources=./transbank -Dsonar.python.coverage.reportPaths=coverage.xml
+  - stage: deploy
+    if: tag IS present
+    script: skip
+    deploy:
+      provider: pypi
+      user: transbankdevelopers
+      password:
+        secure: CW3rkK+9dyXugiLBcgdkvtqJGqvAdNsXk+RiHexVC9DwAeJugnWtTfdvz3y7DuQVdzbW4NQ3tRJrsvTN39+6m3jiJPZ0LSMxOkJcLsiyGruJ2IKsIlMc9IXWMCkUFjLpL1RcQmFkgxx+W9rpBIMY5OYR1DQa3VMyuQzLDiEbCO2Br7lCuXM/lChtt6FD+GE13mQEtRf94tma6Lnth9cVzNH+PsOx4HdyuhZi2oIt0Agj/PvfHqrAzYqF0PzQXbNv5j5Mj847Ysh1aVTRrpAEebdLXxBkyb6HUQ4kIB5JfefSnHSupa+mYeXdmx8wEMvSgl0Ra+YROlOcJqkux3fVAaVYrXao8lx3uK7h/qANl8QxUE7u+iM0YTc9+am0A4O6ESquyPi38Z71f8UDvxNqdc75UwXGd/JYXvhM0V1+ix+ALbsVSjBmhEiRmY8r+HLLeuFuPGGTqpH1T62vdQKcQRqN6zUnPJ1kxEuGxl8J0vRFUHPQjrE9T6Df7ReAHhsrfrQgEPHBjfVKd+49YYxCL994VQpCqMJD6ull6+cGNiisnyZQsRsluZLlyfWjrjD5kNnjKVjzmD1O0SwfmfOyeLlSMXPpnYgVNWMtwnByB76pTBXPZiUhZxWV1ENy5QhBupGYkrnLE/CqoyDcS757FMkNoOz01yvcFTSLKouWzm0=
+      on:
+        tags: true
