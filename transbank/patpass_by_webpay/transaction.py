@@ -35,7 +35,7 @@ class Transaction(WebpayTransaction):
             request = TransactionCreateRequest(buy_order, session_id, amount, return_url, service_id, card_holder_id,
                                            card_holder_name, card_holder_last_name1, card_holder_last_name2,
                                            card_holder_mail, cellphone_number, expiration_date, commerce_mail, uf_flag)
-            return RequestService.post(endpoint, TransactionCreateRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, TransactionCreateRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCreateError(e.message, e.code)
 

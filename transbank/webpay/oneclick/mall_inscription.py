@@ -31,7 +31,7 @@ class MallInscription(WebpayTransaction):
         try:
             endpoint = MallInscription.START_ENDPOINT
             request = MallInscriptionStartRequest(username, email, response_url)
-            return RequestService.post(endpoint, MallInscriptionStartRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, MallInscriptionStartRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise InscriptionStartError(e.message, e.code)
 
@@ -49,7 +49,7 @@ class MallInscription(WebpayTransaction):
         try:
             endpoint = MallInscription.DELETE_ENDPOINT
             request = MallInscriptionDeleteRequest(username, tbk_user)
-            RequestService.delete(endpoint, MallInscriptionDeleteRequestSchema().dumps(request).data, self.options)
+            RequestService.delete(endpoint, MallInscriptionDeleteRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise InscriptionDeleteError(e.message, e.code)
 

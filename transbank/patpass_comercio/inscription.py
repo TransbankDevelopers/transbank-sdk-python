@@ -45,7 +45,7 @@ class Inscription(object):
                                           service_id, final_url, self.options.commerce_code, m_amount,
                                           phone, cell_phone, patpass_name, person_email,
                                           commerce_email, address, city)
-            return RequestService.post(endpoint, InscriptionStartRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, InscriptionStartRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise InscriptionStartError(e.message, e.code)
     
@@ -53,7 +53,7 @@ class Inscription(object):
         try:
             endpoint = Inscription.STATUS_ENDPOINT
             request = InscriptionStatusRequest(token)
-            return RequestService.post(endpoint, InscriptionStatusRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, InscriptionStatusRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise InscriptionStatusError(e.message, e.code)
 

@@ -32,7 +32,7 @@ class Transaction(WebpayTransaction):
         try:
             endpoint = Transaction.CREATE_ENDPOINT
             request = TransactionCreateRequest(buy_order, session_id, amount)
-            return RequestService.post(endpoint, TransactionCreateRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, TransactionCreateRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCreateError(e.message, e.code)
 
@@ -57,7 +57,7 @@ class Transaction(WebpayTransaction):
         try:
             endpoint = Transaction.REFUND_ENDPOINT.format(token)
             request = TransactionRefundRequest(amount)
-            return RequestService.post(endpoint, TransactionRefundRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, TransactionRefundRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionRefundError(e.message, e.code)
 
