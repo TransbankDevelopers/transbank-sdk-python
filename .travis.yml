@@ -1,6 +1,6 @@
 language: python
 python:
-- '3.7'
+- '3.10'
 install:
 - pip install pipenv --upgrade
 - pipenv install --dev
@@ -8,7 +8,7 @@ script:
 - pipenv run tests
 jobs:
   include:
-  - python: '3.7'
+  - python: '3.10'
     dist: xenial
     sudo: true
   - stage: sonarcloud
