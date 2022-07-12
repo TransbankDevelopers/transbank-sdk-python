@@ -2,7 +2,7 @@ language: python
 python:
 - '3.7'
 install:
-- pip install pipenv
+- pip install pipenv==2022.1.8
 - pipenv install --dev --skip-lock
 script:
 - pipenv run tests
