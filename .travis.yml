@@ -3,9 +3,8 @@ python:
 - '3.7'
 install:
 - pip install pipenv==2022.1.8
-- pipenv install --dev --skip-lock
+- pipenv install --dev
 script:
-- pip install pipenv==2022.1.8
 - pipenv run tests
 jobs:
   include:
