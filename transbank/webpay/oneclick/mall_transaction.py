@@ -37,7 +37,7 @@ class MallTransaction(WebpayTransaction):
         try:
             endpoint = MallTransaction.AUTHORIZE_ENDPOINT
             request = MallTransactionAuthorizeRequest(username, tbk_user, parent_buy_order, details.details)
-            return RequestService.post(endpoint, MallTransactionAuthorizeRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, MallTransactionAuthorizeRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionAuthorizeError(e.message, e.code)
 
@@ -48,7 +48,7 @@ class MallTransaction(WebpayTransaction):
         try:
             endpoint = MallTransaction.CAPTURE_ENDPOINT
             request = MallTransactionCaptureRequest(child_commerce_code, child_buy_order, authorization_code, capture_amount)
-            return RequestService.put(endpoint, MallTransactionCaptureRequestSchema().dumps(request).data, self.options)
+            return RequestService.put(endpoint, MallTransactionCaptureRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCaptureError(e.message, e.code)
 
@@ -67,7 +67,7 @@ class MallTransaction(WebpayTransaction):
         try:
             endpoint = MallTransaction.REFUND_ENDPOINT.format(buy_order)
             request = MallTransactionRefundRequest(child_commerce_code, child_buy_order, amount)
-            return RequestService.post(endpoint, MallTransactionRefundRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, MallTransactionRefundRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionRefundError(e.message, e.code)
 

@@ -40,7 +40,7 @@ class Transaction(WebpayTransaction):
         try:
             endpoint = Transaction.CREATE_ENDPOINT
             request = TransactionCreateRequest(buy_order, session_id, amount, card_number, cvv, card_expiration_date)
-            return RequestService.post(endpoint, TransactionCreateRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, TransactionCreateRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCreateError(e.message, e.code)
 
@@ -49,7 +49,7 @@ class Transaction(WebpayTransaction):
         try:
             endpoint = Transaction.COMMIT_ENDPOINT.format(token)
             request = TransactionCommitRequest(id_query_installments, deferred_period_index, grace_period)
-            return RequestService.put(endpoint, TransactionCommitRequestSchema().dumps(request).data, self.options)
+            return RequestService.put(endpoint, TransactionCommitRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCommitError(e.message, e.code)
 
@@ -77,7 +77,7 @@ class Transaction(WebpayTransaction):
         try:
             endpoint = Transaction.CAPTURE_ENDPOINT.format(token)
             request = TransactionCaptureRequest(buy_order, authorization_code, capture_amount)
-            return RequestService.put(endpoint, TransactionCaptureRequestSchema().dumps(request).data, self.options)
+            return RequestService.put(endpoint, TransactionCaptureRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCaptureError(e.message, e.code)
 
@@ -86,7 +86,7 @@ class Transaction(WebpayTransaction):
         try:
             endpoint = Transaction.INSTALLMENTS_ENDPOINT.format(token)
             request = TransactionInstallmentsRequest(installments_number)
-            return RequestService.post(endpoint, TransactionInstallmentsRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, TransactionInstallmentsRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionInstallmentsError(e.message, e.code)
 

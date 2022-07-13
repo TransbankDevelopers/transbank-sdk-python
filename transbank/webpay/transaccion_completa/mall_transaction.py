@@ -43,7 +43,7 @@ class MallTransaction(WebpayTransaction):
         try:
             endpoint = MallTransaction.CREATE_ENDPOINT
             request = TransactionCreateRequest(buy_order, session_id, card_number, card_expiration_date, details, cvv)
-            return RequestService.post(endpoint, TransactionCreateRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, TransactionCreateRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCreateError(e.message, e.code)      
 
@@ -52,7 +52,7 @@ class MallTransaction(WebpayTransaction):
         try:
             endpoint = MallTransaction.COMMIT_ENDPOINT.format(token)
             request = TransactionCommitRequest(details)
-            return RequestService.put(endpoint, TransactionCommitRequestSchema().dumps(request).data, self.options)
+            return RequestService.put(endpoint, TransactionCommitRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCommitError(e.message, e.code)
 
@@ -71,7 +71,7 @@ class MallTransaction(WebpayTransaction):
         try:
             endpoint = MallTransaction.REFUND_ENDPOINT.format(token)
             request = TransactionRefundRequest(buy_order=child_buy_order, commerce_code=child_commerce_code, amount=amount)
-            return RequestService.post(endpoint, TransactionRefundRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, TransactionRefundRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionRefundError(e.message, e.code)
 
@@ -84,7 +84,7 @@ class MallTransaction(WebpayTransaction):
             endpoint = MallTransaction.CAPTURE_ENDPOINT.format(token)
             request = TransactionCaptureRequest(commerce_code=child_commerce_code, buy_order=child_buy_order,
                                             authorization_code=authorization_code, capture_amount=capture_amount)
-            return RequestService.put(endpoint, TransactionCaptureRequestSchema().dumps(request).data, self.options)
+            return RequestService.put(endpoint, TransactionCaptureRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCaptureError(e.message, e.code)
 
@@ -113,7 +113,7 @@ class MallTransaction(WebpayTransaction):
             endpoint = MallTransaction.INSTALLMENTS_ENDPOINT.format(token)
             request = TransactionInstallmentsRequest(installments_number=installments_number, buy_order=buy_order,
                                                  commerce_code=commerce_code)
-            return RequestService.post(endpoint, TransactionInstallmentsRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, TransactionInstallmentsRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionInstallmentsError(e.message, e.code)   
 
