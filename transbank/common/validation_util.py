@@ -4,7 +4,7 @@ class ValidationUtil(object):
 
     @staticmethod
     def has_text(value: str, value_name: str):
-        if not value and not value.strip():
+        if not value or not value.strip():
             raise TransbankError("'{}' can't be null or white space".format(value_name))
 
     @staticmethod
