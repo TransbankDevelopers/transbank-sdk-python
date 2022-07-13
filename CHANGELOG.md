@@ -4,6 +4,12 @@ Todos los cambios notables a este proyecto serán docuemntados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.1] - 2022-07-13
+### Fixed
+- Actualización de versión mínima requerida de dependencia Marshmallow.
+- Se corrige el método 'has_text' de la clase 'ValidationUtil'. [PR #97](https://github.com/TransbankDevelopers/transbank-sdk-python/pull/97) de [@aduquehd](https://github.com/aduquehd)
+
+
 ## [3.0.0] - 2022-01-27
 
 ### Removed
