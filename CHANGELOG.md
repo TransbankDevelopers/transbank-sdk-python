@@ -4,6 +4,13 @@ Todos los cambios notables a este proyecto serán docuemntados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2022-09-20
+### Changed
+- Se migra el API desde la versión 1.2 a la versión 1.3
+### Added
+- Se agrega los métodos 'increaseAmount', 'increaseAuthorizationDate', 'reversePreAuthorizedAmount' y 'deferredCaptureHistory' a las versiones diferidas de WebpayPlus, WebpayPlus Mall, Oneclick Mall, Transaccion Completa y Transaccion Completa Mall
+- Ahora los métodos status y commit de las versiones diferidas de WebpayPlus, WebpayPlus Mall, Transaccion Completa y Transaccion Completa Mall retornan el campo 'captureExpirationDate'. Para Oneclick Mall este campo también se agrega en los detalles de la autorización
+
 ## [3.0.1] - 2022-07-13
 ### Fixed
 - Actualización de versión mínima requerida de dependencia Marshmallow.
