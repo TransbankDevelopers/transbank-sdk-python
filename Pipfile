@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-ipython = "<7.17.0"
+ipython = "<8.11.0"
 nose = "*"
 docutils = "*"
 mock = {markers = "python_version < '3.5'"}
