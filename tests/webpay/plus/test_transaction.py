@@ -95,3 +95,15 @@ class TransactionTestCase(unittest.TestCase):
         response = transaction.refund(self.token_mock, self.amount_mock)
 
         self.assertEqual(response.json(), responses['nullified_response'])
+
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_refund_transaction_error(self, mock_request_service):
+        mock_request_service.post.side_effect = TransactionRefundError(responses['invalid_parameter']['error_message'],
+                                                                      responses['invalid_parameter']['code'])
+
+        transaction = Transaction()
+        with self.assertRaises(TransactionRefundError) as context:
+            transaction.refund(self.token_mock, self.invalid_amount)
+
+        self.assertEqual(context.exception.args[0], responses['invalid_parameter']['error_message'])
+        self.assertEqual(context.exception.code, responses['invalid_parameter']['code'])
