@@ -64,28 +64,15 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(context.exception.args[0], responses['commit_error']['error_message'])
         self.assertEqual(context.exception.code, responses['commit_error']['code'])
 
-    def test_when_transaction_status(self):
-        response = Transaction().create(
-            buy_order=self.buy_order_mock,
-            session_id=self.session_id_mock,
-            amount=self.amount_mock,
-            return_url=self.return_url_mock,
-        )
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_status_transaction(self, mock_request_service):
+        mock_request_service.get.return_value = self.mock_response
+        self.mock_response.json.return_value = responses['commit_status_response']
 
-        response = Transaction().status(token=response['token'])
-        print(response)
-        # self.assertIsNotNone(response.vci) # This is empty when asking status of Initialized tx
-        self.assertIsNotNone(response['amount'])
-        self.assertIsNotNone(response['status'])
-        self.assertIsNotNone(response['buy_order'])
-        self.assertIsNotNone(response['session_id'])
-        # self.assertIsNotNone(response.card_detail.card_number) # This is empty when asking status of Initialized tx
-        self.assertIsNotNone(response['accounting_date'])
-        self.assertIsNotNone(response['transaction_date'])
-        # self.assertIsNotNone(response.authorization_code) # This is empty when asking status of Initialized tx
-        # self.assertIsNotNone(response.payment_type_code) # This is empty when asking status of Initialized tx
-        # self.assertIsNotNone(response.response_code) # This is empty when asking status of Initialized tx
-        self.assertIsNotNone(response['installments_number'])
+        transaction = Transaction()
+        response = transaction.status(self.token_mock)
+
+        self.assertEqual(response.json(), responses['commit_status_response'])
 
     # def test_when_transaction_commit(self):
     #     response = Transaction.status(token=self.token_mock)
