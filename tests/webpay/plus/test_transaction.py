@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import Mock
+from unittest.mock import patch
+from tests.mocks.responses_api_mocks import responses
 from transbank.webpay.webpay_plus.transaction import *
 from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
@@ -18,15 +20,15 @@ class TransactionTestCase(unittest.TestCase):
         self.mock_response = Mock()
         self.invalid_amount = -1000
 
-    def test_when_transaction_create(self):
-        response = Transaction().create(
-            buy_order=self.buy_order_mock,
-            session_id=self.session_id_mock,
-            amount=self.amount_mock,
-            return_url=self.return_url_mock,
-        )
-        self.assertIsNotNone(response['url'])
-        self.assertIsNotNone(response['token'])
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_create_transaction(self, mock_request_service):
+        mock_request_service.post.return_value = self.mock_response
+        self.mock_response.json.return_value = responses['create_response']
+
+        transaction = Transaction()
+        response = transaction.create(self.buy_order_mock, self.session_id_mock, self.amount_mock, self.return_url_mock)
+
+        self.assertEqual(response.json(), responses['create_response'])
 
     def test_when_transaction_create_using_invalid_credentials(self):
         with self.assertRaises(TransactionCreateError) as context:
