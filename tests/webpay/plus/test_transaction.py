@@ -85,3 +85,13 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertEqual(context.exception.args[0], responses['expired_token']['error_message'])
         self.assertEqual(context.exception.code, responses['expired_token']['code'])
+
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_refund_transaction(self, mock_request_service):
+        mock_request_service.post.return_value = self.mock_response
+        self.mock_response.json.return_value = responses['nullified_response']
+
+        transaction = Transaction()
+        response = transaction.refund(self.token_mock, self.amount_mock)
+
+        self.assertEqual(response.json(), responses['nullified_response'])
