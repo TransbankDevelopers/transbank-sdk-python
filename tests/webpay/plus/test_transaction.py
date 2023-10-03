@@ -73,3 +73,15 @@ class TransactionTestCase(unittest.TestCase):
         response = transaction.status(self.token_mock)
 
         self.assertEqual(response.json(), responses['commit_status_response'])
+
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_status_transaction_error(self, mock_request_service):
+        mock_request_service.get.side_effect = TransactionStatusError(responses['expired_token']['error_message'],
+                                                                      responses['expired_token']['code'])
+
+        transaction = Transaction()
+        with self.assertRaises(TransactionStatusError) as context:
+            transaction.status(self.token_mock)
+
+        self.assertEqual(context.exception.args[0], responses['expired_token']['error_message'])
+        self.assertEqual(context.exception.code, responses['expired_token']['code'])
