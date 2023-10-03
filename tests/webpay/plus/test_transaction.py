@@ -39,7 +39,6 @@ class TransactionTestCase(unittest.TestCase):
         with self.assertRaises(TransactionCreateError) as context:
             transaction.create(self.buy_order_mock, self.session_id_mock, self.amount_mock, self.return_url_mock)
 
-        print(context.exception.args[0])
         self.assertEqual(context.exception.args[0], responses['create_error']['error_message'])
         self.assertEqual(context.exception.code, responses['create_error']['code'])
 
@@ -52,6 +51,18 @@ class TransactionTestCase(unittest.TestCase):
         response = transaction.commit(self.token_mock)
 
         self.assertEqual(response.json(), responses['commit_status_response'])
+
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_commit_transaction_error(self, mock_request_service):
+        mock_request_service.put.side_effect = TransactionCommitError(responses['commit_error']['error_message'],
+                                                                      responses['commit_error']['code'])
+
+        transaction = Transaction()
+        with self.assertRaises(TransactionCommitError) as context:
+            transaction.commit(self.token_mock)
+
+        self.assertEqual(context.exception.args[0], responses['commit_error']['error_message'])
+        self.assertEqual(context.exception.code, responses['commit_error']['code'])
 
     def test_when_transaction_status(self):
         response = Transaction().create(

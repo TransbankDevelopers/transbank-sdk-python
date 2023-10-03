@@ -37,9 +37,9 @@ responses = {
     'error_api_mismatch': {
         'error_message': 'Api mismatch error, required version is 1.3'
     },
-    'error_commit': {
-        'message': 'Invalid status 0 for transaction while authorizing. Commerce will be notified by webpay to'
-                   ' authorize',
+    'commit_error': {
+        'error_message': 'Invalid status 0 for transaction while authorizing. Commerce will be notified by webpay to'
+                         ' authorize',
         'code': 422
     },
     'general_error': {
