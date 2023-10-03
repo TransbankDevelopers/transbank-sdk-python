@@ -73,28 +73,3 @@ class TransactionTestCase(unittest.TestCase):
         response = transaction.status(self.token_mock)
 
         self.assertEqual(response.json(), responses['commit_status_response'])
-
-    # def test_when_transaction_commit(self):
-    #     response = Transaction.status(token=self.token_mock)
-    #     self.assertIsNotNone(response.vci)
-    #     self.assertIsNotNone(response.amount)
-    #     self.assertIsNotNone(response.status)
-    #     self.assertIsNotNone(response.buy_order)
-    #     self.assertIsNotNone(response.session_id)
-    #     self.assertIsNotNone(response.card_detail.card_number)
-    #     self.assertIsNotNone(response.accounting_date)
-    #     self.assertIsNotNone(response.transaction_date)
-    #     self.assertIsNotNone(response.authorization_code)
-    #     self.assertIsNotNone(response.payment_type_code)
-    #     self.assertIsNotNone(response.response_code)
-    #     self.assertIsNotNone(response.installments_number)
-
-    # def test_when_transaction_refund(self):
-    #     response = Transaction.refund(token=self.token_mock, amount=1)
-    #     self.assertIsNotNone(response.type)
-    #     self.assertIsNotNone(response.balance)
-    #     self.assertIsNotNone(response.authorization_date)
-    #     self.assertIsNotNone(response.response_code)
-    #     self.assertIsNotNone(response.authorization_code)
-    #     self.assertIsNotNone(response.nullified_amount)
-
