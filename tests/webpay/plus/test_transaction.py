@@ -43,19 +43,15 @@ class TransactionTestCase(unittest.TestCase):
         self.assertEqual(context.exception.args[0], responses['create_error']['error_message'])
         self.assertEqual(context.exception.code, responses['create_error']['code'])
 
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_commit_transaction(self, mock_request_service):
+        mock_request_service.put.return_value = self.mock_response
+        self.mock_response.json.return_value = responses['commit_status_response']
 
-    def test_when_transaction_create_using_invalid_credentials(self):
+        transaction = Transaction()
+        response = transaction.commit(self.token_mock)
 
-        response = Transaction().create(
-            buy_order=self.buy_order_mock,
-            session_id=self.session_id_mock,
-            amount=self.amount_mock,
-            return_url=self.return_url_mock,
-        )
-
-        self.assertIsNotNone(response['url'])
-        self.assertIsNotNone(response['token'])
-
+        self.assertEqual(response.json(), responses['commit_status_response'])
 
     def test_when_transaction_status(self):
         response = Transaction().create(
