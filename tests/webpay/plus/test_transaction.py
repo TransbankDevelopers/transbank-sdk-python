@@ -30,18 +30,19 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertEqual(response.json(), responses['create_response'])
 
-    def test_when_transaction_create_using_invalid_credentials(self):
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_create_transaction_error(self, mock_request_service):
+        mock_request_service.post.side_effect = TransactionCreateError(responses['create_error']['error_message'],
+                                                                       responses['create_error']['code'])
+
+        transaction = Transaction()
         with self.assertRaises(TransactionCreateError) as context:
-            tx = Transaction().configure_for_integration('597012345678', 'FakeApiKeySecret')
+            transaction.create(self.buy_order_mock, self.session_id_mock, self.amount_mock, self.return_url_mock)
 
-            response = tx.create(
-                buy_order=self.buy_order_mock,
-                session_id=self.session_id_mock,
-                amount=self.amount_mock,
-                return_url=self.return_url_mock,
-            )
+        print(context.exception.args[0])
+        self.assertEqual(context.exception.args[0], responses['create_error']['error_message'])
+        self.assertEqual(context.exception.code, responses['create_error']['code'])
 
-        self.assertTrue('Not Authorized' in context.exception.message)
 
     def test_when_transaction_create_using_invalid_credentials(self):
 
