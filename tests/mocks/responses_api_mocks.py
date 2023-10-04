@@ -58,4 +58,78 @@ responses = {
         'error_message': 'amount is required!',
         'code': 422
     },
+    'commit_deferred': {
+        'vci': 'TSY',
+        'amount': 1209,
+        'status': 'AUTHORIZED',
+        'buy_order': 'O-74351',
+        'session_id': 'S-72021',
+        'card_detail': {
+         'card_number': '6623'
+        },
+        'accounting_date': '1004',
+        'transaction_date': '2023-10-04T12:48:34.770Z',
+        'authorization_code': '123456',
+        'payment_type_code': 'VN',
+        'response_code': 0,
+        'installments_number': 0,
+        'capture_expiration_date': '2023-11-03T12:49:26.709Z'
+    },
+    'increase_amount_response': {
+        'authorization_code': '123456',
+        'authorization_date': '2023-10-04T12:51:36Z',
+        'total_amount': 2209,
+        'expiration_date': '2023-11-03T12:49:26.709Z',
+        'response_code': 0
+    },
+    'increase_autho_date_response':
+    {
+        'authorization_code': '123456',
+        'authorization_date': '2023-10-04T12:52:51Z',
+        'total_amount': 2209,
+        'expiration_date': '2023-11-03T12:52:51.108Z',
+        'response_code': 0
+    },
+    'capture_history_response': [
+         {
+              'type': 'Preauthorization',
+              'amount': 1209,
+              'authorization_code': '123456',
+              'authorization_date': '2023-10-04T12:49:26.709Z',
+              'total_amount': 1209,
+              'expiration_date': '2023-11-03T12:49:26.709Z',
+              'response_code': 0
+         },
+         {
+              'type': 'Amount adjustment',
+              'amount': 1000,
+              'authorization_code': '123456',
+              'authorization_date': '2023-10-04T12:51:36.577Z',
+              'total_amount': 2209,
+              'expiration_date': '2023-11-03T12:49:26.709Z',
+              'response_code': 0
+         },
+         {
+              'type': 'Expiration date adjustment',
+              'amount': 0,
+              'authorization_code': '123456',
+              'authorization_date': '2023-10-04T12:52:51.108Z',
+              'total_amount': 2209,
+              'expiration_date': '2023-11-03T12:52:51.108Z',
+              'response_code': 0
+         }
+    ],
+    'capture_response': {
+        'authorization_code': '123456',
+        'authorization_date': '2023-10-04T12:55:49Z',
+        'captured_amount': 2209,
+        'response_code': 0
+    },
+    'reverse_preauthorized_amount': {
+         'authorization_code': '123456',
+         'authorization_date': '2023-10-04T13:01:04Z',
+         'total_amount': 1126,
+         'expiration_date': '2023-11-03T13:00:44.751Z',
+         'response_code': 0
+    }
 }
