@@ -76,7 +76,7 @@ responses = {
         'expiration_date': '2023-11-03T12:49:26.709Z',
         'response_code': 0
     },
-    'increase_autho_date_response':
+    'increase_date_response':
     {
         'authorization_code': '123456',
         'authorization_date': '2023-10-04T12:52:51Z',
@@ -125,5 +125,8 @@ responses = {
          'total_amount': 1126,
          'expiration_date': '2023-11-03T13:00:44.751Z',
          'response_code': 0
+    },
+    'invalid_parameter_capture': {
+        'error_message': 'Invalid value for parameter: capture_amount'
     },
 }
