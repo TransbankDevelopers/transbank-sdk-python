@@ -143,3 +143,15 @@ class TransactionTestCase(unittest.TestCase):
                                               self.capture_amount_mock, IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED)
 
         self.assertEqual(response.json(), responses['increase_amount_response'])
+
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_increase_amount_error(self, mock_request_service):
+        mock_request_service.put.side_effect = TransactionIncreaseAmountError(
+            responses['invalid_parameter_capture']['error_message'])
+
+        transaction = Transaction()
+        with self.assertRaises(TransactionIncreaseAmountError) as context:
+            transaction.increaseAmount(self.token_mock, self.buy_order_mock, self.authorization_code_mock,
+                                       self.invalid_amount, IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED)
+
+        self.assertEqual(context.exception.args[0], responses['invalid_parameter_capture']['error_message'])
