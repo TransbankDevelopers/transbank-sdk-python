@@ -214,3 +214,14 @@ class TransactionTestCase(unittest.TestCase):
         response = transaction.deferredCaptureHistory(self.token_mock)
 
         self.assertEqual(response.json(), responses['capture_history_response'])
+
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_deferred_capture_history_error(self, mock_request_service):
+        mock_request_service.get.side_effect = TransactionDeferredCaptureHistoryError(
+            responses['transaction_detail_not_found']['error_message'])
+
+        transaction = Transaction()
+        with self.assertRaises(TransactionDeferredCaptureHistoryError) as context:
+            transaction.deferredCaptureHistory(self.token_mock)
+
+        self.assertEqual(context.exception.args[0], responses['transaction_detail_not_found']['error_message'])
