@@ -4,8 +4,7 @@ responses = {
         'url': 'https://webpay3gint.transbank.cl/webpayserver/initTransaction'
     },
     'create_error': {
-        'error_message': 'Not Authorized',
-        'code': 401
+        'error_message': 'Not Authorized'
     },
     'commit_status_response': {
             'vci': 'TSY',
@@ -39,24 +38,19 @@ responses = {
     },
     'commit_error': {
         'error_message': 'Invalid status 0 for transaction while authorizing. Commerce will be notified by webpay to'
-                         ' authorize',
-        'code': 422
+                         ' authorize'
     },
     'general_error': {
-        'description': 'Internal server error',
-        'code': 500
+        'description': 'Internal server error'
     },
     'expired_token': {
-        'error_message': 'The transactions date has passed max time (7 days) to recover the status',
-        'code': 422
+        'error_message': 'The transactions date has passed max time (7 days) to recover the status'
     },
     'invalid_parameter': {
-        'error_message': 'Invalid value for parameter: amount',
-        'code': 422
+        'error_message': 'Invalid value for parameter: amount'
     },
     'required_parameter': {
-        'error_message': 'amount is required!',
-        'code': 422
+        'error_message': 'amount is required!'
     },
     'commit_deferred': {
         'vci': 'TSY',

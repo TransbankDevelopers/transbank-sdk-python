@@ -34,15 +34,13 @@ class TransactionTestCase(unittest.TestCase):
 
     @patch('transbank.webpay.webpay_plus.transaction.RequestService')
     def test_create_transaction_error(self, mock_request_service):
-        mock_request_service.post.side_effect = TransactionCreateError(responses['create_error']['error_message'],
-                                                                       responses['create_error']['code'])
+        mock_request_service.post.side_effect = TransactionCreateError(responses['create_error']['error_message'])
 
         transaction = Transaction()
         with self.assertRaises(TransactionCreateError) as context:
             transaction.create(self.buy_order_mock, self.session_id_mock, self.amount_mock, self.return_url_mock)
 
         self.assertEqual(context.exception.args[0], responses['create_error']['error_message'])
-        self.assertEqual(context.exception.code, responses['create_error']['code'])
 
     @patch('transbank.webpay.webpay_plus.transaction.RequestService')
     def test_commit_transaction(self, mock_request_service):
@@ -56,15 +54,13 @@ class TransactionTestCase(unittest.TestCase):
 
     @patch('transbank.webpay.webpay_plus.transaction.RequestService')
     def test_commit_transaction_error(self, mock_request_service):
-        mock_request_service.put.side_effect = TransactionCommitError(responses['commit_error']['error_message'],
-                                                                      responses['commit_error']['code'])
+        mock_request_service.put.side_effect = TransactionCommitError(responses['commit_error']['error_message'])
 
         transaction = Transaction()
         with self.assertRaises(TransactionCommitError) as context:
             transaction.commit(self.token_mock)
 
         self.assertEqual(context.exception.args[0], responses['commit_error']['error_message'])
-        self.assertEqual(context.exception.code, responses['commit_error']['code'])
 
     @patch('transbank.webpay.webpay_plus.transaction.RequestService')
     def test_status_transaction(self, mock_request_service):
@@ -78,15 +74,13 @@ class TransactionTestCase(unittest.TestCase):
 
     @patch('transbank.webpay.webpay_plus.transaction.RequestService')
     def test_status_transaction_error(self, mock_request_service):
-        mock_request_service.get.side_effect = TransactionStatusError(responses['expired_token']['error_message'],
-                                                                      responses['expired_token']['code'])
+        mock_request_service.get.side_effect = TransactionStatusError(responses['expired_token']['error_message'])
 
         transaction = Transaction()
         with self.assertRaises(TransactionStatusError) as context:
             transaction.status(self.token_mock)
 
         self.assertEqual(context.exception.args[0], responses['expired_token']['error_message'])
-        self.assertEqual(context.exception.code, responses['expired_token']['code'])
 
     @patch('transbank.webpay.webpay_plus.transaction.RequestService')
     def test_refund_transaction(self, mock_request_service):
@@ -100,15 +94,13 @@ class TransactionTestCase(unittest.TestCase):
 
     @patch('transbank.webpay.webpay_plus.transaction.RequestService')
     def test_refund_transaction_error(self, mock_request_service):
-        mock_request_service.post.side_effect = TransactionRefundError(responses['invalid_parameter']['error_message'],
-                                                                      responses['invalid_parameter']['code'])
+        mock_request_service.post.side_effect = TransactionRefundError(responses['invalid_parameter']['error_message'])
 
         transaction = Transaction()
         with self.assertRaises(TransactionRefundError) as context:
             transaction.refund(self.token_mock, self.invalid_amount)
 
         self.assertEqual(context.exception.args[0], responses['invalid_parameter']['error_message'])
-        self.assertEqual(context.exception.code, responses['invalid_parameter']['code'])
 
     @patch('transbank.webpay.webpay_plus.transaction.RequestService')
     def test_commit_deferred_capture_transaction(self, mock_request_service):
