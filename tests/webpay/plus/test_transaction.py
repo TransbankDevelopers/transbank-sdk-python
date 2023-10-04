@@ -167,3 +167,15 @@ class TransactionTestCase(unittest.TestCase):
                                                          IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED)
 
         self.assertEqual(response.json(), responses['increase_date_response'])
+
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_increase_authorization_date_error(self, mock_request_service):
+        mock_request_service.put.side_effect = TransactionIncreaseAuthorizationDateError(
+            responses['transaction_detail_not_found']['error_message'])
+
+        transaction = Transaction()
+        with self.assertRaises(TransactionIncreaseAuthorizationDateError) as context:
+            transaction.increaseAuthorizationDate(self.token_mock, self.buy_order_mock, self.authorization_code_mock,
+                                                  IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED)
+
+        self.assertEqual(context.exception.args[0], responses['transaction_detail_not_found']['error_message'])

@@ -129,4 +129,7 @@ responses = {
     'invalid_parameter_capture': {
         'error_message': 'Invalid value for parameter: capture_amount'
     },
+    'transaction_detail_not_found': {
+        'error_message': 'Invalid value for parameter: Transaction Detail not found'
+    }
 }
