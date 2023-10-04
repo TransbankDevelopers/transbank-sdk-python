@@ -19,6 +19,8 @@ class TransactionTestCase(unittest.TestCase):
         self.invalid_token_mock = '01ab47af75fbebedef5bf009efdc4a925e51c84677770ddc51b26283aac53f1a'
         self.mock_response = Mock()
         self.invalid_amount = -1000
+        self.authorization_code_mock = '123456'
+        self.capture_amount_mock = 22090
 
     @patch('transbank.webpay.webpay_plus.transaction.RequestService')
     def test_create_transaction(self, mock_request_service):
@@ -107,3 +109,35 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertEqual(context.exception.args[0], responses['invalid_parameter']['error_message'])
         self.assertEqual(context.exception.code, responses['invalid_parameter']['code'])
+
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_commit_deferred_capture_transaction(self, mock_request_service):
+        mock_request_service.put.return_value = self.mock_response
+        self.mock_response.json.return_value = responses['commit_deferred']
+
+        transaction = Transaction()
+        response = transaction.commit(self.token_mock)
+
+        self.assertEqual(response.json(), responses['commit_deferred'])
+
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_capture_transaction(self, mock_request_service):
+        mock_request_service.put.return_value = self.mock_response
+        self.mock_response.json.return_value = responses['capture_response']
+
+        transaction = Transaction()
+        response = transaction.capture(self.token_mock, self.buy_order_mock, self.authorization_code_mock,
+                                       self.capture_amount_mock)
+
+        self.assertEqual(response.json(), responses['capture_response'])
+
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_capture_transaction_error(self, mock_request_service):
+        mock_request_service.put.side_effect = TransactionCaptureError(responses['invalid_parameter']['error_message'])
+
+        transaction = Transaction()
+        with self.assertRaises(TransactionCaptureError) as context:
+            transaction.capture(self.token_mock, self.buy_order_mock, self.authorization_code_mock,
+                                self.invalid_amount)
+
+        self.assertEqual(context.exception.args[0], responses['invalid_parameter']['error_message'])

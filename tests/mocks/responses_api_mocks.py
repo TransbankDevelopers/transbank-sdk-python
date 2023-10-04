@@ -131,5 +131,5 @@ responses = {
          'total_amount': 1126,
          'expiration_date': '2023-11-03T13:00:44.751Z',
          'response_code': 0
-    }
+    },
 }
