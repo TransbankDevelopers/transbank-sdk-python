@@ -179,3 +179,15 @@ class TransactionTestCase(unittest.TestCase):
                                                   IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED)
 
         self.assertEqual(context.exception.args[0], responses['transaction_detail_not_found']['error_message'])
+
+    @patch('transbank.webpay.webpay_plus.transaction.RequestService')
+    def test_reverse_preauthorized_amount(self, mock_request_service):
+        mock_request_service.put.return_value = self.mock_response
+        self.mock_response.json.return_value = responses['reverse_preauthorized_amount']
+
+        transaction = Transaction()
+        response = transaction.reversePreAuthorizedAmount(self.token_mock, self.buy_order_mock,
+                                                          self.authorization_code_mock, self.amount_mock,
+                                                          IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED)
+
+        self.assertEqual(response.json(), responses['reverse_preauthorized_amount'])
