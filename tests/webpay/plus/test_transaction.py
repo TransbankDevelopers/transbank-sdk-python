@@ -34,6 +34,18 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertEqual(response, responses['create_response'])
 
+    @patch('transbank.common.request_service.requests.post')
+    def test_create_exception_not_authorized(self, mock_post):
+        self.mock_response.status_code = 401
+        self.mock_response.text = json.dumps(responses['create_error'])
+        mock_post.return_value = self.mock_response
+
+        with self.assertRaises(TransactionCreateError) as context:
+            self.transaction.create(self.buy_order_mock, self.session_id_mock, self.amount_mock, self.return_url_mock)
+
+        self.assertTrue('Not Authorized' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionCreateError)
+
     def test_when_transaction_create_using_invalid_credentials(self):
         with self.assertRaises(TransactionCreateError) as context:
             tx = Transaction().configure_for_integration('597012345678', 'FakeApiKeySecret')
