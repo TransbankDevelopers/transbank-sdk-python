@@ -46,32 +46,6 @@ class TransactionTestCase(unittest.TestCase):
         self.assertTrue('Not Authorized' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionCreateError)
 
-    def test_when_transaction_create_using_invalid_credentials(self):
-        with self.assertRaises(TransactionCreateError) as context:
-            tx = Transaction().configure_for_integration('597012345678', 'FakeApiKeySecret')
-
-            response = tx.create(
-                buy_order=self.buy_order_mock,
-                session_id=self.session_id_mock,
-                amount=self.amount_mock,
-                return_url=self.return_url_mock,
-            )
-
-        self.assertTrue('Not Authorized' in context.exception.message)
-
-    def test_when_transaction_create_using_invalid_credentials(self):
-
-        response = Transaction().create(
-            buy_order=self.buy_order_mock,
-            session_id=self.session_id_mock,
-            amount=self.amount_mock,
-            return_url=self.return_url_mock,
-        )
-
-        self.assertIsNotNone(response['url'])
-        self.assertIsNotNone(response['token'])
-
-
     def test_when_transaction_status(self):
         response = Transaction().create(
             buy_order=self.buy_order_mock,
