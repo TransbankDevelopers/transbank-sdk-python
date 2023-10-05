@@ -53,6 +53,13 @@ class TransactionTestCase(unittest.TestCase):
         self.assertTrue('too long, the maximum length' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
 
+    def test_create_exception_session_id_max_length(self):
+        with self.assertRaises(TransbankError) as context:
+            self.transaction.create(self.buy_order_mock, self.token_mock, self.amount_mock, self.return_url_mock)
+
+        self.assertTrue("'session_id' is too long, the maximum length" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
+
     def test_when_transaction_status(self):
         response = Transaction().create(
             buy_order=self.buy_order_mock,
