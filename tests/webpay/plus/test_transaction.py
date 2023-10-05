@@ -1,17 +1,25 @@
 import unittest
+from unittest.mock import Mock
 import random
 from transbank.webpay.webpay_plus.transaction import *
 from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
 from transbank.common.integration_api_keys import IntegrationApiKeys
 
+
 class TransactionTestCase(unittest.TestCase):
 
-    buy_order_mock = str(random.randrange(1000000, 99999999))
-    session_id_mock = str(random.randrange(1000000, 99999999))
-    amount_mock = random.randrange(1000000, 99999999)
-    return_url_mock = "https://url_return.com"
-    token_mock = 'e882245dcdc2f8f3633dab59dd11b2ce43ef2cffc011346d6720cc4d7e397bb4'
+    def setUp(self) -> None:
+        self.buy_order_mock = 'buy_order_mock_123456789'
+        self.session_id_mock = 'session_ide_mock_123456789'
+        self.amount_mock = 150000
+        self.return_url_mock = "https://url_return.com"
+        self.token_mock = '01abf2be20aad1da804aeae1ed3062fb8fba108ee0e07f4d37181f51c3f6714d'
+        self.invalid_amount = -1000
+        self.authorization_code_mock = '123456'
+        self.capture_amount_mock = 150000
+        self.mock_response = Mock()
+        self.transaction = Transaction()
 
     def test_when_transaction_create(self):
         response = Transaction().create(
