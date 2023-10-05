@@ -46,6 +46,13 @@ class TransactionTestCase(unittest.TestCase):
         self.assertTrue('Not Authorized' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionCreateError)
 
+    def test_create_exception_buy_order_max_length(self):
+        with self.assertRaises(TransbankError) as context:
+            self.transaction.create(self.token_mock, self.session_id_mock, self.amount_mock, self.return_url_mock)
+
+        self.assertTrue('too long, the maximum length' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
+
     def test_when_transaction_status(self):
         response = Transaction().create(
             buy_order=self.buy_order_mock,
