@@ -268,3 +268,18 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertTrue('Transaction not found' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionIncreaseAuthorizationDateError)
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_reverse_preauthorized_amount_transaction_successful(self, mock_put):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['reverse_preauthorized_amount'])
+        mock_put.return_value = self.mock_response
+
+        response = self.transaction.reversePreAuthorizedAmount(self.token_mock, self.buy_order_mock,
+                                                               self.authorization_code_mock, self.amount_mock,
+                                                               IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED)
+
+        self.assertTrue(response['total_amount'])
+        self.assertTrue(response['response_code'] == 0)
+
+
