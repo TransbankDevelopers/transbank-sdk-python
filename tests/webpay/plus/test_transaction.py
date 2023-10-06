@@ -295,3 +295,15 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertTrue('Transaction not found' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionReversePreAuthorizedAmountError)
+
+    @patch('transbank.common.request_service.requests.get')
+    def test_deferred_capture_history_successful(self, mock_get):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['capture_history_response'])
+        mock_get.return_value = self.mock_response
+
+        response = self.transaction.deferredCaptureHistory(self.token_mock)
+
+        self.assertTrue(response[0]['type'])
+        self.assertTrue(response[0]['total_amount'])
+
