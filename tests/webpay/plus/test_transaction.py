@@ -153,3 +153,15 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertTrue(response['type'] == 'NULLIFIED')
         self.assertTrue(response['response_code'] == 0)
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_refund_exception(self, mock_post):
+        self.mock_response.status_code = 422
+        self.mock_response.text = json.dumps(responses['invalid_parameter'])
+        mock_post.return_value = self.mock_response
+
+        with self.assertRaises(TransactionRefundError) as context:
+            self.transaction.refund(self.token_mock, self.invalid_amount)
+
+        self.assertTrue('Invalid value for parameter' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionRefundError)
