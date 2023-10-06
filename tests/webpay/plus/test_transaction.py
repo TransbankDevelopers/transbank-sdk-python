@@ -232,3 +232,12 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertTrue('Invalid value for parameter' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionIncreaseAmountError)
+
+    def test_increase_amount_exception_commerce_code_max_length(self):
+        invalid_commerce_code = IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED + '1'
+        with self.assertRaises(TransbankError) as context:
+            self.transaction.increaseAmount(self.token_mock, self.buy_order_mock, self.authorization_code_mock,
+                                            self.invalid_amount, invalid_commerce_code)
+
+        self.assertTrue("'commerce_code' is too long, the maximum length" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
