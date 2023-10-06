@@ -102,6 +102,17 @@ class TransactionTestCase(unittest.TestCase):
         self.assertTrue("'token' is too long, the maximum length" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
 
+    @patch('transbank.common.request_service.requests.get')
+    def test_status_transaction_successful(self, mock_get):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['commit_status_response'])
+        mock_get.return_value = self.mock_response
+
+        response = self.transaction.status(self.token_mock)
+
+        self.assertEqual(response, responses['commit_status_response'])
+        self.assertTrue(response['response_code'] == 0)
+
     def test_when_transaction_status(self):
         response = Transaction().create(
             buy_order=self.buy_order_mock,
