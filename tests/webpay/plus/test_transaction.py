@@ -142,3 +142,14 @@ class TransactionTestCase(unittest.TestCase):
         response = self.transaction.refund(self.token_mock, self.amount_mock)
 
         self.assertTrue(response['type'] == 'REVERSED')
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_refund_transaction_nullified_successful(self, mock_post):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['nullified_response'])
+        mock_post.return_value = self.mock_response
+
+        response = self.transaction.refund(self.token_mock, self.amount_mock)
+
+        self.assertTrue(response['type'] == 'NULLIFIED')
+        self.assertTrue(response['response_code'] == 0)
