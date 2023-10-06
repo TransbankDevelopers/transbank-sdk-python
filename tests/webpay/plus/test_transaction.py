@@ -241,3 +241,17 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertTrue("'commerce_code' is too long, the maximum length" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_increase_authorization_date_transaction_successful(self, mock_put):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['increase_date_response'])
+        mock_put.return_value = self.mock_response
+
+        response = self.transaction.increaseAuthorizationDate(self.token_mock, self.buy_order_mock,
+                                                              self.authorization_code_mock,
+                                                              IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED)
+
+        self.assertTrue(response['expiration_date'])
+        self.assertTrue(response['response_code'] == 0)
+

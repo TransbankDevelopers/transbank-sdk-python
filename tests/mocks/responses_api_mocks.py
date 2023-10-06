@@ -131,5 +131,8 @@ responses = {
     },
     'transaction_detail_not_found': {
         'error_message': 'Invalid value for parameter: Transaction Detail not found'
+    },
+    'transaction_not_found': {
+        'error_message': 'Transaction not found'
     }
 }
