@@ -219,3 +219,16 @@ class TransactionTestCase(unittest.TestCase):
                                                    IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED)
 
         self.assertEqual(response, responses['increase_amount_response'])
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_increase_amount_exception(self, mock_put):
+        self.mock_response.status_code = 422
+        self.mock_response.text = json.dumps(responses['invalid_parameter'])
+        mock_put.return_value = self.mock_response
+
+        with self.assertRaises(TransactionIncreaseAmountError) as context:
+            self.transaction.increaseAmount(self.token_mock, self.buy_order_mock, self.authorization_code_mock,
+                                            self.invalid_amount, IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED)
+
+        self.assertTrue('Invalid value for parameter' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionIncreaseAmountError)
