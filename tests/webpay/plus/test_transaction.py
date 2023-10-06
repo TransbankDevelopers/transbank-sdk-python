@@ -198,3 +198,12 @@ class TransactionTestCase(unittest.TestCase):
 
         self.assertTrue('Invalid value for parameter' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionCaptureError)
+
+    def test_capture_exception_authorization_code_max_length(self):
+        invalid_authorization_code = self.authorization_code_mock + 'a'
+        with self.assertRaises(TransbankError) as context:
+            self.transaction.capture(self.token_mock, self.buy_order_mock, invalid_authorization_code,
+                                     self.capture_amount_mock)
+
+        self.assertTrue("'authorization_code' is too long, the maximum length" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
