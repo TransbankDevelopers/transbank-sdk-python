@@ -121,6 +121,18 @@ class TransactionTestCase(unittest.TestCase):
         self.assertTrue("'token' is too long, the maximum length" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
 
+    @patch('transbank.common.request_service.requests.get')
+    def test_status_exception_expired_token(self, mock_get):
+        self.mock_response.status_code = 422
+        self.mock_response.text = json.dumps(responses['expired_token'])
+        mock_get.return_value = self.mock_response
+
+        with self.assertRaises(TransactionStatusError) as context:
+            self.transaction.status(self.token_mock)
+
+        self.assertTrue('has passed max time (7 days)' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionStatusError)
+
     def test_when_transaction_status(self):
         response = Transaction().create(
             buy_order=self.buy_order_mock,
