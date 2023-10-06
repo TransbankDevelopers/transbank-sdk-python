@@ -12,7 +12,7 @@ class TransactionRefundRequestSchema(Schema):
     amount = fields.Str()
 
 class TransactionCaptureRequestSchema(Schema):
-    buy_order = fields.Int()
+    buy_order = fields.Str()
     capture_amount = fields.Str()
     authorization_code = fields.Str()
 
