@@ -1,9 +1,12 @@
 import unittest
 import random
+import json
 from unittest.mock import Mock
+from unittest.mock import patch
 from transbank.webpay.webpay_plus.mall_transaction import *
 from transbank.webpay.webpay_plus.request import *
 from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
+from tests.mocks.responses_api_mocks import responses
 
 
 class TransactionMallTestCase(unittest.TestCase):
@@ -41,6 +44,17 @@ class TransactionMallTestCase(unittest.TestCase):
         details = MallTransactionCreateDetails(self.amount1_mock, self.child1_commerce_code, self.child1_buy_order) \
             .add(self.amount2_mock, self.child2_commerce_code, self.child2_buy_order)
         return details
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_create_mall_transaction_successful(self, mock_post):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['create_response'])
+        mock_post.return_value = self.mock_response
+
+        response = self.transaction.create(self.mall_buy_order_mock, self.session_id_mock, self.return_url_mock,
+                                           self.get_mall_transaction_details())
+
+        self.assertEqual(response, responses['create_response'])
 
     def test_when_transaction_create(self):
         response = MallTransaction().create(
