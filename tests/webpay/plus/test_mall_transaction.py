@@ -37,6 +37,10 @@ class TransactionMallTestCase(unittest.TestCase):
         self.assertEqual(details.details[1].commerce_code, self.child2_commerce_code)
         self.assertEqual(details.details[1].buy_order, self.child2_buy_order)
 
+    def get_mall_transaction_details(self):
+        details = MallTransactionCreateDetails(self.amount1_mock, self.child1_commerce_code, self.child1_buy_order) \
+            .add(self.amount2_mock, self.child2_commerce_code, self.child2_buy_order)
+        return details
 
     def test_when_transaction_create(self):
         response = MallTransaction().create(
