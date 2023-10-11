@@ -24,18 +24,19 @@ class TransactionMallTestCase(unittest.TestCase):
         self.invalid_amount = -1000
         self.authorization_code_mock = '123456'
 
-    def get_mall_transaction_details(self):
-        commerce_code_child_1 = IntegrationCommerceCodes.WEBPAY_PLUS_MALL_CHILD1
-        buy_order_child_1 = self.get_random_str()
-        amount_child_1 = self.get_random_str()
+    def test_create_details(self):
+        mall_details = MallDetails(self.amount1_mock, self.child1_commerce_code, self.child1_buy_order)
 
-        commerce_code_child_2 = IntegrationCommerceCodes.WEBPAY_PLUS_MALL_CHILD2
-        buy_order_child_2 = self.get_random_str()
-        amount_child_2 = self.get_random_str()
+        details = MallTransactionCreateDetails(mall_details.amount, mall_details.commerce_code, mall_details.buy_order).\
+            add(self.amount2_mock, self.child2_commerce_code, self.child2_buy_order)
 
-        details = MallTransactionCreateDetails(amount_child_1, commerce_code_child_1, buy_order_child_1) \
-            .add(amount_child_2, commerce_code_child_2, buy_order_child_2)
-        return details
+        self.assertEqual(details.details[0].amount, self.amount1_mock)
+        self.assertEqual(details.details[0].commerce_code, self.child1_commerce_code)
+        self.assertEqual(details.details[0].buy_order, self.child1_buy_order)
+        self.assertEqual(details.details[1].amount, self.amount2_mock)
+        self.assertEqual(details.details[1].commerce_code, self.child2_commerce_code)
+        self.assertEqual(details.details[1].buy_order, self.child2_buy_order)
+
 
     def test_when_transaction_create(self):
         response = MallTransaction().create(
