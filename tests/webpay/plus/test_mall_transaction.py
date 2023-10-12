@@ -70,4 +70,10 @@ class TransactionMallTestCase(unittest.TestCase):
         self.assertTrue('Not Authorized' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionCreateError)
 
+    def test_create_mall_exception_buy_order_max_length(self):
+        with self.assertRaises(TransbankError) as context:
+            self.transaction.create(self.mall_buy_order_mock+'too_long', self.session_id_mock, self.return_url_mock,
+                                    self.get_mall_transaction_details())
 
+        self.assertTrue("'buy_order' is too long, the maximum length" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
