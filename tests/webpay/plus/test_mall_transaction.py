@@ -1,6 +1,7 @@
 import unittest
-import random
 import json
+import secrets
+import string
 from unittest.mock import Mock
 from unittest.mock import patch
 from transbank.webpay.webpay_plus.mall_transaction import *
@@ -84,5 +85,15 @@ class TransactionMallTestCase(unittest.TestCase):
                                     self.get_mall_transaction_details())
 
         self.assertTrue("'session_id' is too long, the maximum length" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
+
+    def test_create_mall_exception_return_url_max_length(self):
+        valid_string = string.ascii_letters + string.digits + "-._~"
+        too_long_url = ''.join(secrets.choice(valid_string) for _ in range(ApiConstants.RETURN_URL_LENGTH + 1))
+        with self.assertRaises(TransbankError) as context:
+            self.transaction.create(self.mall_buy_order_mock, self.session_id_mock, too_long_url,
+                                    self.get_mall_transaction_details())
+
+        self.assertTrue("'return_url' is too long, the maximum length" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
 
