@@ -7,6 +7,7 @@ from transbank.webpay.webpay_plus.mall_transaction import *
 from transbank.webpay.webpay_plus.request import *
 from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
 from tests.mocks.responses_api_mocks import responses
+from transbank.error.transaction_create_error import TransactionCreateError
 
 
 class TransactionMallTestCase(unittest.TestCase):
@@ -55,6 +56,19 @@ class TransactionMallTestCase(unittest.TestCase):
                                            self.get_mall_transaction_details())
 
         self.assertEqual(response, responses['create_response'])
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_create_mall_exception_not_authorized(self, mock_post):
+        self.mock_response.status_code = 401
+        self.mock_response.text = json.dumps(responses['create_error'])
+        mock_post.return_value = self.mock_response
+
+        with self.assertRaises(TransactionCreateError) as context:
+            self.transaction.create(self.mall_buy_order_mock, self.session_id_mock, self.return_url_mock,
+                                    self.get_mall_transaction_details())
+
+        self.assertTrue('Not Authorized' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionCreateError)
 
     def test_when_transaction_create(self):
         response = MallTransaction().create(
