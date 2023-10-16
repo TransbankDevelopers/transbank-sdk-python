@@ -115,3 +115,16 @@ class TransactionMallTestCase(unittest.TestCase):
         self.assertTrue("'details.commerce_code' is too long, the maximum length" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
 
+    @patch('transbank.common.request_service.requests.put')
+    def test_commit_mall_transaction_successful(self, mock_put):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['commit_mall'])
+        mock_put.return_value = self.mock_response
+
+        response = self.transaction.commit(self.token_mock)
+
+        self.assertIn('details', response)
+        self.assertGreaterEqual(len(response['details']), 2)
+
+        for detail in response['details']:
+            self.assertEqual(detail['response_code'], 0)
