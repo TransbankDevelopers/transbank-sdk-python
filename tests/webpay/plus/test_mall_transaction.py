@@ -128,3 +128,15 @@ class TransactionMallTestCase(unittest.TestCase):
 
         for detail in response['details']:
             self.assertEqual(detail['response_code'], 0)
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_commit_mall_exception_when_authorized(self, mock_put):
+        self.mock_response.status_code = 422
+        self.mock_response.text = json.dumps(responses['commit_error'])
+        mock_put.return_value = self.mock_response
+
+        with self.assertRaises(TransactionCommitError) as context:
+            self.transaction.commit(self.token_mock)
+
+        self.assertTrue('transaction while authorizing' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionCommitError)
