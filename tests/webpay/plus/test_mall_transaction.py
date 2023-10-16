@@ -106,3 +106,12 @@ class TransactionMallTestCase(unittest.TestCase):
         self.assertTrue("'details.buy_order' is too long, the maximum length" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
 
+    def test_create_mall_exception_commerce_code_max_length(self):
+        with self.assertRaises(TransbankError) as context:
+            self.transaction.create(self.mall_buy_order_mock, self.session_id_mock, self.return_url_mock,
+                                    MallTransactionCreateDetails(self.amount1_mock, self.child1_commerce_code+'123',
+                                                                 self.child1_buy_order))
+
+        self.assertTrue("'details.commerce_code' is too long, the maximum length" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
+
