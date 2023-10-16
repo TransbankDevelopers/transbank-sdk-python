@@ -140,3 +140,11 @@ class TransactionMallTestCase(unittest.TestCase):
 
         self.assertTrue('transaction while authorizing' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionCommitError)
+
+    def test_commit_exception_token_max_length(self):
+        invalid_token = self.token_mock + 'a'
+        with self.assertRaises(TransbankError) as context:
+            self.transaction.commit(invalid_token)
+
+        self.assertTrue("'token' is too long, the maximum length" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
