@@ -162,4 +162,7 @@ responses = {
             'accounting_date': '1011',
             'transaction_date': '2023-10-15T21:10:29.395Z'
         },
+    'bigger_amount_mall': {
+        'error_message': 'Amount to refund is bigger than authorized'
+    }
 }

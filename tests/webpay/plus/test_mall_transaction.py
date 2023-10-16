@@ -178,3 +178,14 @@ class TransactionMallTestCase(unittest.TestCase):
 
         self.assertTrue('has passed max time (7 days)' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionStatusError)
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_refund_transaction_successful(self, mock_post):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['nullified_response'])
+        mock_post.return_value = self.mock_response
+
+        response = self.transaction.refund(self.token_mock, self.child1_buy_order, self.child1_commerce_code,
+                                           self.amount1_mock)
+
+        self.assertTrue(response['type'] == 'NULLIFIED')
