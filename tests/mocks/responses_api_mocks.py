@@ -134,5 +134,32 @@ responses = {
     },
     'transaction_not_found': {
         'error_message': 'Transaction not found'
-    }
+    },
+    'commit_mall': {
+            'vci': 'TSY',
+            'details': [{
+                'amount': 1000,
+                'status': 'AUTHORIZED',
+                'authorization_code': '1213',
+                'payment_type_code': 'VN',
+                'response_code': 0,
+                'installments_number': 0,
+                'commerce_code': '597055555536',
+                'buy_order': 'child_buy_order1_mock_123'
+            }, {
+                'amount': 2000,
+                'status': 'AUTHORIZED',
+                'authorization_code': '1213',
+                'payment_type_code': 'VN',
+                'response_code': 0,
+                'installments_number': 0,
+                'commerce_code': '597055555537',
+                'buy_order': 'child_buy_order2_mock_123'
+            }],
+            'buy_order': 'mall_buy_order_mock_123',
+            'session_id': 'session_id_mock_123456789',
+            'card_detail': {'card_number': '6623'},
+            'accounting_date': '1011',
+            'transaction_date': '2023-10-15T21:10:29.395Z'
+        },
 }
