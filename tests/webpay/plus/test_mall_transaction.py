@@ -28,6 +28,7 @@ class TransactionMallTestCase(unittest.TestCase):
         self.transaction = MallTransaction()
         self.invalid_amount = -1000
         self.authorization_code_mock = '123456'
+        self.deferred_capture = MallTransaction().configure_for_testing_deferred()
 
     def test_create_details(self):
         mall_details = MallDetails(self.amount1_mock, self.child1_commerce_code, self.child1_buy_order)
@@ -226,3 +227,14 @@ class TransactionMallTestCase(unittest.TestCase):
 
         self.assertTrue("'child_buy_order' is too long, the maximum length" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
+
+    @patch('transbank.common.request_service.requests.get')
+    def test_status_mall_deferred_transaction_successful(self, mock_get):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['status_mall_deferred'])
+        mock_get.return_value = self.mock_response
+
+        response = self.deferred_capture.status(self.token_mock)
+
+        for detail in response['details']:
+            self.assertIsNotNone(detail['capture_expiration_date'])

@@ -164,5 +164,34 @@ responses = {
         },
     'bigger_amount_mall': {
         'error_message': 'Amount to refund is bigger than authorized'
+    },
+    'status_mall_deferred': {
+        'vci': 'TSY',
+        'details': [{
+            'amount': 1000,
+            'status': 'AUTHORIZED',
+            'authorization_code': '123456',
+            'payment_type_code': 'VN',
+            'response_code': 0,
+            'installments_number': 0,
+            'commerce_code': '597055555582',
+            'buy_order': 'abcdef55',
+            'capture_expiration_date': '2023-11-15T23:20:55.499Z'
+        }, {
+            'amount': 2000,
+            'status': 'AUTHORIZED',
+            'authorization_code': '123456',
+            'payment_type_code': 'VN',
+            'response_code': 0,
+            'installments_number': 0,
+            'commerce_code': '597055555583',
+            'buy_order': 'wxyz55',
+            'capture_expiration_date': '2023-11-15T23:20:55.672Z'
+        }],
+        'buy_order': 'buyorder55',
+        'session_id': 'session55',
+        'card_detail': {'card_number': '6623'},
+        'accounting_date': '1016',
+        'transaction_date': '2023-10-16T23:20:11.653Z'
     }
 }
