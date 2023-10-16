@@ -189,3 +189,16 @@ class TransactionMallTestCase(unittest.TestCase):
                                            self.amount1_mock)
 
         self.assertTrue(response['type'] == 'NULLIFIED')
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_refund_mall_exception(self, mock_post):
+        self.mock_response.status_code = 422
+        self.mock_response.text = json.dumps(responses['bigger_amount_mall'])
+        mock_post.return_value = self.mock_response
+
+        with self.assertRaises(TransactionRefundError) as context:
+            self.transaction.refund(self.token_mock, self.child1_buy_order, self.child1_commerce_code,
+                                    1000000)
+
+        self.assertTrue('Amount to refund is bigger than' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionRefundError)
