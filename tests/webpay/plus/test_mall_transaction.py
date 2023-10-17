@@ -250,3 +250,16 @@ class TransactionMallTestCase(unittest.TestCase):
 
         self.assertTrue(response['captured_amount'])
         self.assertTrue(response['response_code'] == 0)
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_capture_mall_exception(self, mock_put):
+        self.mock_response.status_code = 422
+        self.mock_response.text = json.dumps(responses['invalid_parameter'])
+        mock_put.return_value = self.mock_response
+
+        with self.assertRaises(TransactionCaptureError) as context:
+            self.deferred_capture.capture(self.child1_commerce_code, self.token_mock, self.child1_buy_order,
+                                          self.authorization_code_mock, self.invalid_amount)
+
+        self.assertTrue('Invalid value for parameter' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionCaptureError)
