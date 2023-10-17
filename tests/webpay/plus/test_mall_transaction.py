@@ -238,3 +238,15 @@ class TransactionMallTestCase(unittest.TestCase):
 
         for detail in response['details']:
             self.assertIsNotNone(detail['capture_expiration_date'])
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_capture_mall_transaction_successful(self, mock_put):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['capture_response'])
+        mock_put.return_value = self.mock_response
+
+        response = self.deferred_capture.capture(self.child1_commerce_code, self.token_mock, self.child1_buy_order,
+                                                 self.authorization_code_mock, self.amount1_mock)
+
+        self.assertTrue(response['captured_amount'])
+        self.assertTrue(response['response_code'] == 0)
