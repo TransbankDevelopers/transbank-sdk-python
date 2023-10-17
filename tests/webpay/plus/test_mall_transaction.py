@@ -81,8 +81,11 @@ class TransactionMallTestCase(unittest.TestCase):
         self.assertEqual(context.exception.__class__, TransbankError)
 
     def test_create_mall_exception_session_id_max_length(self):
+        valid_string = string.ascii_letters + string.digits + "-._~"
+        too_long_session_id = ''.join(secrets.choice(valid_string) for _ in range(ApiConstants.SESSION_ID_LENGTH + 1))
+
         with self.assertRaises(TransbankError) as context:
-            self.transaction.create(self.mall_buy_order_mock, self.token_mock, self.return_url_mock,
+            self.transaction.create(self.mall_buy_order_mock, too_long_session_id, self.return_url_mock,
                                     self.get_mall_transaction_details())
 
         self.assertTrue("'session_id' is too long, the maximum length" in context.exception.message)
