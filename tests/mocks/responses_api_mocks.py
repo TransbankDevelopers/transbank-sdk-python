@@ -134,5 +134,64 @@ responses = {
     },
     'transaction_not_found': {
         'error_message': 'Transaction not found'
+    },
+    'commit_mall': {
+            'vci': 'TSY',
+            'details': [{
+                'amount': 1000,
+                'status': 'AUTHORIZED',
+                'authorization_code': '1213',
+                'payment_type_code': 'VN',
+                'response_code': 0,
+                'installments_number': 0,
+                'commerce_code': '597055555536',
+                'buy_order': 'child_buy_order1_mock_123'
+            }, {
+                'amount': 2000,
+                'status': 'AUTHORIZED',
+                'authorization_code': '1213',
+                'payment_type_code': 'VN',
+                'response_code': 0,
+                'installments_number': 0,
+                'commerce_code': '597055555537',
+                'buy_order': 'child_buy_order2_mock_123'
+            }],
+            'buy_order': 'mall_buy_order_mock_123',
+            'session_id': 'session_id_mock_123456789',
+            'card_detail': {'card_number': '6623'},
+            'accounting_date': '1011',
+            'transaction_date': '2023-10-15T21:10:29.395Z'
+        },
+    'bigger_amount_mall': {
+        'error_message': 'Amount to refund is bigger than authorized'
+    },
+    'status_mall_deferred': {
+        'vci': 'TSY',
+        'details': [{
+            'amount': 1000,
+            'status': 'AUTHORIZED',
+            'authorization_code': '123456',
+            'payment_type_code': 'VN',
+            'response_code': 0,
+            'installments_number': 0,
+            'commerce_code': '597055555582',
+            'buy_order': 'abcdef55',
+            'capture_expiration_date': '2023-11-15T23:20:55.499Z'
+        }, {
+            'amount': 2000,
+            'status': 'AUTHORIZED',
+            'authorization_code': '123456',
+            'payment_type_code': 'VN',
+            'response_code': 0,
+            'installments_number': 0,
+            'commerce_code': '597055555583',
+            'buy_order': 'wxyz55',
+            'capture_expiration_date': '2023-11-15T23:20:55.672Z'
+        }],
+        'buy_order': 'buyorder55',
+        'session_id': 'session55',
+        'card_detail': {'card_number': '6623'},
+        'accounting_date': '1016',
+        'transaction_date': '2023-10-16T23:20:11.653Z'
     }
 }
