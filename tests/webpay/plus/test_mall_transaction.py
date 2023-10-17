@@ -289,3 +289,15 @@ class TransactionMallTestCase(unittest.TestCase):
         self.assertTrue('Invalid value for parameter' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionIncreaseAmountError)
 
+    @patch('transbank.common.request_service.requests.put')
+    def test_increase_authorization_date_mall_transaction(self, mock_put):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['increase_date_response'])
+        mock_put.return_value = self.mock_response
+
+        response = self.deferred_capture.increaseAuthorizationDate(self.token_mock, self.child1_buy_order,
+                                                                   self.authorization_code_mock,
+                                                                   self.child1_commerce_code)
+
+        self.assertTrue(response['expiration_date'])
+        self.assertTrue(response['response_code'] == 0)
