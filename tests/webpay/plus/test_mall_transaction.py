@@ -353,3 +353,17 @@ class TransactionMallTestCase(unittest.TestCase):
 
         self.assertTrue(response[0]['type'])
         self.assertTrue(response[0]['total_amount'])
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_mall_deferred_capture_history_exception(self, mock_post):
+        self.mock_response.status_code = 400
+        self.mock_response.text = json.dumps(responses['transaction_detail_not_found'])
+        mock_post.return_value = self.mock_response
+
+        with self.assertRaises(TransactionDeferredCaptureHistoryError) as context:
+            self.deferred_capture.deferredCaptureHistory(self.token_mock, self.child1_buy_order,
+                                                         self.child1_commerce_code)
+
+        self.assertTrue('Transaction Detail not found' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionDeferredCaptureHistoryError)
+
