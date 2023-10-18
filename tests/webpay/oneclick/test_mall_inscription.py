@@ -1,5 +1,7 @@
 import unittest
 import json
+import string
+import secrets
 from unittest.mock import Mock
 from transbank.webpay.oneclick.mall_inscription import *
 from transbank.webpay.oneclick.request import *
@@ -27,3 +29,8 @@ class MallInscriptionTestCase(unittest.TestCase):
         response = self.inscription.start(self.username_mock, self.email_mock, self.return_url_mock)
 
         self.assertEqual(response, responses['inscription_start_response'])
+
+    def get_invalid_length_param(self) -> str:
+        valid_string = string.ascii_letters + string.digits + "-._~"
+        invalid_length_param = ''.join(secrets.choice(valid_string) for _ in range(ApiConstants.RETURN_URL_LENGTH + 1))
+        return invalid_length_param
