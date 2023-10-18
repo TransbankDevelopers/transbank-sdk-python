@@ -34,3 +34,15 @@ class MallInscriptionTestCase(unittest.TestCase):
         valid_string = string.ascii_letters + string.digits + "-._~"
         invalid_length_param = ''.join(secrets.choice(valid_string) for _ in range(ApiConstants.RETURN_URL_LENGTH + 1))
         return invalid_length_param
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_inscription_start_exception_not_authorized(self, mock_post):
+        self.mock_response.status_code = 401
+        self.mock_response.text = json.dumps(responses['create_error'])
+        mock_post.return_value = self.mock_response
+
+        with self.assertRaises(InscriptionStartError) as context:
+            self.inscription.start(self.username_mock, self.email_mock, self.return_url_mock)
+
+        self.assertTrue('Not Authorized' in context.exception.message)
+        self.assertEqual(context.exception.__class__, InscriptionStartError)
