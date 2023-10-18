@@ -198,4 +198,11 @@ responses = {
         'token': '01ab844d8fa41f98b4ccfeef3d254235eadc9a5a39cb86498d807e10e5b00f9b',
         'url_webpay': 'https://webpay3gint.transbank.cl/webpayserver/bp_multicode_inscription.cgi'
     },
+    'inscription_finish_response': {
+        'response_code': 0,
+        'tbk_user': '08ed03b1-8fa6-4d7b-b35c-b134e1c5e9ee',
+        'authorization_code': '1213',
+        'card_type': 'Visa',
+        'card_number': 'XXXXXXXXXXXX6623'
+    },
 }
