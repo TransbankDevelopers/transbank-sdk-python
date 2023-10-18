@@ -64,3 +64,13 @@ class MallInscriptionTestCase(unittest.TestCase):
 
         self.assertTrue("'email' is too long, the maximum length" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
+
+    def test_inscription_start_exception_response_url_max_length(self):
+        invalid_url = self.get_invalid_length_param()
+
+        with self.assertRaises(TransbankError) as context:
+            self.inscription.start(self.username_mock, self.email_mock, invalid_url)
+
+        print(context.exception.message)
+        self.assertTrue("'response_url' is too long, the maximum length" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
