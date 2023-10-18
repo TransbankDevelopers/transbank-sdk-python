@@ -74,3 +74,13 @@ class MallInscriptionTestCase(unittest.TestCase):
         print(context.exception.message)
         self.assertTrue("'response_url' is too long, the maximum length" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_inscription_finish_transaction_successful(self, mock_put):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['inscription_finish_response'])
+        mock_put.return_value = self.mock_response
+
+        response = self.inscription.finish(self.tbk_token_mock)
+
+        self.assertEqual(response, responses['inscription_finish_response'])
