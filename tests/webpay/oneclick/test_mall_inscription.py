@@ -46,3 +46,12 @@ class MallInscriptionTestCase(unittest.TestCase):
 
         self.assertTrue('Not Authorized' in context.exception.message)
         self.assertEqual(context.exception.__class__, InscriptionStartError)
+
+    def test_inscription_start_exception_username_max_length(self):
+        invalid_username = self.get_invalid_length_param()
+
+        with self.assertRaises(TransbankError) as context:
+            self.inscription.start(invalid_username, self.email_mock, self.return_url_mock)
+
+        self.assertTrue("'username' is too long, the maximum length" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
