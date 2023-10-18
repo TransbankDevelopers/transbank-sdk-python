@@ -4,6 +4,7 @@ from unittest.mock import Mock
 from transbank.webpay.oneclick.mall_inscription import *
 from transbank.webpay.oneclick.request import *
 from tests.mocks.responses_api_mocks import responses
+from unittest.mock import patch
 
 
 class MallInscriptionTestCase(unittest.TestCase):

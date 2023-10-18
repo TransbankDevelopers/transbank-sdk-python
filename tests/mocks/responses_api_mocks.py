@@ -193,5 +193,9 @@ responses = {
         'card_detail': {'card_number': '6623'},
         'accounting_date': '1016',
         'transaction_date': '2023-10-16T23:20:11.653Z'
-    }
+    },
+    'inscription_start_response': {
+        'token': '01ab844d8fa41f98b4ccfeef3d254235eadc9a5a39cb86498d807e10e5b00f9b',
+        'url_webpay': 'https://webpay3gint.transbank.cl/webpayserver/bp_multicode_inscription.cgi'
+    },
 }
