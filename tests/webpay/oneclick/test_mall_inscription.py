@@ -94,3 +94,14 @@ class MallInscriptionTestCase(unittest.TestCase):
         response = self.inscription.finish(self.tbk_token_mock)
 
         self.assertEqual(response, responses['inscription_finish_fail'])
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_inscription_finish_exception(self, mock_put):
+        self.mock_response.status_code = 500
+        self.mock_response.text = json.dumps(responses['general_error'])
+        mock_put.return_value = self.mock_response
+
+        with self.assertRaises(InscriptionFinishError) as context:
+            self.inscription.finish(self.tbk_token_mock)
+
+        self.assertEqual(context.exception.__class__, InscriptionFinishError)
