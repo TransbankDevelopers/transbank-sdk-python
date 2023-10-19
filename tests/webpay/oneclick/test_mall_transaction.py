@@ -57,3 +57,15 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertEqual(response, responses['authorize_response'])
 
+    @patch('transbank.common.request_service.requests.post')
+    def test_create_mall_exception_not_authorized(self, mock_post):
+        self.mock_response.status_code = 500
+        self.mock_response.text = json.dumps(responses['general_error'])
+        mock_post.return_value = self.mock_response
+
+        with self.assertRaises(TransactionAuthorizeError) as context:
+            self.transaction.authorize(self.username_mock, self.tbk_user_mock, self.parent_buy_order_mock,
+                                       self.get_mall_transaction_details())
+
+        self.assertTrue('Internal server error' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionAuthorizeError)
