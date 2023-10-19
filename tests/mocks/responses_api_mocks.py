@@ -207,5 +207,25 @@ responses = {
     },
     'inscription_finish_fail': {
         'response_code': -1
-    }
+    },
+    'authorize_response': {
+         'details': [
+          {
+           'amount': 1693,
+           'status': 'AUTHORIZED',
+           'authorization_code': '1213',
+           'payment_type_code': 'VN',
+           'response_code': 0,
+           'installments_number': 0,
+           'commerce_code': '597055555542',
+           'buy_order': 'child_buy_order_1'
+          }
+         ],
+         'buy_order': 'parent_buy_order',
+         'card_detail': {
+          'card_number': '6623'
+         },
+         'accounting_date': '1019',
+         'transaction_date': '2023-10-19T21:30:21.095Z'
+    },
 }

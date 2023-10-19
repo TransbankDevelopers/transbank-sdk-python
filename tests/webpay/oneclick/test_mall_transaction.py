@@ -23,7 +23,7 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
         self.child2_buy_order_mock = 'child_buy_order_2'
         self.return_url_mock = 'https://url_return.com'
         self.mock_response = Mock()
-        self.inscription = MallTransaction()
+        self.transaction = MallTransaction()
 
     def test_authorize_details(self):
         mall_details = MallTransactionAuthorizeDetails(self.child1_commerce_code, self.child1_buy_order_mock,
@@ -45,3 +45,15 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
         details = MallTransactionAuthorizeDetails(
             self.child1_commerce_code, self.child1_buy_order_mock, self.installments_number_mock, self.amount1_mock)
         return details
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_authorize_transaction_successful(self, mock_post):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['authorize_response'])
+        mock_post.return_value = self.mock_response
+
+        response = self.transaction.authorize(self.username_mock, self.tbk_user_mock, self.parent_buy_order_mock,
+                                              self.get_mall_transaction_details())
+
+        self.assertEqual(response, responses['authorize_response'])
+
