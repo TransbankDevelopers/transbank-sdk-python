@@ -58,7 +58,7 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
         self.assertEqual(response, responses['authorize_response'])
 
     @patch('transbank.common.request_service.requests.post')
-    def test_create_mall_exception_not_authorized(self, mock_post):
+    def test_authorize_exception(self, mock_post):
         self.mock_response.status_code = 500
         self.mock_response.text = json.dumps(responses['general_error'])
         mock_post.return_value = self.mock_response
