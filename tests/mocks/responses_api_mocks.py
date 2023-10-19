@@ -205,4 +205,7 @@ responses = {
         'card_type': 'Visa',
         'card_number': 'XXXXXXXXXXXX6623'
     },
+    'inscription_finish_fail': {
+        'response_code': -1
+    }
 }
