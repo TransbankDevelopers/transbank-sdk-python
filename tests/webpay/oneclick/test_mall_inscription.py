@@ -105,3 +105,12 @@ class MallInscriptionTestCase(unittest.TestCase):
             self.inscription.finish(self.tbk_token_mock)
 
         self.assertEqual(context.exception.__class__, InscriptionFinishError)
+
+    def test_inscription_delete_exception_empty_tbk_user(self):
+        empty_tbk_user = ''
+
+        with self.assertRaises(TransbankError) as context:
+            self.inscription.delete(empty_tbk_user, self.username_mock)
+
+        self.assertTrue("'tbk_user' can't be null or white space" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
