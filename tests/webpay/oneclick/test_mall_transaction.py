@@ -40,3 +40,8 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
         self.assertEqual(details.details[1].buy_order, self.child2_buy_order_mock)
         self.assertEqual(details.details[1].installments_number, self.installments_number_mock)
         self.assertEqual(details.details[1].amount, self.amount2_mock)
+
+    def get_mall_transaction_details(self):
+        details = MallTransactionAuthorizeDetails(
+            self.child1_commerce_code, self.child1_buy_order_mock, self.installments_number_mock, self.amount1_mock)
+        return details
