@@ -77,3 +77,12 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertTrue("'username' is too long" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
+
+    def test_authorize_exception_tbk_user_max_length(self):
+        invalid_tbk_user = get_invalid_length_param()
+        with self.assertRaises(TransbankError) as context:
+            self.transaction.authorize(self.username_mock, invalid_tbk_user, self.parent_buy_order_mock,
+                                       self.get_mall_transaction_details())
+
+        self.assertTrue("'tbk_user' is too long" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
