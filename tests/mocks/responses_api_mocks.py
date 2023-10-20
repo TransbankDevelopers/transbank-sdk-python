@@ -272,5 +272,8 @@ responses = {
     },
     'buy_order_not_found': {
         'error_message': 'Invalid value for parameter: buy order not found'
+    },
+    'already_refunded_error': {
+        'error_message': 'Transaction already fully refunded'
     }
 }
