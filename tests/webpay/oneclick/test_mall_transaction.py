@@ -203,3 +203,14 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
         self.assertTrue(response['details'][0]['status'], 'CAPTURED')
         self.assertEqual(response, responses['captured_status_response'])
 
+    @patch('transbank.common.request_service.requests.get')
+    def test_status_exception(self, mock_get):
+        self.mock_response.status_code = 422
+        self.mock_response.text = json.dumps(responses['buy_order_not_found'])
+        mock_get.return_value = self.mock_response
+
+        with self.assertRaises(TransactionStatusError) as context:
+            self.deferred_transaction.status('FakeBuyOrder')
+
+        self.assertTrue("buy order not found" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionStatusError)
