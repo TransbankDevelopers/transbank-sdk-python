@@ -191,3 +191,15 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertTrue("'authorization_code' is too long" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
+
+    @patch('transbank.common.request_service.requests.get')
+    def test_status_transaction_successful(self, mock_get):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['captured_status_response'])
+        mock_get.return_value = self.mock_response
+
+        response = self.deferred_transaction.status(self.child2_buy_order_mock)
+
+        self.assertTrue(response['details'][0]['status'], 'CAPTURED')
+        self.assertEqual(response, responses['captured_status_response'])
+
