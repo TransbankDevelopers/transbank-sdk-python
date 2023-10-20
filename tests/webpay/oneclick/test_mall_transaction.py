@@ -214,3 +214,14 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertTrue("buy order not found" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionStatusError)
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_refund_transaction_successful(self, mock_post):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['reversed_response'])
+        mock_post.return_value = self.mock_response
+
+        response = self.deferred_transaction.refund(self.parent_buy_order_mock, self.deferred_child_commerce_code,
+                                                    self.child2_buy_order_mock, self.amount2_mock)
+
+        self.assertTrue(response['type'], 'REVERSED')
