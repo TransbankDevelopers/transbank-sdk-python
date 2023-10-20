@@ -301,3 +301,17 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
                                                                         self.deferred_child_commerce_code)
 
         self.assertEqual(response, responses['reverse_preauthorized_amount'])
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_reverse_preauthorized_amount_exception(self, mock_put):
+        self.mock_response.status_code = 400
+        self.mock_response.text = json.dumps(responses['transaction_not_found'])
+        mock_put.return_value = self.mock_response
+
+        with self.assertRaises(TransactionReversePreAuthorizedAmountError) as context:
+            self.deferred_transaction.reversePreAuthorizedAmount(self.child2_buy_order_mock,
+                                                                 self.authorization_code_mock, self.amount1_mock,
+                                                                 self.deferred_child_commerce_code)
+
+        self.assertTrue('Transaction not found' in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionReversePreAuthorizedAmountError)
