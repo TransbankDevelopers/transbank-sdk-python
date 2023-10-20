@@ -269,5 +269,8 @@ responses = {
         },
         'accounting_date': '1020',
         'transaction_date': '2023-10-20T15:44:13.111Z'
+    },
+    'buy_order_not_found': {
+        'error_message': 'Invalid value for parameter: buy order not found'
     }
 }
