@@ -193,5 +193,87 @@ responses = {
         'card_detail': {'card_number': '6623'},
         'accounting_date': '1016',
         'transaction_date': '2023-10-16T23:20:11.653Z'
+    },
+    'inscription_start_response': {
+        'token': '01ab844d8fa41f98b4ccfeef3d254235eadc9a5a39cb86498d807e10e5b00f9b',
+        'url_webpay': 'https://webpay3gint.transbank.cl/webpayserver/bp_multicode_inscription.cgi'
+    },
+    'inscription_finish_response': {
+        'response_code': 0,
+        'tbk_user': '08ed03b1-8fa6-4d7b-b35c-b134e1c5e9ee',
+        'authorization_code': '1213',
+        'card_type': 'Visa',
+        'card_number': 'XXXXXXXXXXXX6623'
+    },
+    'inscription_finish_fail': {
+        'response_code': -1
+    },
+    'authorize_response': {
+         'details': [
+          {
+           'amount': 1693,
+           'status': 'AUTHORIZED',
+           'authorization_code': '1213',
+           'payment_type_code': 'VN',
+           'response_code': 0,
+           'installments_number': 0,
+           'commerce_code': '597055555542',
+           'buy_order': 'child_buy_order_1'
+          }
+         ],
+         'buy_order': 'parent_buy_order',
+         'card_detail': {
+          'card_number': '6623'
+         },
+         'accounting_date': '1019',
+         'transaction_date': '2023-10-19T21:30:21.095Z'
+    },
+    'deferred_authorize_response': {
+        'details': [
+            {
+                'amount': 2000,
+                'status': 'AUTHORIZED',
+                'authorization_code': '123456',
+                'payment_type_code': 'VN',
+                'response_code': 0,
+                'installments_number': 0,
+                'commerce_code': '597055555548',
+                'buy_order': 'child_buy_order_2',
+                'capture_expiration_date': '2023-11-19T11:52:39.753Z'
+            }
+        ],
+        'buy_order': 'parent_buy_order',
+        'card_detail': {
+            'card_number': '6623'
+        },
+        'accounting_date': '1020',
+        'transaction_date': '2023-10-20T11:52:39.571Z'
+    },
+    'captured_status_response': {
+        'details': [
+            {
+                'amount': 2000,
+                'status': 'CAPTURED',
+                'authorization_code': '123456',
+                'payment_type_code': 'VN',
+                'response_code': 0,
+                'installments_number': 0,
+                'commerce_code': '597055555548',
+                'buy_order': 'child_buy_order_2',
+                'capture_expiration_date': '2023-11-19T15:44:13.429Z'
+            }
+        ],
+        'buy_order': 'parent_buy_order',
+        'card_detail': {
+            'card_number': '6623'
+        },
+        'accounting_date': '1020',
+        'transaction_date': '2023-10-20T15:44:13.111Z'
+    },
+    'buy_order_not_found': {
+        'error_message': 'Invalid value for parameter: buy order not found'
+    },
+    'already_refunded_error': {
+        'error_message': 'Transaction already fully refunded'
     }
 }
