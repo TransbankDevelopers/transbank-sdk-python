@@ -8,7 +8,6 @@ from transbank.webpay.webpay_plus.transaction import *
 from transbank.error.transaction_create_error import TransactionCreateError
 from tests.mocks.responses_api_mocks import responses
 from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
-from transbank.common.integration_api_keys import IntegrationApiKeys
 
 
 class TransactionTestCase(unittest.TestCase):
