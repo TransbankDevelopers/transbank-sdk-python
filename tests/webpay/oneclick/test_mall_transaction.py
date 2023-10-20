@@ -25,6 +25,8 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
         self.transaction = MallTransaction()
         self.deferred_transaction = MallTransaction().configure_for_testing_deferred()
         self.deferred_child_commerce_code = IntegrationCommerceCodes.ONECLICK_MALL_DEFERRED_CHILD1
+        self.capture_amount_mock = 2000
+        self.authorization_code_mock = '123456'
 
     def test_authorize_details(self):
         mall_details = MallTransactionAuthorizeDetails(self.child1_commerce_code, self.child1_buy_order_mock,
@@ -135,3 +137,16 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertTrue("'details.buy_order' is too long" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_capture_transaction_successful(self, mock_put):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['capture_response'])
+        mock_put.return_value = self.mock_response
+
+        response = self.deferred_transaction.capture(self.deferred_child_commerce_code, self.child2_buy_order_mock,
+                                                     self.authorization_code_mock, self.capture_amount_mock)
+
+        self.assertEqual(response, responses['capture_response'])
+
+
