@@ -1,11 +1,10 @@
 import unittest
 import json
-import string
-import secrets
 from unittest.mock import Mock
 from transbank.webpay.oneclick.mall_transaction import *
 from tests.mocks.responses_api_mocks import responses
 from unittest.mock import patch
+from tests.webpay.test_utils import get_invalid_length_param
 
 
 class OneclickMallTransactionTestCase(unittest.TestCase):
@@ -69,3 +68,12 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertTrue('Internal server error' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionAuthorizeError)
+
+    def test_authorize_exception_username_max_length(self):
+        invalid_username = get_invalid_length_param()
+        with self.assertRaises(TransbankError) as context:
+            self.transaction.authorize(invalid_username, self.tbk_user_mock, self.parent_buy_order_mock,
+                                       self.get_mall_transaction_details())
+
+        self.assertTrue("'username' is too long" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
