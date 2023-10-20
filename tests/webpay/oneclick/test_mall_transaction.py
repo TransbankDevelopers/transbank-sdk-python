@@ -23,6 +23,8 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
         self.return_url_mock = 'https://url_return.com'
         self.mock_response = Mock()
         self.transaction = MallTransaction()
+        self.deferred_transaction = MallTransaction().configure_for_testing_deferred()
+        self.deferred_child_commerce_code = IntegrationCommerceCodes.ONECLICK_MALL_DEFERRED_CHILD1
 
     def test_authorize_details(self):
         mall_details = MallTransactionAuthorizeDetails(self.child1_commerce_code, self.child1_buy_order_mock,
@@ -55,6 +57,20 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
                                               self.get_mall_transaction_details())
 
         self.assertEqual(response, responses['authorize_response'])
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_deferred_authorize_transaction_successful(self, mock_post):
+        details = MallTransactionAuthorizeDetails(
+            self.deferred_child_commerce_code, self.child2_buy_order_mock, self.installments_number_mock,
+            self.amount2_mock)
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['deferred_authorize_response'])
+        mock_post.return_value = self.mock_response
+
+        response = self.deferred_transaction.authorize(self.username_mock, self.tbk_user_mock,
+                                                       self.parent_buy_order_mock, details)
+
+        self.assertEqual(response, responses['deferred_authorize_response'])
 
     @patch('transbank.common.request_service.requests.post')
     def test_authorize_exception(self, mock_post):
