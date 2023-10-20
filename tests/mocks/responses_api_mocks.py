@@ -228,4 +228,25 @@ responses = {
          'accounting_date': '1019',
          'transaction_date': '2023-10-19T21:30:21.095Z'
     },
+    'deferred_authorize_response': {
+        'details': [
+            {
+                'amount': 2000,
+                'status': 'AUTHORIZED',
+                'authorization_code': '123456',
+                'payment_type_code': 'VN',
+                'response_code': 0,
+                'installments_number': 0,
+                'commerce_code': '597055555548',
+                'buy_order': 'child_buy_order_2',
+                'capture_expiration_date': '2023-11-19T11:52:39.753Z'
+            }
+        ],
+        'buy_order': 'parent_buy_order',
+        'card_detail': {
+            'card_number': '6623'
+        },
+        'accounting_date': '1020',
+        'transaction_date': '2023-10-20T11:52:39.571Z'
+    },
 }
