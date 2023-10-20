@@ -161,3 +161,13 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertTrue('Internal server error' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionCaptureError)
+
+    def test_capture_exception_child_commerce_code_max_length(self):
+        invalid_child_commerce_code = get_invalid_length_param()
+
+        with self.assertRaises(TransbankError) as context:
+            self.deferred_transaction.capture(invalid_child_commerce_code, self.child2_buy_order_mock,
+                                              self.authorization_code_mock, self.capture_amount_mock)
+
+        self.assertTrue("'child_commerce_code' is too long" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
