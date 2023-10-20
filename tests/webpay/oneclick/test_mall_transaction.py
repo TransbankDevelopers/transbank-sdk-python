@@ -95,3 +95,15 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertTrue("'parent_buy_order' is too long" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransbankError)
+
+    def test_authorize_exception_child_commerce_code_max_length(self):
+        invalid_child_commerce_code = get_invalid_length_param()
+        details = MallTransactionAuthorizeDetails(
+            invalid_child_commerce_code, self.child1_buy_order_mock, self.installments_number_mock, self.amount1_mock)
+
+        with self.assertRaises(TransbankError) as context:
+            self.transaction.authorize(self.username_mock, self.tbk_user_mock, self.parent_buy_order_mock,
+                                       details)
+
+        self.assertTrue("'details.commerce_code' is too long" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransbankError)
