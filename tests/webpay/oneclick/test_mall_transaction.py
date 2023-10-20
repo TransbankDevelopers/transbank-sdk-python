@@ -263,3 +263,15 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertTrue('Invalid value for parameter' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionIncreaseAmountError)
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_increase_authorization_date_transaction_successful(self, mock_put):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['increase_date_response'])
+        mock_put.return_value = self.mock_response
+
+        response = self.deferred_transaction.increaseAuthorizationDate(self.child2_buy_order_mock,
+                                                                       self.authorization_code_mock,
+                                                                       self.deferred_child_commerce_code)
+
+        self.assertEqual(response, responses['increase_date_response'])
