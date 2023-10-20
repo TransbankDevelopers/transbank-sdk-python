@@ -245,7 +245,7 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
         self.mock_response.text = json.dumps(responses['increase_amount_response'])
         mock_put.return_value = self.mock_response
 
-        response = self.deferred_transaction.increaseAmount(self.parent_buy_order_mock, self.authorization_code_mock,
+        response = self.deferred_transaction.increaseAmount(self.child2_buy_order_mock, self.authorization_code_mock,
                                                             self.amount1_mock, self.deferred_child_commerce_code)
 
         self.assertEqual(response, responses['increase_amount_response'])
@@ -258,7 +258,7 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
         mock_put.return_value = self.mock_response
 
         with self.assertRaises(TransactionIncreaseAmountError) as context:
-            self.deferred_transaction.increaseAmount(self.parent_buy_order_mock, self.authorization_code_mock,
+            self.deferred_transaction.increaseAmount(self.child2_buy_order_mock, self.authorization_code_mock,
                                                      invalid_amount, self.deferred_child_commerce_code)
 
         self.assertTrue('Invalid value for parameter' in context.exception.message)
