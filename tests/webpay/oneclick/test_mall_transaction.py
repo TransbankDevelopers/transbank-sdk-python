@@ -225,3 +225,16 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
                                                     self.child2_buy_order_mock, self.amount2_mock)
 
         self.assertTrue(response['type'], 'REVERSED')
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_refund_exception(self, mock_post):
+        self.mock_response.status_code = 422
+        self.mock_response.text = json.dumps(responses['already_refunded_error'])
+        mock_post.return_value = self.mock_response
+
+        with self.assertRaises(TransactionRefundError) as context:
+            self.deferred_transaction.refund(self.parent_buy_order_mock, self.deferred_child_commerce_code,
+                                             self.child2_buy_order_mock, self.amount2_mock)
+
+        self.assertTrue("Transaction already fully refunded" in context.exception.message)
+        self.assertEqual(context.exception.__class__, TransactionRefundError)
