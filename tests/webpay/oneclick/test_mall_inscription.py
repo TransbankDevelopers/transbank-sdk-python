@@ -8,7 +8,7 @@ from tests.mocks.responses_api_mocks import responses
 from unittest.mock import patch
 
 
-class MallInscriptionTestCase(unittest.TestCase):
+class OneclickMallInscriptionTestCase(unittest.TestCase):
 
     def setUp(self) -> None:
         self.username_mock = 'test_user'
