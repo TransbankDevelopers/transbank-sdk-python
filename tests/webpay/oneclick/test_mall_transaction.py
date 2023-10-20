@@ -315,3 +315,15 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertTrue('Transaction not found' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionReversePreAuthorizedAmountError)
+
+    @patch('transbank.common.request_service.requests.post')
+    def test_deferred_capture_history_successful(self, mock_post):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['capture_history_response'])
+        mock_post.return_value = self.mock_response
+
+        response = self.deferred_transaction.deferredCaptureHistory(self.authorization_code_mock,
+                                                                    self.child2_buy_order_mock,
+                                                                    self.deferred_child_commerce_code)
+
+        self.assertTrue(response, responses['capture_history_response'])
