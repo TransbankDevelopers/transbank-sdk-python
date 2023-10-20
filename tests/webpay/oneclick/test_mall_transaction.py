@@ -289,3 +289,15 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertTrue('Internal server error' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionIncreaseAuthorizationDateError)
+
+    @patch('transbank.common.request_service.requests.put')
+    def test_reverse_preauthorized_amount_transaction_successful(self, mock_put):
+        self.mock_response.status_code = 200
+        self.mock_response.text = json.dumps(responses['reverse_preauthorized_amount'])
+        mock_put.return_value = self.mock_response
+
+        response = self.deferred_transaction.reversePreAuthorizedAmount(self.child2_buy_order_mock,
+                                                                        self.authorization_code_mock, self.amount1_mock,
+                                                                        self.deferred_child_commerce_code)
+
+        self.assertEqual(response, responses['reverse_preauthorized_amount'])
