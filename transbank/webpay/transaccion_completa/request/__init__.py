@@ -36,12 +36,6 @@ class TransactionInstallmentsRequest(object):
     def __init__(self, installments_number: float):
         self.installments_number = installments_number
 
-class TransactionIncreaseAuthorizationDateRequest(object):
-    def __init__(self,  buy_order: str, authorization_code: str, commerce_code: str):
-        self.buy_order = buy_order
-        self.authorization_code = authorization_code
-        self.commerce_code = commerce_code
-
 class TransactionReversePreAuthorizedAmountRequest(object):
     def __init__(self,  buy_order: str, authorization_code: str, amount: float, commerce_code: str):
         self.buy_order = buy_order

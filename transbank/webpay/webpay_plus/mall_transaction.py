@@ -6,16 +6,15 @@ from transbank.common.webpay_transaction import WebpayTransaction
 from transbank.common.integration_api_keys import IntegrationApiKeys
 from transbank.common.validation_util import ValidationUtil
 from transbank.webpay.webpay_plus.mall_schema import MallTransactionCreateRequestSchema, MallTransactionRefundRequestSchema, MallTransactionCaptureRequestSchema, \
-    MallTransactionIncreaseAuthorizationDateRequestSchema, MallTransactionReversePreAuthorizedAmountRequestSchema, MallTransacionDeferredCaptureHistoryRequestSchema
+    MallTransactionReversePreAuthorizedAmountRequestSchema, MallTransacionDeferredCaptureHistoryRequestSchema
 from transbank.webpay.webpay_plus.request import MallTransacionDeferredCaptureHistoryRequest, MallTransactionCreateDetails, MallTransactionCreateRequest, \
-    MallTransactionIncreaseAuthorizationDateRequest, MallTransactionRefundRequest, MallTransactionCaptureRequest, MallTransactionReversePreAuthorizedAmountRequest
+    MallTransactionRefundRequest, MallTransactionCaptureRequest, MallTransactionReversePreAuthorizedAmountRequest
 from transbank.error.transbank_error import TransbankError
 from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.error.transaction_commit_error import TransactionCommitError
 from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.error.transaction_refund_error import TransactionRefundError
 from transbank.error.transaction_capture_error import TransactionCaptureError
-from transbank.error.transaction_increase_authorization_date_error import TransactionIncreaseAuthorizationDateError
 from transbank.error.transaction_reverse_pre_authorized_amount_error import TransactionReversePreAuthorizedAmountError
 from transbank.error.transaction_deferred_capture_history_error import TransactionDeferredCaptureHistoryError
 
@@ -25,7 +24,6 @@ class MallTransaction(WebpayTransaction):
     STATUS_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}'
     REFUND_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/refunds'
     CAPTURE_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/capture'
-    INCREASE_AUTHORIZATION_DATE_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/authorization_date'
     REVERSE_PRE_AUTHORIZE_AMOUNT_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/reverse/amount'
     DEFERRED_CAPTURE_HISTORY_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/details'
 
@@ -90,18 +88,6 @@ class MallTransaction(WebpayTransaction):
             return RequestService.put(endpoint, MallTransactionCaptureRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCaptureError(e.message, e.code)
-
-    def increaseAuthorizationDate(self, token: str, buy_order: str, authorization_code: str, child_commerce_code: str):
-        ValidationUtil.has_text_with_max_length(token, ApiConstants.TOKEN_LENGTH, "token")
-        ValidationUtil.has_text_with_max_length(child_commerce_code, ApiConstants.COMMERCE_CODE_LENGTH, "child_commerce_code")
-        ValidationUtil.has_text_with_max_length(buy_order, ApiConstants.BUY_ORDER_LENGTH, "buy_order")
-        ValidationUtil.has_text_with_max_length(authorization_code, ApiConstants.AUTHORIZATION_CODE_LENGTH, "authorization_code")
-        try:
-            endpoint = MallTransaction.INCREASE_AUTHORIZATION_DATE_ENDPOINT.format(token)
-            request = MallTransactionIncreaseAuthorizationDateRequest(buy_order, authorization_code, child_commerce_code)
-            return RequestService.put(endpoint, MallTransactionIncreaseAuthorizationDateRequestSchema().dumps(request), self.options)
-        except TransbankError as e:
-            raise TransactionIncreaseAuthorizationDateError(e.message, e.code)
 
     def reversePreAuthorizedAmount(self, buy_order: str, token: str, authorization_code: str, amount: float, child_commerce_code:str):
         ValidationUtil.has_text_with_max_length(token, ApiConstants.TOKEN_LENGTH, "token")
