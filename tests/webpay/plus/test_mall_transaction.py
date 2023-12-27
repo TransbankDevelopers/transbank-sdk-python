@@ -271,33 +271,6 @@ class TransactionMallTestCase(unittest.TestCase):
         self.assertTrue('Invalid value for parameter' in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionCaptureError)
 
-    @patch('transbank.common.request_service.requests.put')
-    def test_reverse_preauthorized_amount_mall_transaction_successful(self, mock_put):
-        self.mock_response.status_code = 200
-        self.mock_response.text = json.dumps(responses['reverse_preauthorized_amount'])
-        mock_put.return_value = self.mock_response
-
-        response = self.deferred_capture.reversePreAuthorizedAmount(self.child1_buy_order, self.token_mock,
-                                                                    self.authorization_code_mock, self.amount1_mock,
-                                                                    self.child1_commerce_code)
-
-        self.assertTrue(response['total_amount'])
-        self.assertTrue(response['response_code'] == 0)
-
-    @patch('transbank.common.request_service.requests.put')
-    def test_reverse_preauthorized_amount_mall_exception(self, mock_put):
-        self.mock_response.status_code = 400
-        self.mock_response.text = json.dumps(responses['transaction_not_found'])
-        mock_put.return_value = self.mock_response
-
-        with self.assertRaises(TransactionReversePreAuthorizedAmountError) as context:
-            self.deferred_capture.reversePreAuthorizedAmount(self.child1_buy_order, self.token_mock,
-                                                             self.authorization_code_mock, self.amount1_mock,
-                                                             self.child1_commerce_code)
-
-        self.assertTrue('Transaction not found' in context.exception.message)
-        self.assertEqual(context.exception.__class__, TransactionReversePreAuthorizedAmountError)
-
     @patch('transbank.common.request_service.requests.post')
     def test_mall_deferred_capture_history_successful(self, mock_post):
         self.mock_response.status_code = 200

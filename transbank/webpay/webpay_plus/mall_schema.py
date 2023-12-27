@@ -27,12 +27,6 @@ class MallTransactionCaptureRequestSchema(Schema):
     authorization_code = fields.Str()
     capture_amount = fields.Str()
 
-class MallTransactionReversePreAuthorizedAmountRequestSchema(Schema):
-    buy_order = fields.Str()
-    authorization_code = fields.Str()
-    amount = fields.Str()
-    commerce_code = fields.Str()
-
 class MallTransacionDeferredCaptureHistoryRequestSchema(Schema):
     buy_order = fields.Str()
     commerce_code = fields.Str()

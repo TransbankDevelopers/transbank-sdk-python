@@ -6,9 +6,9 @@ from transbank.common.integration_api_keys import IntegrationApiKeys
 from transbank.common.validation_util import ValidationUtil
 from transbank.common.webpay_transaction import WebpayTransaction
 from transbank.webpay.webpay_plus.schema import TransactionCreateRequestSchema, \
-    TransactionRefundRequestSchema, TransactionCaptureRequestSchema, TransactionReversePreAuthorizedAmountRequestSchema
+    TransactionRefundRequestSchema, TransactionCaptureRequestSchema
 from transbank.webpay.webpay_plus.request import TransactionCreateRequest, \
-    TransactionRefundRequest, TransactionCaptureRequest, TransactionReversePreAuthorizedAmountRequest
+    TransactionRefundRequest, TransactionCaptureRequest
 from transbank.error.transbank_error import TransbankError
 from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.error.transaction_commit_error import TransactionCommitError
@@ -16,15 +16,12 @@ from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.error.transaction_refund_error import TransactionRefundError
 from transbank.error.transaction_capture_error import TransactionCaptureError
 from transbank.error.transaction_deferred_capture_history_error import TransactionDeferredCaptureHistoryError
-from transbank.error.transaction_reverse_pre_authorized_amount_error import TransactionReversePreAuthorizedAmountError
-
 class Transaction(WebpayTransaction):
     CREATE_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/'
     COMMIT_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}'
     STATUS_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}'
     REFUND_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/refunds'
     CAPTURE_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/capture'
-    REVERSE_PRE_AUTHORIZE_AMOUNT_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/reverse/amount'
     DEFERRED_CAPTURE_HISTORY_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/details'
 
 
@@ -80,18 +77,6 @@ class Transaction(WebpayTransaction):
             return RequestService.put(endpoint, TransactionCaptureRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCaptureError(e.message, e.code)
-
-    def reversePreAuthorizedAmount(self, token: str, buy_order: str, authorization_code: str, amount: float, commerce_code: str):
-        ValidationUtil.has_text_with_max_length(token, ApiConstants.TOKEN_LENGTH, "token")
-        ValidationUtil.has_text_with_max_length(buy_order, ApiConstants.BUY_ORDER_LENGTH, "buy_order")
-        ValidationUtil.has_text_with_max_length(authorization_code, ApiConstants.AUTHORIZATION_CODE_LENGTH, "authorization_code")
-        ValidationUtil.has_text_with_max_length(commerce_code, ApiConstants.COMMERCE_CODE_LENGTH, "commerce_code")
-        try:
-            endpoint = Transaction.REVERSE_PRE_AUTHORIZE_AMOUNT_ENDPOINT.format(token)
-            request = TransactionReversePreAuthorizedAmountRequest(buy_order, authorization_code, amount, commerce_code)
-            return RequestService.put(endpoint, TransactionReversePreAuthorizedAmountRequestSchema().dumps(request), self.options)
-        except TransbankError as e:
-            raise TransactionReversePreAuthorizedAmountError(e.message, e.code)
 
     def deferredCaptureHistory(self, token: str):
         ValidationUtil.has_text_with_max_length(token, ApiConstants.TOKEN_LENGTH, "token")

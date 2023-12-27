@@ -27,12 +27,6 @@ class TransactionCaptureRequestSchema(Schema):
     authorization_code = fields.Str()
     capture_amount = fields.Str()
 
-class TransactionReversePreAuthorizedAmountRequestSchema(Schema):
-    buy_order = fields.Str()
-    authorization_code = fields.Str()
-    amount = fields.Str()
-    commerce_code = fields.Str()
-
 class TransactionDeferredCaptureHistoryRequestSchema(Schema):
     buy_order = fields.Str()
     commerce_code = fields.Str()
