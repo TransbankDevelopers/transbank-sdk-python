@@ -5,9 +5,9 @@ from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
 from transbank.common.integration_api_keys import IntegrationApiKeys
 from transbank.common.validation_util import ValidationUtil
 from transbank.common.webpay_transaction import WebpayTransaction
-from transbank.webpay.webpay_plus.schema import TransactionCreateRequestSchema, TransactionIncreaseAmountRequestSchema, \
+from transbank.webpay.webpay_plus.schema import TransactionCreateRequestSchema, \
     TransactionIncreaseAuthorizationDateRequestSchema, TransactionRefundRequestSchema, TransactionCaptureRequestSchema, TransactionReversePreAuthorizedAmountRequestSchema
-from transbank.webpay.webpay_plus.request import TransactionCreateRequest, TransactionIncreaseAmountRequest, \
+from transbank.webpay.webpay_plus.request import TransactionCreateRequest, \
     TransactionIncreaseAuthorizationDateRequest, TransactionRefundRequest, TransactionCaptureRequest, TransactionReversePreAuthorizedAmountRequest
 from transbank.error.transbank_error import TransbankError
 from transbank.error.transaction_create_error import TransactionCreateError
@@ -16,7 +16,6 @@ from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.error.transaction_refund_error import TransactionRefundError
 from transbank.error.transaction_capture_error import TransactionCaptureError
 from transbank.error.transaction_deferred_capture_history_error import TransactionDeferredCaptureHistoryError
-from transbank.error.transaction_increase_amount_error import TransactionIncreaseAmountError
 from transbank.error.transaction_increase_authorization_date_error import TransactionIncreaseAuthorizationDateError
 from transbank.error.transaction_reverse_pre_authorized_amount_error import TransactionReversePreAuthorizedAmountError
 
@@ -84,18 +83,6 @@ class Transaction(WebpayTransaction):
             return RequestService.put(endpoint, TransactionCaptureRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCaptureError(e.message, e.code)
-
-    def increaseAmount(self, token: str, buy_order: str, authorization_code: str, amount: float, commerce_code: str):
-        ValidationUtil.has_text_with_max_length(token, ApiConstants.TOKEN_LENGTH, "token")
-        ValidationUtil.has_text_with_max_length(buy_order, ApiConstants.BUY_ORDER_LENGTH, "buy_order")
-        ValidationUtil.has_text_with_max_length(authorization_code, ApiConstants.AUTHORIZATION_CODE_LENGTH, "authorization_code")
-        ValidationUtil.has_text_with_max_length(commerce_code, ApiConstants.COMMERCE_CODE_LENGTH, "commerce_code")
-        try:
-            endpoint = Transaction.INCREASE_AMOUNT_ENDPOINT.format(token)
-            request = TransactionIncreaseAmountRequest(buy_order, authorization_code, amount, commerce_code)
-            return RequestService.put(endpoint, TransactionIncreaseAmountRequestSchema().dumps(request), self.options)
-        except TransbankError as e:
-            raise TransactionIncreaseAmountError(e.message, e.code)
 
     def increaseAuthorizationDate(self, token: str, buy_order: str, authorization_code: str, commerce_code: str):
         ValidationUtil.has_text_with_max_length(token, ApiConstants.TOKEN_LENGTH, "token")

@@ -98,17 +98,6 @@ class MallTransactionRefundRequest(object):
         self.detail_buy_order = detail_buy_order
         self.amount = amount
 
-class MallTransactionIncreaseAmountRequest(object):
-    def __init__(self, buy_order: str, authorization_code: str, amount: float, commerce_code: str):
-        self.buy_order = buy_order
-        self.authorization_code = authorization_code
-        self.amount = amount
-        self.commerce_code = commerce_code
-
-    def __repr__(self):
-        return "MallTransactionIncreaseAmountRequest(buy_order: {}, authorization_code: {}, amount: {}, commerce_code: {})".format(
-            self.buy_order, self.authorization_code, self.amount, self.commerce_code )
-
 class MallTransactionIncreaseAuthorizationDateRequest(object):
     def __init__(self, buy_order: str, authorization_code: str, commerce_code: str):
         self.buy_order = buy_order
