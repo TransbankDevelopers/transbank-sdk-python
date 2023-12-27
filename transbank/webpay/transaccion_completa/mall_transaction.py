@@ -6,11 +6,9 @@ from transbank.common.webpay_transaction import WebpayTransaction
 from transbank.common.integration_api_keys import IntegrationApiKeys
 from transbank.common.validation_util import ValidationUtil
 from transbank.webpay.transaccion_completa.mall_request import TransactionCreateRequest, TransactionCommitRequest, \
-    TransactionRefundRequest, TransactionCaptureRequest, TransactionInstallmentsRequest, \
-        TransactionDeferredCaptureHistoryRequest
+    TransactionRefundRequest, TransactionCaptureRequest, TransactionInstallmentsRequest
 from transbank.webpay.transaccion_completa.mall_schema import TransactionCreateRequestSchema, \
-    TransactionCommitRequestSchema, TransactionInstallmentsRequestSchema, TransactionRefundRequestSchema, TransactionCaptureRequestSchema, \
-        TransactionDeferredCaptureHistoryRequestSchema
+    TransactionCommitRequestSchema, TransactionInstallmentsRequestSchema, TransactionRefundRequestSchema, TransactionCaptureRequestSchema
 from transbank.error.transbank_error import TransbankError
 from transbank.error.transaction_create_error import TransactionCreateError
 from transbank.error.transaction_commit_error import TransactionCommitError
@@ -18,7 +16,6 @@ from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.error.transaction_refund_error import TransactionRefundError
 from transbank.error.transaction_capture_error import TransactionCaptureError
 from transbank.error.transaction_installments_error import TransactionInstallmentsError
-from transbank.error.transaction_deferred_capture_history_error import TransactionDeferredCaptureHistoryError
 
 class MallTransaction(WebpayTransaction):
     CREATE_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/'
@@ -27,7 +24,6 @@ class MallTransaction(WebpayTransaction):
     REFUND_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/refunds'
     CAPTURE_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/capture'
     INSTALLMENTS_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/installments'
-    DEFERRED_CAPTURE_HISTORY_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/details'
 
     def __init__(self, options: WebpayOptions = None):
         if options is None:
@@ -120,18 +116,6 @@ class MallTransaction(WebpayTransaction):
             return RequestService.post(endpoint, TransactionInstallmentsRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionInstallmentsError(e.message, e.code)
-
-    def deferredCaptureHistory(self, token: str, buy_order: str, commerce_code: str):
-        ValidationUtil.has_text_with_max_length(token, ApiConstants.TOKEN_LENGTH, "token")
-        ValidationUtil.has_text_with_max_length(buy_order, ApiConstants.BUY_ORDER_LENGTH, "buy_order")
-        ValidationUtil.has_text_with_max_length(commerce_code, ApiConstants.COMMERCE_CODE_LENGTH, "commerce_code")
-        try:
-            endpoint = MallTransaction.DEFERRED_CAPTURE_HISTORY_ENDPOINT.format(token)
-            request = TransactionDeferredCaptureHistoryRequest(buy_order, commerce_code)
-            return RequestService.post(endpoint, TransactionDeferredCaptureHistoryRequestSchema().dumps(request), self.options)
-        except TransbankError as e:
-            raise TransactionDeferredCaptureHistoryError (e.message, e.code)
-
 
     def configure_for_testing(self):
         return self.configure_for_integration(IntegrationCommerceCodes.TRANSACCION_COMPLETA_MALL, IntegrationApiKeys.WEBPAY)

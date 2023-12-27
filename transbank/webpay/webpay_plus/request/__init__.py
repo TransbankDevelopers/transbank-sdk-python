@@ -100,12 +100,3 @@ class MallTransactionCaptureRequest(object):
     def __repr__(self):
         return "MallTransactionCaptureRequest(commerce_code: {}, buy_order: {}, authorization_code: {}, capture_amount: {})".format(
             self.commerce_code, self.buy_order, self.authorization_code, self.capture_amount )
-
-class MallTransacionDeferredCaptureHistoryRequest(object):
-    def __init__(self, buy_order: str, commerce_code: str):
-        self.buy_order = buy_order
-        self.commerce_code = commerce_code
-
-    def __repr__(self):
-        return "MallTransacionDeferredCaptureHistoryRequest(commerce_code: {}, buy_order: {})".format(
-            self.commerce_code, self.buy_order)

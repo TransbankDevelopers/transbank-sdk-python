@@ -5,24 +5,18 @@ from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
 from transbank.common.webpay_transaction import WebpayTransaction
 from transbank.common.integration_api_keys import IntegrationApiKeys
 from transbank.common.validation_util import ValidationUtil
-from transbank.webpay.oneclick.schema import MallTransactionAuthorizeRequestSchema, MallTransactionRefundRequestSchema, MallTransactionCaptureRequestSchema, \
-    MallTransactionDeferredCaptureHistoryRequestSchema
-from transbank.webpay.oneclick.request import MallTransactionAuthorizeDetails, MallTransactionAuthorizeRequest, MallTransactionRefundRequest, MallTransactionCaptureRequest, \
-    MallTransactionDeferredCaptureHistoryRequest
+from transbank.webpay.oneclick.schema import MallTransactionAuthorizeRequestSchema, MallTransactionRefundRequestSchema, MallTransactionCaptureRequestSchema
+from transbank.webpay.oneclick.request import MallTransactionAuthorizeDetails, MallTransactionAuthorizeRequest, MallTransactionRefundRequest, MallTransactionCaptureRequest
 from transbank.error.transbank_error import TransbankError
 from transbank.error.transaction_authorize_error import TransactionAuthorizeError
 from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.error.transaction_refund_error import TransactionRefundError
 from transbank.error.transaction_capture_error import TransactionCaptureError
-from transbank.error.transaction_deferred_capture_history_error import TransactionDeferredCaptureHistoryError
-
 class MallTransaction(WebpayTransaction):
     AUTHORIZE_ENDPOINT = ApiConstants.ONECLICK_ENDPOINT + '/transactions'
     STATUS_ENDPOINT = ApiConstants.ONECLICK_ENDPOINT + '/transactions/{}'
     REFUND_ENDPOINT = ApiConstants.ONECLICK_ENDPOINT + '/transactions/{}/refunds'
     CAPTURE_ENDPOINT = ApiConstants.ONECLICK_ENDPOINT + '/transactions/capture'
-    DEFERRED_CAPTURE_HISTORY_ENDPOINT = ApiConstants.ONECLICK_ENDPOINT + '/transactions/details'
-
 
     def __init__(self, options: WebpayOptions = None):
         if options is None:
@@ -75,18 +69,6 @@ class MallTransaction(WebpayTransaction):
             return RequestService.post(endpoint, MallTransactionRefundRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionRefundError(e.message, e.code)
-
-
-    def deferredCaptureHistory(self, authorization_code: str,  buy_order: str, child_commerce_code: str):
-        ValidationUtil.has_text_with_max_length(buy_order, ApiConstants.BUY_ORDER_LENGTH, "buy_order")
-        ValidationUtil.has_text_with_max_length(authorization_code, ApiConstants.AUTHORIZATION_CODE_LENGTH, "authorization_code")
-        ValidationUtil.has_text_with_max_length(child_commerce_code, ApiConstants.COMMERCE_CODE_LENGTH, "child_commerce_code")
-        try:
-            endpoint = MallTransaction.DEFERRED_CAPTURE_HISTORY_ENDPOINT
-            request = MallTransactionDeferredCaptureHistoryRequest(buy_order, authorization_code, child_commerce_code)
-            return RequestService.post(endpoint, MallTransactionDeferredCaptureHistoryRequestSchema().dumps(request), self.options)
-        except TransbankError as e:
-            raise TransactionDeferredCaptureHistoryError(e.message, e.code)
 
     def configure_for_testing(self):
         return self.configure_for_integration(IntegrationCommerceCodes.ONECLICK_MALL, IntegrationApiKeys.WEBPAY)

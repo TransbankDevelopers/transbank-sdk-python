@@ -56,8 +56,3 @@ class TransactionInstallmentsRequest(object):
         self.installments_number = installments_number
         self.buy_order = buy_order
         self.commerce_code = commerce_code
-
-class TransactionDeferredCaptureHistoryRequest(object):
-    def __init__(self, buy_order: str, commerce_code: str):
-        self.buy_order = buy_order
-        self.commerce_code = commerce_code

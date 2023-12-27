@@ -15,15 +15,13 @@ from transbank.error.transaction_commit_error import TransactionCommitError
 from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.error.transaction_refund_error import TransactionRefundError
 from transbank.error.transaction_capture_error import TransactionCaptureError
-from transbank.error.transaction_deferred_capture_history_error import TransactionDeferredCaptureHistoryError
+
 class Transaction(WebpayTransaction):
     CREATE_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/'
     COMMIT_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}'
     STATUS_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}'
     REFUND_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/refunds'
     CAPTURE_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/capture'
-    DEFERRED_CAPTURE_HISTORY_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/details'
-
 
     def __init__(self, options: WebpayOptions = None):
         if options is None:
@@ -77,14 +75,6 @@ class Transaction(WebpayTransaction):
             return RequestService.put(endpoint, TransactionCaptureRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionCaptureError(e.message, e.code)
-
-    def deferredCaptureHistory(self, token: str):
-        ValidationUtil.has_text_with_max_length(token, ApiConstants.TOKEN_LENGTH, "token")
-        try:
-            endpoint = Transaction.DEFERRED_CAPTURE_HISTORY_ENDPOINT.format(token)
-            return RequestService.get(endpoint, self.options)
-        except TransbankError as e:
-            raise TransactionDeferredCaptureHistoryError(e.message, e.code)
 
     def configure_for_testing(self):
         return self.configure_for_integration(IntegrationCommerceCodes.WEBPAY_PLUS, IntegrationApiKeys.WEBPAY)

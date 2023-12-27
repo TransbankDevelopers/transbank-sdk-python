@@ -239,28 +239,3 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
         self.assertTrue("Transaction already fully refunded" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionRefundError)
 
-    @patch('transbank.common.request_service.requests.post')
-    def test_deferred_capture_history_successful(self, mock_post):
-        self.mock_response.status_code = 200
-        self.mock_response.text = json.dumps(responses['capture_history_response'])
-        mock_post.return_value = self.mock_response
-
-        response = self.deferred_transaction.deferredCaptureHistory(self.authorization_code_mock,
-                                                                    self.child2_buy_order_mock,
-                                                                    self.deferred_child_commerce_code)
-
-        self.assertTrue(response, responses['capture_history_response'])
-
-    @patch('transbank.common.request_service.requests.post')
-    def test_deferred_capture_history_exception(self, mock_post):
-        self.mock_response.status_code = 400
-        self.mock_response.text = json.dumps(responses['transaction_detail_not_found'])
-        mock_post.return_value = self.mock_response
-
-        with self.assertRaises(TransactionDeferredCaptureHistoryError) as context:
-            self.deferred_transaction.deferredCaptureHistory(self.authorization_code_mock, self.child2_buy_order_mock,
-                                                             self.deferred_child_commerce_code)
-
-        self.assertTrue('Transaction Detail not found' in context.exception.message)
-        self.assertEqual(context.exception.__class__, TransactionDeferredCaptureHistoryError)
-
