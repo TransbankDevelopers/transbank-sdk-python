@@ -81,8 +81,3 @@ class Transaction(WebpayTransaction):
 
     def configure_for_testing_deferred(self):
         return self.configure_for_integration(IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED, IntegrationApiKeys.WEBPAY)
-
-
-
-
-

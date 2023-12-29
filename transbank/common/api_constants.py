@@ -14,4 +14,3 @@ class ApiConstants(object):
     COMMERCE_CODE_LENGTH = 12
     TOKEN_LENGTH = 64
     EMAIL_LENGTH = 100
-

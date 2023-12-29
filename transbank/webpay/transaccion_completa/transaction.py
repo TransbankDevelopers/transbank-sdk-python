@@ -101,4 +101,3 @@ class Transaction(WebpayTransaction):
 
     def configure_for_testing_deferred_sin_cvv(self):
         return self.configure_for_integration(IntegrationCommerceCodes.TRANSACCION_COMPLETA_DEFERRED_SIN_CVV, IntegrationApiKeys.WEBPAY)
-

@@ -238,4 +238,3 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
 
         self.assertTrue("Transaction already fully refunded" in context.exception.message)
         self.assertEqual(context.exception.__class__, TransactionRefundError)
-

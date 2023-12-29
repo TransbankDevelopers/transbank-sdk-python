@@ -18,4 +18,3 @@ class TransactionCreateRequestSchema(Schema):
     amount = fields.Float()
     return_url = fields.Str()
     wpm_detail = fields.Nested(WpmDetailSchema, many=False)
-
