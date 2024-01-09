@@ -30,38 +30,6 @@ class TransactionCaptureRequest(object):
         return "TransactionCaptureRequest(buy_order: {}, authorization_code: {}, capture_amount: {})".format(
             self.buy_order, self.authorization_code, self.capture_amount)
 
-class TransactionIncreaseAmountRequest(object):
-    def __init__(self, buy_order: str, authorization_code: str, amount: float, commerce_code: str):
-        self.buy_order = buy_order
-        self.authorization_code = authorization_code
-        self.amount = amount
-        self.commerce_code = commerce_code
-
-    def __repr__(self):
-        return "TransactionIncreaseAmountRequest(buy_order: {}, authorization_code: {}, amount: {}, commerce_code: {})".format(
-            self.buy_order, self.authorization_code, self.amount, self.commerce_code)
-
-class TransactionIncreaseAuthorizationDateRequest(object):
-    def __init__(self, buy_order: str, authorization_code: str, commerce_code: str):
-        self.buy_order = buy_order
-        self.authorization_code = authorization_code
-        self.commerce_code = commerce_code
-
-    def __repr__(self):
-        return "TransactionIncreaseAuthorizationDateRequest(buy_order: {}, authorization_code: {}, commerce_code: {})".format(
-            self.buy_order, self.authorization_code, self.commerce_code)
-
-class TransactionReversePreAuthorizedAmountRequest(object):
-    def __init__(self, buy_order: str, authorization_code: str, amount: float, commerce_code: str):
-        self.buy_order = buy_order
-        self.authorization_code = authorization_code
-        self.amount = amount
-        self.commerce_code = commerce_code
-
-    def __repr__(self):
-        return "TransactionReversePreAuthorizedAmount(buy_order: {}, authorization_code: {}, amount: {}, commerce_code: {})".format(
-            self.buy_order, self.authorization_code, self.amount, self.commerce_code)
-
 class MallTransactionRefundRequest(object):
     def __init__(self, commerce_code: str, buy_order: str, amount: float):
         self.buy_order = buy_order
@@ -132,44 +100,3 @@ class MallTransactionCaptureRequest(object):
     def __repr__(self):
         return "MallTransactionCaptureRequest(commerce_code: {}, buy_order: {}, authorization_code: {}, capture_amount: {})".format(
             self.commerce_code, self.buy_order, self.authorization_code, self.capture_amount )
-
-class MallTransactionIncreaseAmountRequest(object):
-    def __init__(self, buy_order: str, authorization_code: str, amount: float, commerce_code:str):
-        self.buy_order = buy_order
-        self.authorization_code = authorization_code
-        self.amount = amount
-        self.commerce_code = commerce_code
-
-    def __repr__(self):
-        return "MallTransactionIncreaseAmountRequest(commerce_code: {}, buy_order: {}, authorization_code: {}, amount: {})".format(
-            self.commerce_code, self.buy_order, self.authorization_code, self.amount )
-
-class MallTransactionIncreaseAuthorizationDateRequest(object):
-    def __init__(self, buy_order: str, authorization_code: str, commerce_code: str):
-        self.buy_order = buy_order
-        self.authorization_code = authorization_code
-        self.commerce_code = commerce_code
-
-    def __repr__(self):
-        return "MallTransactionIncreaseAuthorizationDateRequest(commerce_code: {}, buy_order: {}, authorization_code: {})".format(
-            self.commerce_code, self.buy_order, self.authorization_code)
-
-class MallTransactionReversePreAuthorizedAmountRequest(object):
-    def __init__(self, buy_order: str, authorization_code: str, amount: float, commerce_code:str):
-        self.buy_order = buy_order
-        self.authorization_code = authorization_code
-        self.amount = amount
-        self.commerce_code = commerce_code
-
-    def __repr__(self):
-        return "MallTransactionReversePreAuthorizedAmountRequest(commerce_code: {}, buy_order: {}, authorization_code: {}, amount: {})".format(
-            self.commerce_code, self.buy_order, self.authorization_code, self.amount )
-
-class MallTransacionDeferredCaptureHistoryRequest(object):
-    def __init__(self, buy_order: str, commerce_code: str):
-        self.buy_order = buy_order
-        self.commerce_code = commerce_code
-
-    def __repr__(self):
-        return "MallTransacionDeferredCaptureHistoryRequest(commerce_code: {}, buy_order: {})".format(
-            self.commerce_code, self.buy_order)

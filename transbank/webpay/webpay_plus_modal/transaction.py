@@ -63,4 +63,3 @@ class Transaction(WebpayTransaction):
 
     def configure_for_testing(self):
         return self.configure_for_integration(IntegrationCommerceCodes.WEBPAY_PLUS_MODAL, IntegrationApiKeys.WEBPAY)
-

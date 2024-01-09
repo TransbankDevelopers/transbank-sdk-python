@@ -56,28 +56,3 @@ class TransactionInstallmentsRequest(object):
         self.installments_number = installments_number
         self.buy_order = buy_order
         self.commerce_code = commerce_code
-
-class TransactionIncreaseAmountRequest(object):
-    def __init__(self, buy_order: str, authorization_code: str, amount: float, commerce_code: str):
-        self.buy_order = buy_order
-        self.authorization_code = authorization_code
-        self.amount = amount
-        self.commerce_code = commerce_code
-
-class TransactionIncreaseAuthorizationDateRequest(object):
-    def __init__(self, buy_order: str, authorization_code: str, commerce_code: str):
-        self.buy_order = buy_order
-        self.authorization_code = authorization_code
-        self.commerce_code = commerce_code
-
-class TransactionReversePreAuthorizedAmountRequest(object):
-    def __init__(self, buy_order: str, authorization_code: str, amount: float, commerce_code: str):
-        self.buy_order = buy_order
-        self.authorization_code = authorization_code
-        self.amount = amount
-        self.commerce_code = commerce_code
-
-class TransactionDeferredCaptureHistoryRequest(object):
-    def __init__(self, buy_order: str, commerce_code: str):
-        self.buy_order = buy_order
-        self.commerce_code = commerce_code

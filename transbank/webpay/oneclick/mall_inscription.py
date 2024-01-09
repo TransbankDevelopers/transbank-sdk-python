@@ -58,8 +58,3 @@ class MallInscription(WebpayTransaction):
 
     def configure_for_testing_deferred(self):
         return self.configure_for_integration(IntegrationCommerceCodes.ONECLICK_MALL_DEFERRED, IntegrationApiKeys.WEBPAY)
-   
-
-    
-
-

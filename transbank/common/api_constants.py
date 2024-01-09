@@ -1,6 +1,6 @@
 class ApiConstants(object):
-    WEBPAY_ENDPOINT = "/rswebpaytransaction/api/webpay/v1.3"
-    ONECLICK_ENDPOINT = "/rswebpaytransaction/api/oneclick/v1.3"
+    WEBPAY_ENDPOINT = "/rswebpaytransaction/api/webpay/v1.2"
+    ONECLICK_ENDPOINT = "/rswebpaytransaction/api/oneclick/v1.2"
     PATPASS_ENDPOINT = "/restpatpass/v1/services"
 
     BUY_ORDER_LENGTH = 26
@@ -14,4 +14,3 @@ class ApiConstants(object):
     COMMERCE_CODE_LENGTH = 12
     TOKEN_LENGTH = 64
     EMAIL_LENGTH = 100
-

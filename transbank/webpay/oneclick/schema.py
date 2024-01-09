@@ -35,25 +35,3 @@ class MallTransactionRefundRequestSchema(Schema):
     commerce_code = fields.Str()
     detail_buy_order = fields.Str()
     amount = fields.Str()
-
-class MallTransactionIncreaseAmountRequestSchema(Schema):
-    buy_order = fields.Str()
-    authorization_code = fields.Str()
-    amount = fields.Str()
-    commerce_code = fields.Str()
-
-class MallTransactionIncreaseAuthorizationDateRequestSchema(Schema):
-    buy_order = fields.Str()
-    authorization_code = fields.Str()
-    commerce_code = fields.Str()
-
-class MallTransactionReversePreAuthorizedAmountRequestSchema(Schema):
-    buy_order = fields.Str()
-    authorization_code = fields.Str()
-    amount = fields.Str()
-    commerce_code = fields.Str()
-
-class MallTransactionDeferredCaptureHistoryRequestSchema(Schema):
-    buy_order = fields.Str()
-    authorization_code = fields.Str()
-    commerce_code = fields.Str()
