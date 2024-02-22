@@ -49,7 +49,12 @@ class MallInscription(WebpayTransaction):
         try:
             endpoint = MallInscription.DELETE_ENDPOINT
             request = MallInscriptionDeleteRequest(username, tbk_user)
-            RequestService.delete(endpoint, MallInscriptionDeleteRequestSchema().dumps(request), self.options)
+            response = RequestService.delete(endpoint, MallInscriptionDeleteRequestSchema().dumps(request), self.options)
+            if response == 204:                
+                return True
+            else:                
+                return False
+                
         except TransbankError as e:
             raise InscriptionDeleteError(e.message, e.code)
 
