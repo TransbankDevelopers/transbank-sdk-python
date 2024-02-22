@@ -34,7 +34,7 @@ class RequestService(object):
     @classmethod
     def process_response(cls, response: any):
         if not response.text:
-            return 
+            return response.status_code
         dict_response = json.loads(response.text)
         if response.status_code not in (200, 299):
             if "error_message" in dict_response:
