@@ -20,6 +20,10 @@ jobs:
         organization: transbankdevelopers
     script:
     - pipenv run citests
+    - curl -s "https://get.sdkman.io" | bash
+    - source "$HOME/.sdkman/bin/sdkman-init.sh"
+    - sdk install java 17.0.10-ms
+    - sdk use java 17.0.10-ms
     - sonar-scanner -Dsonar.projectKey=transbank-sdk-python -Dsonar.projectName="Transbank
       Python SDK" -Dsonar.organization=transbankdevelopers -Dsonar.host.url=https://sonarcloud.io
       -Dsonar.sources=./transbank -Dsonar.python.coverage.reportPaths=coverage.xml
