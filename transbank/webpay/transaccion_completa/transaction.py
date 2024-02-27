@@ -66,7 +66,7 @@ class Transaction(WebpayTransaction):
         try:
             endpoint = Transaction.REFUND_ENDPOINT.format(token)
             request = TransactionRefundRequest(amount)
-            return RequestService.post(endpoint, TransactionRefundRequestSchema().dumps(request).data, self.options)
+            return RequestService.post(endpoint, TransactionRefundRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise TransactionRefundError(e.message, e.code)
 
