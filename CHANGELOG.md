@@ -4,6 +4,14 @@ Todos los cambios notables a este proyecto serán docuemntados en este archivo.
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2024-02-28
+### Changed
+- Se hace downgrade al API de la versión 1.3 a la versión 1.2.
+
+### Fixed
+- Retorna un boolean en el metodo delete para la Inscripción de Oneclick Mall.
+- Se corrige error en el método 'refund' de Transaccion Completa.
+
 ## [4.0.0] - 2022-09-20
 ### Changed
 - Se migra el API desde la versión 1.2 a la versión 1.3
