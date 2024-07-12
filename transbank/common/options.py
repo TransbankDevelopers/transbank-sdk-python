@@ -4,10 +4,11 @@ from transbank.common.integration_type import IntegrationType
 
 
 class Options(ABC):
-    def __init__(self, commerce_code: str = None, api_key: str = None, integration_type: IntegrationType = None):
+    def __init__(self, commerce_code: str = None, api_key: str = None, integration_type: IntegrationType = None, default_timeout: int = 600):
         self.commerce_code = commerce_code
         self.api_key = api_key
         self.integration_type = integration_type
+        self.default_timeout = default_timeout
 
     @abstractmethod
     def header_commerce_code_name(self):
