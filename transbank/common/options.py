@@ -27,6 +27,14 @@ class Options(ABC):
         self._commerce_code = commerce_code
 
     @property
+    def default_timeout(self) -> int:
+        return self._default_timeout
+
+    @default_timeout.setter
+    def default_timeout(self, default_timeout: int) -> None:
+        self._default_timeout = default_timeout
+
+    @property
     def api_key(self) -> str:
         return self._api_key
 
