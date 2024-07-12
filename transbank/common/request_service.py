@@ -10,25 +10,25 @@ class RequestService(object):
     @classmethod
     def post(cls, endpoint: str, request: str, options: Options):
         endpoint = "{}{}".format(cls.host(options), endpoint)
-        response = requests.post(url=endpoint, data=request, headers=HeadersBuilder.build(options))
+        response = requests.post(url=endpoint, data=request, headers=HeadersBuilder.build(options),timeout=options.default_timeout)
         return cls.process_response(response)
 
     @classmethod
     def delete(cls, endpoint: str, request: str, options: Options):
         endpoint = "{}{}".format(cls.host(options), endpoint)
-        response = requests.delete(url=endpoint, data=request, headers=HeadersBuilder.build(options))
+        response = requests.delete(url=endpoint, data=request, headers=HeadersBuilder.build(options),timeout=options.default_timeout)
         return cls.process_response(response)
 
     @classmethod
     def put(cls, endpoint: str, request: str, options: Options):
         endpoint = "{}{}".format(cls.host(options), endpoint)
-        response = requests.put(url=endpoint, data=request, headers=HeadersBuilder.build(options))
+        response = requests.put(url=endpoint, data=request, headers=HeadersBuilder.build(options),timeout=options.default_timeout)
         return cls.process_response(response)
 
     @classmethod
     def get(cls, endpoint: str, options: Options):
         endpoint = "{}{}".format(cls.host(options), endpoint)
-        response = requests.get(url=endpoint, headers=HeadersBuilder.build(options))
+        response = requests.get(url=endpoint, headers=HeadersBuilder.build(options),timeout=options.default_timeout)
         return cls.process_response(response)
 
     @classmethod
