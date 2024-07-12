@@ -34,6 +34,9 @@ class Options(ABC):
     def default_timeout(self, default_timeout: int) -> None:
         self._default_timeout = default_timeout
 
+    def set_timeout(self, timeout: int) -> None:
+        self.default_timeout = timeout
+
     @property
     def api_key(self) -> str:
         return self._api_key
