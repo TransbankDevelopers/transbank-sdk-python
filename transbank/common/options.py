@@ -4,11 +4,11 @@ from transbank.common.integration_type import IntegrationType
 
 
 class Options(ABC):
-    def __init__(self, commerce_code: str = None, api_key: str = None, integration_type: IntegrationType = None, default_timeout: int = 600):
+    def __init__(self, commerce_code: str = None, api_key: str = None, integration_type: IntegrationType = None, timeout: int = 600):
         self.commerce_code = commerce_code
         self.api_key = api_key
         self.integration_type = integration_type
-        self.default_timeout = default_timeout
+        self.timeout = timeout
 
     @abstractmethod
     def header_commerce_code_name(self):
@@ -27,15 +27,12 @@ class Options(ABC):
         self._commerce_code = commerce_code
 
     @property
-    def default_timeout(self) -> int:
-        return self._default_timeout
+    def timeout(self) -> int:
+        return self._timeout
 
-    @default_timeout.setter
-    def default_timeout(self, default_timeout: int) -> None:
-        self._default_timeout = default_timeout
-
-    def set_timeout(self, timeout: int) -> None:
-        self.default_timeout = timeout
+    @timeout.setter
+    def timeout(self, timeout: int) -> None:
+        self._timeout = timeout
 
     @property
     def api_key(self) -> str:
@@ -58,7 +55,7 @@ class Options(ABC):
         return options is None or not options.commerce_code and not options.api_key and not options.integration_type
 
     def __repr__(self) -> str:
-        return "Options(commerce_code: {}, api_key: {}, integration_type: {})".format(self.commerce_code, self.api_key, self.integration_type,self.default_timeout)
+        return "Options(commerce_code: {}, api_key: {}, integration_type: {})".format(self.commerce_code, self.api_key, self.integration_type,self.timeout)
 
 
 class WebpayOptions(Options):
