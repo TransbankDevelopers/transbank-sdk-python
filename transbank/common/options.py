@@ -55,7 +55,7 @@ class Options(ABC):
         return options is None or not options.commerce_code and not options.api_key and not options.integration_type
 
     def __repr__(self) -> str:
-        return "Options(commerce_code: {}, api_key: {}, integration_type: {})".format(self.commerce_code, self.api_key, self.integration_type,self.timeout)
+        return "Options(commerce_code: {}, api_key: {}, integration_type: {}, timeout: {})".format(self.commerce_code, self.api_key, self.integration_type,self.timeout)
 
 
 class WebpayOptions(Options):
