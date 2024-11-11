@@ -1,8 +1,6 @@
 from transbank.common.options import WebpayOptions
 from transbank.common.request_service import RequestService
 from transbank.common.api_constants import ApiConstants
-from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
-from transbank.common.integration_api_keys import IntegrationApiKeys
 from transbank.common.validation_util import ValidationUtil
 from transbank.common.webpay_transaction import WebpayTransaction
 from transbank.webpay.webpay_plus.schema import TransactionCreateRequestSchema, \
@@ -76,8 +74,3 @@ class Transaction(WebpayTransaction):
         except TransbankError as e:
             raise TransactionCaptureError(e.message, e.code)
 
-    def configure_for_testing(self):
-        return self.configure_for_integration(IntegrationCommerceCodes.WEBPAY_PLUS, IntegrationApiKeys.WEBPAY)
-
-    def configure_for_testing_deferred(self):
-        return self.configure_for_integration(IntegrationCommerceCodes.WEBPAY_PLUS_DEFERRED, IntegrationApiKeys.WEBPAY)

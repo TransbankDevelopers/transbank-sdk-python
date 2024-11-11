@@ -1,9 +1,7 @@
 from transbank.common.options import WebpayOptions
 from transbank.common.request_service import RequestService
 from transbank.common.api_constants import ApiConstants
-from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
 from transbank.common.webpay_transaction import WebpayTransaction
-from transbank.common.integration_api_keys import IntegrationApiKeys
 from transbank.common.validation_util import ValidationUtil
 from transbank.webpay.oneclick.schema import MallInscriptionStartRequestSchema, MallInscriptionDeleteRequestSchema
 from transbank.webpay.oneclick.request import MallInscriptionStartRequest, MallInscriptionDeleteRequest
@@ -21,10 +19,10 @@ class MallInscription(WebpayTransaction):
     def __init__(self, options: WebpayOptions = None):
         if options is None:
             self.configure_for_testing()
-        else: 
-            super().__init__(options) 
+        else:
+            super().__init__(options)
 
-    def start(self, username: str, email: str, response_url: str):        
+    def start(self, username: str, email: str, response_url: str):
         ValidationUtil.has_text_trim_with_max_length(username, ApiConstants.USER_NAME_LENGTH, "username")
         ValidationUtil.has_text_trim_with_max_length(email, ApiConstants.EMAIL_LENGTH, "email")
         ValidationUtil.has_text_with_max_length(response_url, ApiConstants.RETURN_URL_LENGTH, "response_url")
@@ -51,12 +49,7 @@ class MallInscription(WebpayTransaction):
             request = MallInscriptionDeleteRequest(username, tbk_user)
             response = RequestService.delete(endpoint, MallInscriptionDeleteRequestSchema().dumps(request), self.options)
             return response == ApiConstants.HTTP_STATUS_DELETE_OK
-                
+
         except TransbankError as e:
             raise InscriptionDeleteError(e.message, e.code)
 
-    def configure_for_testing(self):
-        return self.configure_for_integration(IntegrationCommerceCodes.ONECLICK_MALL, IntegrationApiKeys.WEBPAY)
-
-    def configure_for_testing_deferred(self):
-        return self.configure_for_integration(IntegrationCommerceCodes.ONECLICK_MALL_DEFERRED, IntegrationApiKeys.WEBPAY)

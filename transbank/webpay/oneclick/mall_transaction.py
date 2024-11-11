@@ -1,9 +1,7 @@
 from transbank.common.options import WebpayOptions
 from transbank.common.request_service import RequestService
 from transbank.common.api_constants import ApiConstants
-from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
 from transbank.common.webpay_transaction import WebpayTransaction
-from transbank.common.integration_api_keys import IntegrationApiKeys
 from transbank.common.validation_util import ValidationUtil
 from transbank.webpay.oneclick.schema import MallTransactionAuthorizeRequestSchema, MallTransactionRefundRequestSchema, MallTransactionCaptureRequestSchema
 from transbank.webpay.oneclick.request import MallTransactionAuthorizeDetails, MallTransactionAuthorizeRequest, MallTransactionRefundRequest, MallTransactionCaptureRequest
@@ -12,6 +10,7 @@ from transbank.error.transaction_authorize_error import TransactionAuthorizeErro
 from transbank.error.transaction_status_error import TransactionStatusError
 from transbank.error.transaction_refund_error import TransactionRefundError
 from transbank.error.transaction_capture_error import TransactionCaptureError
+
 class MallTransaction(WebpayTransaction):
     AUTHORIZE_ENDPOINT = ApiConstants.ONECLICK_ENDPOINT + '/transactions'
     STATUS_ENDPOINT = ApiConstants.ONECLICK_ENDPOINT + '/transactions/{}'
@@ -70,8 +69,3 @@ class MallTransaction(WebpayTransaction):
         except TransbankError as e:
             raise TransactionRefundError(e.message, e.code)
 
-    def configure_for_testing(self):
-        return self.configure_for_integration(IntegrationCommerceCodes.ONECLICK_MALL, IntegrationApiKeys.WEBPAY)
-
-    def configure_for_testing_deferred(self):
-        return self.configure_for_integration(IntegrationCommerceCodes.ONECLICK_MALL_DEFERRED, IntegrationApiKeys.WEBPAY)

@@ -1,9 +1,7 @@
 from transbank.common.options import WebpayOptions
 from transbank.common.request_service import RequestService
 from transbank.common.api_constants import ApiConstants
-from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
 from transbank.common.webpay_transaction import WebpayTransaction
-from transbank.common.integration_api_keys import IntegrationApiKeys
 from transbank.common.validation_util import ValidationUtil
 from transbank.webpay.transaccion_completa.request import TransactionCreateRequest, TransactionCommitRequest, \
     TransactionRefundRequest, TransactionCaptureRequest, TransactionInstallmentsRequest
@@ -90,14 +88,3 @@ class Transaction(WebpayTransaction):
         except TransbankError as e:
             raise TransactionInstallmentsError(e.message, e.code)
 
-    def configure_for_testing(self):
-        return self.configure_for_integration(IntegrationCommerceCodes.TRANSACCION_COMPLETA, IntegrationApiKeys.WEBPAY)
-
-    def configure_for_testing_deferred(self):
-        return self.configure_for_integration(IntegrationCommerceCodes.TRANSACCION_COMPLETA_DEFERRED, IntegrationApiKeys.WEBPAY)
-
-    def configure_for_testing_sin_cvv(self):
-        return self.configure_for_integration(IntegrationCommerceCodes.TRANSACCION_COMPLETA_SIN_CVV, IntegrationApiKeys.WEBPAY)
-
-    def configure_for_testing_deferred_sin_cvv(self):
-        return self.configure_for_integration(IntegrationCommerceCodes.TRANSACCION_COMPLETA_DEFERRED_SIN_CVV, IntegrationApiKeys.WEBPAY)
