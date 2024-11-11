@@ -17,11 +17,8 @@ class MallTransaction(WebpayTransaction):
     REFUND_ENDPOINT = ApiConstants.ONECLICK_ENDPOINT + '/transactions/{}/refunds'
     CAPTURE_ENDPOINT = ApiConstants.ONECLICK_ENDPOINT + '/transactions/capture'
 
-    def __init__(self, options: WebpayOptions = None):
-        if options is None:
-            self.configure_for_testing()
-        else:
-            super().__init__(options)
+    def __init__(self, options: WebpayOptions):
+        super().__init__(options)
 
     def authorize(self, username: str, tbk_user: str, parent_buy_order: str, details: MallTransactionAuthorizeDetails):
         ValidationUtil.has_text_with_max_length(username, ApiConstants.USER_NAME_LENGTH, "username")

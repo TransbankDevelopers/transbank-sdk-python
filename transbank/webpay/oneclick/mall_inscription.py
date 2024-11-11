@@ -16,11 +16,8 @@ class MallInscription(WebpayTransaction):
     FINISH_ENDPOINT = ApiConstants.ONECLICK_ENDPOINT + '/inscriptions/{}'
     DELETE_ENDPOINT = ApiConstants.ONECLICK_ENDPOINT + '/inscriptions'
 
-    def __init__(self, options: WebpayOptions = None):
-        if options is None:
-            self.configure_for_testing()
-        else:
-            super().__init__(options)
+    def __init__(self, options: WebpayOptions):
+        super().__init__(options)
 
     def start(self, username: str, email: str, response_url: str):
         ValidationUtil.has_text_trim_with_max_length(username, ApiConstants.USER_NAME_LENGTH, "username")

@@ -23,11 +23,8 @@ class Transaction(WebpayTransaction):
     CAPTURE_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/capture'
     INSTALLMENTS_ENDPOINT = ApiConstants.WEBPAY_ENDPOINT + '/transactions/{}/installments'
 
-    def __init__(self, options: WebpayOptions = None):
-        if options is None:
-            self.configure_for_testing()
-        else:
-            super().__init__(options)
+    def __init__(self, options: WebpayOptions):
+        super().__init__(options)
 
     def create(self, buy_order: str, session_id: str, amount: float, cvv: str, card_number: str, card_expiration_date: str):
         ValidationUtil.has_text_with_max_length(buy_order, ApiConstants.BUY_ORDER_LENGTH, "buy_order")
