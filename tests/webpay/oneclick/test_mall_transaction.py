@@ -2,6 +2,8 @@ import unittest
 import json
 from unittest.mock import Mock
 from transbank.webpay.oneclick.mall_transaction import *
+from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
+from transbank.common.integration_api_keys import IntegrationApiKeys
 from tests.mocks.responses_api_mocks import responses
 from unittest.mock import patch
 from tests.webpay.test_utils import get_invalid_length_param
@@ -22,8 +24,8 @@ class OneclickMallTransactionTestCase(unittest.TestCase):
         self.child2_buy_order_mock = 'child_buy_order_2'
         self.return_url_mock = 'https://url_return.com'
         self.mock_response = Mock()
-        self.transaction = MallTransaction()
-        self.deferred_transaction = MallTransaction().configure_for_testing_deferred()
+        self.transaction = MallTransaction.build_for_integration(IntegrationCommerceCodes.ONECLICK_MALL, IntegrationApiKeys.WEBPAY)
+        self.deferred_transaction = MallTransaction.build_for_integration(IntegrationCommerceCodes.ONECLICK_MALL_DEFERRED, IntegrationApiKeys.WEBPAY)
         self.deferred_child_commerce_code = IntegrationCommerceCodes.ONECLICK_MALL_DEFERRED_CHILD1
         self.capture_amount_mock = 2000
         self.authorization_code_mock = '123456'

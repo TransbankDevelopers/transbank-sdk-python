@@ -8,6 +8,7 @@ from transbank.webpay.webpay_plus.transaction import *
 from transbank.error.transaction_create_error import TransactionCreateError
 from tests.mocks.responses_api_mocks import responses
 from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
+from transbank.common.integration_api_keys import IntegrationApiKeys
 
 
 class TransactionTestCase(unittest.TestCase):
@@ -22,7 +23,7 @@ class TransactionTestCase(unittest.TestCase):
         self.authorization_code_mock = '123456'
         self.capture_amount_mock = 150000
         self.mock_response = Mock()
-        self.transaction = Transaction()
+        self.transaction = Transaction.build_for_integration(IntegrationCommerceCodes.WEBPAY_PLUS, IntegrationApiKeys.WEBPAY)
 
     @patch('transbank.common.request_service.requests.post')
     def test_create_transaction_successful(self, mock_post):
