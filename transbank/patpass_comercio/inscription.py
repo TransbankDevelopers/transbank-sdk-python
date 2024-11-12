@@ -1,9 +1,7 @@
 from transbank.common.options import PatpassComercioOptions
 from transbank.common.request_service import RequestService
 from transbank.common.api_constants import ApiConstants
-from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
 from transbank.common.integration_type import IntegrationType
-from transbank.common.integration_api_keys import IntegrationApiKeys
 from transbank.patpass_comercio.request import InscriptionStartRequest, InscriptionStatusRequest
 from transbank.patpass_comercio.schema import InscriptionStartRequestSchema, InscriptionStatusRequestSchema
 from transbank.error.transbank_error import TransbankError
@@ -15,11 +13,18 @@ class Inscription(object):
     START_ENDPOINT = ApiConstants.PATPASS_ENDPOINT + '/patInscription'
     STATUS_ENDPOINT = ApiConstants.PATPASS_ENDPOINT + '/status'
 
-    def __init__(self, options: PatpassComercioOptions = None):
-        if options is None:
-            self.configure_for_testing()
-        else:
-            self.options = options  
+    def __init__(self, options: PatpassComercioOptions):
+        self.options = options
+
+    @classmethod
+    def build_for_integration(cls, commerce_code, api_key):
+        options = PatpassComercioOptions(commerce_code, api_key, IntegrationType.TEST)
+        return cls(options)
+
+    @classmethod
+    def build_for_production(cls, commerce_code, api_key):
+        options = PatpassComercioOptions(commerce_code, api_key, IntegrationType.LIVE)
+        return cls(options)
 
     def start(self, url: str,
               name: str,
@@ -48,7 +53,7 @@ class Inscription(object):
             return RequestService.post(endpoint, InscriptionStartRequestSchema().dumps(request), self.options)
         except TransbankError as e:
             raise InscriptionStartError(e.message, e.code)
-    
+
     def status(self, token: str):
         try:
             endpoint = Inscription.STATUS_ENDPOINT
@@ -57,13 +62,4 @@ class Inscription(object):
         except TransbankError as e:
             raise InscriptionStatusError(e.message, e.code)
 
-    def configure_for_integration(self, commerce_code, api_key):
-        self.options = PatpassComercioOptions(commerce_code, api_key, IntegrationType.TEST)
-        return self
 
-    def configure_for_production(self, commerce_code, api_key):
-        self.options = PatpassComercioOptions(commerce_code, api_key, IntegrationType.LIVE)
-        return self
-
-    def configure_for_testing(self):
-        return self.configure_for_integration(IntegrationCommerceCodes.PATPASS_COMERCIO, IntegrationApiKeys.PATPASS_COMERCIO)
