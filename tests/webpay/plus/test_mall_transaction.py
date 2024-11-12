@@ -7,6 +7,7 @@ from unittest.mock import patch
 from transbank.webpay.webpay_plus.mall_transaction import *
 from transbank.webpay.webpay_plus.request import *
 from transbank.common.integration_commerce_codes import IntegrationCommerceCodes
+from transbank.common.integration_api_keys import IntegrationApiKeys
 from tests.mocks.responses_api_mocks import responses
 from transbank.error.transaction_create_error import TransactionCreateError
 
@@ -25,10 +26,10 @@ class TransactionMallTestCase(unittest.TestCase):
         self.child2_buy_order = 'child_buy_order2_mock_123'
         self.token_mock = '01abf2be20aad1da804aeae1ed3062fb8fba108ee0e07f4d37181f51c3f6714d'
         self.mock_response = Mock()
-        self.transaction = MallTransaction()
+        self.transaction = MallTransaction.build_for_integration(IntegrationCommerceCodes.WEBPAY_PLUS_MALL, IntegrationApiKeys.WEBPAY)
         self.invalid_amount = -1000
         self.authorization_code_mock = '123456'
-        self.deferred_capture = MallTransaction().configure_for_testing_deferred()
+        self.deferred_capture = MallTransaction.build_for_integration(IntegrationCommerceCodes.WEBPAY_PLUS_MALL_DEFERRED, IntegrationApiKeys.WEBPAY)
 
     def test_create_details(self):
         mall_details = MallDetails(self.amount1_mock, self.child1_commerce_code, self.child1_buy_order)
