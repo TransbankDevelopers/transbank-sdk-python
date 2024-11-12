@@ -4,10 +4,10 @@ from transbank.common.integration_type import IntegrationType
 
 
 class Options(ABC):
-    def __init__(self, commerce_code: str = None, api_key: str = None, integration_type: IntegrationType = None, timeout: int = 600):
-        self.commerce_code = commerce_code
-        self.api_key = api_key
-        self.integration_type = integration_type
+    def __init__(self, commerce_code: str, api_key: str, integration_type: IntegrationType, timeout: int = 600):
+        self._commerce_code = commerce_code
+        self._api_key = api_key
+        self._integration_type = integration_type
         self.timeout = timeout
 
     @abstractmethod
@@ -22,9 +22,13 @@ class Options(ABC):
     def commerce_code(self) -> str:
         return self._commerce_code
 
-    @commerce_code.setter
-    def commerce_code(self, commerce_code: str) -> None:
-        self._commerce_code = commerce_code
+    @property
+    def integration_type(self) -> IntegrationType:
+        return self._integration_type
+
+    @property
+    def api_key(self) -> str:
+        return self._api_key
 
     @property
     def timeout(self) -> int:
@@ -33,22 +37,6 @@ class Options(ABC):
     @timeout.setter
     def timeout(self, timeout: int) -> None:
         self._timeout = timeout
-
-    @property
-    def api_key(self) -> str:
-        return self._api_key
-
-    @api_key.setter
-    def api_key(self, api_key: str) -> None:
-        self._api_key = api_key
-
-    @property
-    def integration_type(self) -> IntegrationType:
-        return self._integration_type
-
-    @integration_type.setter
-    def integration_type(self, integration_type: IntegrationType) -> None:
-        self._integration_type = integration_type
 
     @staticmethod
     def is_empty(options: 'Options') -> bool:
