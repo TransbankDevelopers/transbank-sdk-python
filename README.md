@@ -8,7 +8,7 @@ SDK Oficial de Transbank
 
 ## Requisitos:
 
-- Python 3.4+
+- Python 3.12+
 
 # Instalación
 
