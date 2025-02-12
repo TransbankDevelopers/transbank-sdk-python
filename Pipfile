@@ -3,20 +3,24 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[requires]
+python_version = "3.12"
+
 [dev-packages]
 ipython = "<7.17.0"
-nose = "*"
 docutils = "*"
-mock = {markers = "python_version < '3.5'"}
 coverage = "*"
 pylint = "*"
 requests-mock = "<=1.5.2"
+pytest-cov = "*"
+pytest = "*"
 
 [packages]
-marshmallow = '>3, <=3.17'
-requests = '>=2.22.0'
+marshmallow = ">3, <=3.17"
+requests = ">=2.22.0"
 mock = "*"
+setuptools = "*"
 
 [scripts]
-tests = "python setup.py nosetests"
-citests = "python3 setup.py nosetests --cover-xml"
+tests = "pytest"
+citests = "pytest --cov-report=xml"
