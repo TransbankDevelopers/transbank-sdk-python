@@ -24,7 +24,7 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-  "marshmallow>3, <=3.17",
+  "marshmallow>3, <=3.26.1",
   "requests>=2.20.0"
 ]
 
