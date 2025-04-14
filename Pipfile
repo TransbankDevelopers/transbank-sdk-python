@@ -7,7 +7,7 @@ name = "pypi"
 python_version = "3.12"
 
 [dev-packages]
-ipython = "<7.17.0"
+ipython = "<8.11.0"
 docutils = "*"
 coverage = "*"
 pylint = "*"
