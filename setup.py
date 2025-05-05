@@ -7,6 +7,7 @@
 import io
 import os
 import sys
+import subprocess
 from shutil import rmtree
 
 from setuptools import find_packages, setup, Command
@@ -23,12 +24,12 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-  "marshmallow>3, <=3.17",
+  "marshmallow>3, <=3.26.1",
   "requests>=2.20.0"
 ]
 
 TESTS_REQUIREMENTS = [
-    "nose>=1.0",
+    "pytest",
     "coverage",
     "mock",
     "requests-mock<=1.5.2"
@@ -78,18 +79,18 @@ class UploadCommand(Command):
         try:
             self.status('Removing previous builds…')
             rmtree(os.path.join(here, 'dist'))
-        except OSError:
+        except FileNotFoundError:
             pass
 
         self.status('Building Source and Wheel (universal) distribution…')
-        os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
+        subprocess.run([sys.executable, "setup.py", "sdist", "bdist_wheel", "--universal"], check=True)
 
         self.status('Uploading the package to PyPI via Twine…')
-        os.system('twine upload dist/*')
+        subprocess.run(["twine", "upload", "dist/*"], check=True)
 
         self.status('Pushing git tags…')
-        os.system('git tag v{0}'.format(about['__version__']))
-        os.system('git push --tags')
+        subprocess.run(["git", "tag", f"v{about['__version__']}"], check=True)
+        subprocess.run(["git", "push", "--tags"], check=True)
 
         sys.exit()
 
@@ -105,7 +106,7 @@ setup(
     url=URL,
     packages=find_packages(exclude=('tests',)),
     install_requires=REQUIRED,
-    setup_requires=TESTS_REQUIREMENTS,
+    tests_require=TESTS_REQUIREMENTS,
     include_package_data=True,
     license='BSD 3-clause "New" or "Revised License"',
     classifiers=[
@@ -113,11 +114,12 @@ setup(
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'License :: OSI Approved :: BSD License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         'Programming Language :: Python :: Implementation :: CPython',
     ],
     # $ setup.py publish support.
