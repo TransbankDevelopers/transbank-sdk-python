@@ -44,4 +44,3 @@ class MallBinInfoTestCase(unittest.TestCase):
 
         with self.assertRaises(MallBinInfoQueryError):
             mall_bin_info.query_bin('tbkUser')
-        
