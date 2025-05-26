@@ -97,3 +97,10 @@ class MallTransactionRefundRequest(object):
         self.commerce_code = commerce_code
         self.detail_buy_order = detail_buy_order
         self.amount = amount
+
+class MallBinInfoQueryRequest(object):
+    def __init__(self, tbk_user: str):
+        self.tbk_user = tbk_user
+
+    def __repr__(self):
+        return "MallBinInfoQueryRequest(tbk_user: {})".format(self.tbk_user)
