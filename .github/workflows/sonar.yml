@@ -13,6 +13,14 @@ jobs:
             - uses: actions/checkout@v4
               with:
                   fetch-depth: 0
+            - name: Set up Python
+              uses: actions/setup-python@v5
+            - name: Install tox
+              run: |
+                  pip install tox
+            - name: Run Tox
+              run: |
+                  tox -e cov
             - name: SonarQube Scan
               uses: SonarSource/sonarqube-scan-action@v5
               env:
