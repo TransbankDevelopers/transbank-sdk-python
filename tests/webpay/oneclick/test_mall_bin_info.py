@@ -22,7 +22,7 @@ class MallBinInfoTestCase(unittest.TestCase):
         mall_bin_info = MallBinInfo.build_for_integration('commerce_code', 'api_key')
         result = mall_bin_info.query_bin('tbkUser')
 
-        args, kwargs = mock_post.call_args
+        _, kwargs = mock_post.call_args
         body = json.loads(kwargs['data'])
 
         self.assertEqual(result['bin_issuer'], 'TEST COMMERCE BANK')
