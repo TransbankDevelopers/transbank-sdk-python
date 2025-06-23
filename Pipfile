@@ -7,19 +7,19 @@ name = "pypi"
 python_version = "3.12"
 
 [dev-packages]
-ipython = "<8.11.0"
+ipython = ">=9.3.0"
 docutils = "*"
 coverage = "*"
 pylint = "*"
-requests-mock = "<=1.5.2"
+requests-mock = "<=1.12.1"
 pytest-cov = "*"
 pytest = "*"
 
 [packages]
-marshmallow = ">3, <=3.26.1"
-requests = ">=2.32.0"
+marshmallow = ">=4.0.0"
+requests = ">=2.32.4"
 mock = "*"
-setuptools = ">=70.0.0"
+setuptools = ">=80.9.0"
 
 [scripts]
 tests = "pytest"
