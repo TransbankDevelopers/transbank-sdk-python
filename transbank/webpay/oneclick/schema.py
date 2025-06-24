@@ -35,3 +35,6 @@ class MallTransactionRefundRequestSchema(Schema):
     commerce_code = fields.Str()
     detail_buy_order = fields.Str()
     amount = fields.Str()
+
+class MallBinInfoQueryRequestSchema(Schema):
+    tbk_user = fields.Str()
