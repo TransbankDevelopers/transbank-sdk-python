@@ -14,7 +14,7 @@ SDK Oficial de Transbank
 
 # Instalación
 
-Puedes instalar el SDK directamente
+Puedes instalar el SDK directamente utilizando pip mediante el comando:
 
 ```bash
 pip install transbank-sdk
