@@ -8,7 +8,9 @@ SDK Oficial de Transbank
 
 ## Requisitos:
 
-- Python 3.12+
+-   Python 3.12+
+-   [Pipenv](https://github.com/pypa/pipenv)
+-   Plugin de editorconfig para tu editor favorito.
 
 # Instalación
 
