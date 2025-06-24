@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/TransbankDevelopers/transbank-sdk-python.svg?branch=master)](https://travis-ci.org/TransbankDevelopers/transbank-sdk-python)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=transbank-sdk-python&metric=alert_status)](https://sonarcloud.io/dashboard?id=transbank-sdk-python)
+![Publish Status](https://github.com/TransbankDevelopers/transbank-sdk-python/actions/workflows/publish.yml/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=TransbankDevelopers_transbank-sdk-python&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=TransbankDevelopers_transbank-sdk-python)
 [![PyPI version](https://badge.fury.io/py/transbank-sdk.svg)](https://badge.fury.io/py/transbank-sdk)
 
 # Transbank Python SDK
