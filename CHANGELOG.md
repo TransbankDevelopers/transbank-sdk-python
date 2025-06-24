@@ -1,6 +1,6 @@
 # Changelog
 
-Todos los cambios notables a este proyecto serán docuemntados en este archivo.
+Todos los cambios notables a este proyecto serán documentados en este archivo.
 
 El formato está basado en [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 y este proyecto adhiere a [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
@@ -49,8 +49,8 @@ El SDK ya no apunta por defecto al ambiente de integración. Ahora es necesario 
 
 ### Fixed
 
--   Retorna un boolean en el metodo delete para la Inscripción de Oneclick Mall.
--   Se corrige error en el método 'refund' de Transaccion Completa.
+-   Retorna un boolean en el método delete para la Inscripción de Oneclick Mall.
+-   Se corrige error en el método 'refund' de Transacción Completa.
 
 ## [4.0.0] - 2022-09-20
 
@@ -60,8 +60,8 @@ El SDK ya no apunta por defecto al ambiente de integración. Ahora es necesario 
 
 ### Added
 
--   Se agrega los métodos 'increaseAmount', 'increaseAuthorizationDate', 'reversePreAuthorizedAmount' y 'deferredCaptureHistory' a las versiones diferidas de WebpayPlus, WebpayPlus Mall, Oneclick Mall, Transaccion Completa y Transaccion Completa Mall
--   Ahora los métodos status y commit de las versiones diferidas de WebpayPlus, WebpayPlus Mall, Transaccion Completa y Transaccion Completa Mall retornan el campo 'captureExpirationDate'. Para Oneclick Mall este campo también se agrega en los detalles de la autorización
+-   Se agrega los métodos 'increaseAmount', 'increaseAuthorizationDate', 'reversePreAuthorizedAmount' y 'deferredCaptureHistory' a las versiones diferidas de WebpayPlus, WebpayPlus Mall, Oneclick Mall, Transacción Completa y Transacción Completa Mall
+-   Ahora los métodos status y commit de las versiones diferidas de WebpayPlus, WebpayPlus Mall, Transacción Completa y Transacción Completa Mall retornan el campo 'captureExpirationDate'. Para Oneclick Mall este campo también se agrega en los detalles de la autorización
 
 ## [3.0.1] - 2022-07-13
 
