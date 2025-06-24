@@ -33,6 +33,16 @@ y luego ejecutar:
 pipenv install
 ```
 
+### Test
+
+Para ejecutar los test localmente debes usar los siguientes comandos en una terminal.
+
+```bash
+pipenv install
+pipenv install --dev
+pipenv run tests
+```
+
 ## Documentación
 
 Puedes encontrar toda la documentación de cómo usar este SDK en el sitio https://www.transbankdevelopers.cl.
