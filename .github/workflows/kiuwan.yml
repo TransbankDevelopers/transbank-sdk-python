@@ -2,11 +2,11 @@ name: Kiuwan
 
 on:
     pull_request:
-        types: [ opened, synchronize, reopened ]
+        types: [opened, synchronize, reopened]
 
 jobs:
     scan:
-        uses: TransbankDevelopers/transbank-github-actions-templates/.github/workflows/kiuwan-pr-scan.yml@2a2837602d7636c5f31f97209ae60a0fe74c2c94
+        uses: TransbankDevelopers/transbank-github-actions-templates/.github/workflows/kiuwan-pr-scan.yml@02f92d3b1c1b56c6242aa7c76eb9479fd82187aa
         with:
             project_name: td-webpay-sdk-python
             source_path: .
