@@ -36,7 +36,7 @@ class RequestService(object):
         if not response.text:
             return response.status_code
         dict_response = json.loads(response.text)
-        if response.status_code not in (200, 299):
+        if not 200 <= response.status_code < 300:
             if "error_message" in dict_response:
                 raise TransbankError(message=dict_response["error_message"], code=response.status_code)
             if "description" in dict_response:
